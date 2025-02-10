@@ -23,12 +23,12 @@ myNumber <- 12.43
 
 # do some calculations
 # natural log
-log(myNumber)
+log(12.43)
 ```
 
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
-log10(myNumber)
+log10(10)
 ```
 
 # Session Information
