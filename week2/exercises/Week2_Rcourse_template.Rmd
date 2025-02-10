@@ -23,7 +23,7 @@ myNumber <- 12.43
 
 # do some calculations
 # natural log
-log(12.43)
+log(2)
 ```
 
 ```{r lg10, echo=TRUE, include=TRUE}
