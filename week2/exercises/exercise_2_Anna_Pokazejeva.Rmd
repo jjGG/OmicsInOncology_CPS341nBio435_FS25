@@ -18,6 +18,9 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 ## Exercise 2
 * from https://alexd106.github.io/intro2R/exercise_2.html
+
+### Question 2
+
 ```{r myN, echo=TRUE, include=TRUE}
 myNumber <- 12.43
 
@@ -34,11 +37,25 @@ log10(myNumber)
 ```{r, echo=TRUE, include=TRUE}
 log2(myNumber)
 ```
+```{r sqrt, echo=TRUE, include=TRUE}
+sqrt(myNumber)
+```
+
+```{r exp, echo=TRUE, include=TRUE}
+exp(myNumber)
+```
+### Question 3
+
+```{r, echo=TRUE, include=TRUE}
+r <- 20
+area <- pi*r*r
+print(area)
+```
+
+
 
 # Session Information
-
 ```{r sessionInfo, echo=FALSE, include=TRUE}
 pander::pander(sessionInfo())
 ```
-
 
