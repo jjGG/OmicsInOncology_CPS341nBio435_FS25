@@ -83,7 +83,7 @@ first_five <- weight[1:5]
 ## excercise 2.7
 ```{r, echo=TRUE, include=TRUE}
 # height of children
-height
+height <- 8
 ```
 
 # Session Information
