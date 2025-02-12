@@ -34,6 +34,19 @@ log(myNumber)
 log10(myNumber)
 ```
 
+```{r, echo=TRUE, include=TRUE}
+log2(myNumber)
+log(myNumber, 2)
+```
+
+```{r, echo=TRUE, include=TRUE}
+sqrt(myNumber)
+```
+
+```{r, echo=TRUE, include=TRUE}
+# TODO antilog
+exp(myNumber)
+```
 
 # Session Information
 
@@ -41,4 +54,126 @@ log10(myNumber)
 pander::pander(sessionInfo())
 ```
 
+### Task 3
 
+```{r}
+# Define the radius
+radius <- 20 / 2  
+
+# Calculate the area of the circle
+area_circle <- pi * radius^2  
+
+# Print the result
+area_circle 
+```
+
+### Task 5
+
+```{r}
+# Create vector containing the weight of 10 children
+
+weight <- c(69,62,57,59,59,64,56,66,67,66)
+
+# Print the vector
+weight
+```
+
+### Task 6
+
+```{r}
+
+# Mean of weight
+mean(weight)    
+
+# Variance of weight
+var(weight)    
+
+# Standard deviation of weight
+sd(weight)    
+
+# Range of weight
+range(weight)
+
+# Number of elements in weight
+length(weight) 
+
+# Remind ourselves what weight looks like
+weight
+
+# Get 5 first values
+weight[c(1, 2, 3, 4, 5)]
+
+# Extract the weights of the first five children using positional indexing
+first_five <- weight[1:5]
+
+# Print the new variable
+first_five
+
+```
+
+### Task 7
+
+```{r}
+
+# Creating vector called height containing the height (in cm) of 10 previous children
+height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+
+# Print vector
+height
+
+#Summarise
+summary(height)
+
+# Extract the heights of the 2nd, 3rd, 9th and 10th child and assign to new variable
+some_child <- height[c(2,3,9,10)]
+
+# Print new variable
+some_child
+
+# Extract heights of children that are less than or equal to 99 cm
+shorter_child <- height[height <= 99]
+
+# Print the extracted heights
+shorter_child
+
+```
+
+### Task 8
+
+```{r}
+
+# Convert height from cm to meters
+height_m <- height / 100  
+
+# Calculate BMI using vectorization
+bmi <- weight / (height_m^2)  
+
+# Print the BMI values
+bmi
+```
+
+
+### Task 9
+
+```{r}
+
+# Create a sequence from 0 to 1 in steps of 0.1 using seq()
+seq1 <- seq(from = 0, to = 1, by = 0.1)
+seq1
+
+```
+
+### Task 10 
+
+```{r}
+
+# Create a sequence from 1 to 10 in steps of 0.5
+seq_reverse <- seq(from = 1, to = 10, by = 0.5)
+
+# Reverse the sequence to get it from 10 to 1
+seq2 <- rev(seq_reverse)
+
+# Print the sequence
+seq2
+
+```
