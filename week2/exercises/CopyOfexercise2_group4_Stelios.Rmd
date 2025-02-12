@@ -23,13 +23,99 @@ myNumber <- 12.43
 
 # do some calculations
 # natural log
-log(2)
+log(myNumber)
 ```
 
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
-log10(10)
+log10(myNumber)
 ```
+
+```{r lg2, echo=TRUE, include=TRUE}
+# log2
+log2(myNumber)
+```
+
+```{r sqrt, echo=TRUE, include=TRUE}
+# square root
+sqrt(myNumber)
+```
+
+```{r exp, echo=TRUE, include=TRUE}
+# natural antilog
+exp(myNumber)
+```
+
+### Exercise 2.3
+
+```{r areaofcircle, echo=TRUE, include=TRUE}
+# area of circle in meters
+area_circle <- (0.1)^2*pi
+print(area_circle)
+```
+
+### Exercise 2.5
+
+```{r vector, echo=TRUE, include=TRUE}
+# Creating vector for weight in kg
+weight <- c(69,62,57,59,59,64,56,66,67,66)
+print(weight)
+```
+
+### Exercise 2.6
+
+```{r , echo=TRUE, include=TRUE}
+# manipulating weight vector
+mean(weight)
+var(weight)
+sd(weight)
+range(weight)
+length(weight)
+
+first_five <- weight[1:5]
+print(first_five)
+```
+
+### Exercise 2.7
+
+```{r vectorheight, echo=TRUE, include=TRUE}
+# Creating vector for height in cm
+height <- c(112,102,83,84,99,90,77,112,133,112)
+print(height)
+
+summary(height)
+
+some_child <- height[c(2,3,9,10)]
+print(some_child)
+
+shorter_child <- height[height<=99]
+print(shorter_child)
+```
+
+### Exercise 2.8
+
+```{r bmi, echo=TRUE, include=TRUE}
+# bmi
+bmi <- weight/(height/100)^2
+print(bmi)
+```
+
+### Exercise 2.9
+
+```{r sequence1, echo=TRUE, include=TRUE}
+# sequence1
+seq1 <- seq(0,1,0.1)
+print(seq1)
+```
+
+### Exercise 2.10
+
+```{r sequence2, echo=TRUE, include=TRUE}
+# sequence2
+seq2 <- sort(seq(1,10,0.5),TRUE)
+print(seq2)
+```
+
 
 # Session Information
 
