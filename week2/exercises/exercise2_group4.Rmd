@@ -56,6 +56,42 @@ print(area_circle)
 weight <- c(69,62,57,59,59,64,56,66,67,66)
 print (weight)
 ```
+## Exercise 6
+```{r , echo=TRUE, include=TRUE}
+# using the vector weight
+weight <- c(69,62,57,59,59,64,56,66,67,66)
+mean(weight)
+var(weight)
+sd(weight)
+range(weight)
+length(weight)
+
+first_five <- weight[1:5]
+print(first_five)
+```
+## Exercise 7
+```{r , echo=TRUE, include=TRUE}
+# create a vector height in cm
+
+height <- c(112,102,83,84,99,90,77,112,133,112)
+summary(height)
+some_child <- height[c(2,3,9,10)]
+shorter_child <- height[height<=99]
+```
+
+## Exercise 8
+```{r , echo=TRUE, include=TRUE}
+# calculate BMI
+
+bmi <- weight / (height/100)^2 
+```
+
+## Exercise 9
+```{r , echo=TRUE, include=TRUE}
+# calculate BMI
+
+bmi <- weight / (height/100)^2 
+```
 
 # Session Information
 
