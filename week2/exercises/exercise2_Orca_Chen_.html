@@ -354,6 +354,119 @@ display: none;
 <pre class="r"><code># log10
 log10(myNumber)</code></pre>
 <pre><code>## [1] 1.094471</code></pre>
+<pre class="r"><code># lg2
+log2(myNumber)</code></pre>
+<pre><code>## [1] 3.635754</code></pre>
+<pre class="r"><code># square_root
+sqrt(myNumber)</code></pre>
+<pre><code>## [1] 3.525621</code></pre>
+<pre class="r"><code># natural_antilog
+exp(myNumber)</code></pre>
+<pre><code>## [1] 250196</code></pre>
+<pre class="r"><code># Q3: Circle_area calculations
+d &lt;- 20
+(d/2)^2*pi*0.5</code></pre>
+<pre><code>## [1] 157.0796</code></pre>
+<pre class="r"><code># Q4: cube root
+(14*0.51)^(1/3)</code></pre>
+<pre><code>## [1] 1.9256</code></pre>
+<pre class="r"><code># Q5: Weight_vector
+Weight &lt;- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)</code></pre>
+<pre class="r"><code># Q6:mean
+mean(Weight)</code></pre>
+<pre><code>## [1] 62.5</code></pre>
+<pre class="r"><code># Variance
+var(Weight)</code></pre>
+<pre><code>## [1] 20.72222</code></pre>
+<pre class="r"><code># Standard deviation
+sd(Weight)</code></pre>
+<pre><code>## [1] 4.552167</code></pre>
+<pre class="r"><code># range of weight
+range(Weight)</code></pre>
+<pre><code>## [1] 56 69</code></pre>
+<pre class="r"><code># number of children
+length(Weight)</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code># Q7: height_vector
+Height &lt;- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(Height)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    77.0    85.5   100.5   100.4   112.0   133.0</code></pre>
+<pre class="r"><code># position_index_extraction
+some_child &lt;- Height[c(2,3,9,10)]
+summary(some_child)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   83.00   97.25  107.00  107.50  117.25  133.00</code></pre>
+<pre class="r"><code># logical_index_extraction
+shorter_child &lt;- Height[Height &lt;= 99]
+summary(shorter_child)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    77.0    83.0    84.0    86.6    90.0    99.0</code></pre>
+<pre class="r"><code># Q8: BMI
+BMI &lt;- Weight/(sqrt(Height))</code></pre>
+<pre class="r"><code># Q9: Seq( )
+seq1 &lt;- seq(from = 0, to = 1, by = 0.5)</code></pre>
+<pre class="r"><code># Q10: sequence
+seq2 &lt;- rev(seq(from = 1, to = 10, by = 0.5))</code></pre>
+<pre class="r"><code># Q11: sequence
+seq3 &lt;- rep(1:3, times = 3)
+seq3</code></pre>
+<pre><code>## [1] 1 2 3 1 2 3 1 2 3</code></pre>
+<pre class="r"><code>seq4 &lt;- rep(c(&quot;a&quot;,&quot;e&quot;,&quot;c&quot;,&quot;g&quot;), each =3)
+seq4</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;a&quot; &quot;a&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;c&quot; &quot;c&quot; &quot;c&quot; &quot;g&quot; &quot;g&quot; &quot;g&quot;</code></pre>
+<pre class="r"><code>seq5 &lt;- rep(c(&quot;a&quot;,&quot;e&quot;,&quot;c&quot;,&quot;g&quot;), times =3)
+seq5</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;g&quot; &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;g&quot; &quot;a&quot; &quot;e&quot; &quot;c&quot; &quot;g&quot;</code></pre>
+<pre class="r"><code>seq6 &lt;- rep(1:3, times =3, each = 3)
+seq6</code></pre>
+<pre><code>##  [1] 1 1 1 2 2 2 3 3 3 1 1 1 2 2 2 3 3 3 1 1 1 2 2 2 3 3 3</code></pre>
+<pre class="r"><code>seq7 &lt;- rep(1:5, times = (5:1))
+seq7</code></pre>
+<pre><code>##  [1] 1 1 1 1 1 2 2 2 2 3 3 3 4 4 5</code></pre>
+<pre class="r"><code>inc.vec1 &lt;- c(7,2,8,1)
+inc.vec2 &lt;- c(4,3,1,5)
+seq8 &lt;- rep(inc.vec1, times = inc.vec2)
+seq8</code></pre>
+<pre><code>##  [1] 7 7 7 7 2 2 2 8 1 1 1 1 1</code></pre>
+<pre class="r"><code># Q12: height_order
+height_sorted &lt;- sort(Height, decreasing = F)
+height_sorted</code></pre>
+<pre><code>##  [1]  77  83  84  90  99 102 112 112 112 133</code></pre>
+<pre class="r"><code>child_name &lt;- c(&quot;Alfred&quot;, &quot;Barbara&quot;, &quot;James&quot;, &quot;Jane&quot;, &quot;John&quot;, &quot;Judy&quot;, &quot;Louise&quot;, &quot;Mary&quot;, &quot;Ronald&quot;, &quot;William&quot;)
+child_name</code></pre>
+<pre><code>##  [1] &quot;Alfred&quot;  &quot;Barbara&quot; &quot;James&quot;   &quot;Jane&quot;    &quot;John&quot;    &quot;Judy&quot;    &quot;Louise&quot; 
+##  [8] &quot;Mary&quot;    &quot;Ronald&quot;  &quot;William&quot;</code></pre>
+<pre class="r"><code># order()
+height_ord &lt;- order(Height)
+height_ord</code></pre>
+<pre><code>##  [1]  7  3  4  6  5  2  1  8 10  9</code></pre>
+<pre class="r"><code>child_ord &lt;- child_name[height_ord]
+child_ord</code></pre>
+<pre><code>##  [1] &quot;Louise&quot;  &quot;James&quot;   &quot;Jane&quot;    &quot;Judy&quot;    &quot;John&quot;    &quot;Barbara&quot; &quot;Alfred&quot; 
+##  [8] &quot;Mary&quot;    &quot;William&quot; &quot;Ronald&quot;</code></pre>
+<pre class="r"><code># Louise is the shortes while Ronald is the tallest
+range(Height)</code></pre>
+<pre><code>## [1]  77 133</code></pre>
+<pre class="r"><code># order()
+weight_rev &lt;- order(Weight, decreasing = T)
+child_weight_rev &lt;- child_name[weight_rev]
+child_weight_rev</code></pre>
+<pre><code>##  [1] &quot;Alfred&quot;  &quot;Ronald&quot;  &quot;Mary&quot;    &quot;William&quot; &quot;Judy&quot;    &quot;Barbara&quot; &quot;Jane&quot;   
+##  [8] &quot;John&quot;    &quot;James&quot;   &quot;Louise&quot;</code></pre>
+<pre class="r"><code># The fattest is Alfred while the thinnest is Louise</code></pre>
+<pre class="r"><code>Mydata &lt;- c(2, 4, 1, 6, 8, 5, NA, 4, 7)
+mean (Mydata, na.rm = T) #na.rm = T: ignore the NA value</code></pre>
+<pre><code>## [1] 4.625</code></pre>
+<pre class="r"><code>rm(seq_1)</code></pre>
+<pre><code>## Warning in rm(seq_1): object &#39;seq_1&#39; not found</code></pre>
+<pre class="r"><code>ls()</code></pre>
+<pre><code>##  [1] &quot;BMI&quot;              &quot;child_name&quot;       &quot;child_ord&quot;        &quot;child_weight_rev&quot;
+##  [5] &quot;d&quot;                &quot;Height&quot;           &quot;height_ord&quot;       &quot;height_sorted&quot;   
+##  [9] &quot;inc.vec1&quot;         &quot;inc.vec2&quot;         &quot;Mydata&quot;           &quot;myNumber&quot;        
+## [13] &quot;seq1&quot;             &quot;seq2&quot;             &quot;seq3&quot;             &quot;seq4&quot;            
+## [17] &quot;seq5&quot;             &quot;seq6&quot;             &quot;seq7&quot;             &quot;seq8&quot;            
+## [21] &quot;shorter_child&quot;    &quot;some_child&quot;       &quot;Weight&quot;           &quot;weight_rev&quot;</code></pre>
 </div>
 </div>
 <div id="session-information" class="section level1" number="2">

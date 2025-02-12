@@ -34,7 +34,7 @@ log10(myNumber)
 
 ```{r lg2, echo=TRUE, include=TRUE}
 # lg2
-lg2(myNumber)
+log2(myNumber)
 ```
 
 ```{r square_root, echo=TRUE, include=TRUE}
@@ -80,7 +80,7 @@ Height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
 summary(Height)
 # position_index_extraction
 some_child <- Height[c(2,3,9,10)]
-summary(some_chil)
+summary(some_child)
 # logical_index_extraction
 shorter_child <- Height[Height <= 99]
 summary(shorter_child)
