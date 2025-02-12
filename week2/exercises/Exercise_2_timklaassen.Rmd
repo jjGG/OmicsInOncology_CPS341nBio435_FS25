@@ -14,10 +14,11 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
-# Exercises for the R-Beginner - The fancy calculator
+# 2.Exercises for the R-Beginner - The fancy calculator
 
 ## Exercise 2
 * from https://alexd106.github.io/intro2R/exercise_2.html
+
 ```{r myN, echo=FALSE, include=TRUE}
 myNumber <- 12.43
 
@@ -29,6 +30,86 @@ log(myNumber)
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
 log10(myNumber)
+```
+
+```{r lg2, echo=TRUE, include=TRUE}
+# log2
+log2(myNumber)
+log(myNumber, 2)
+```
+
+```{r sqrt, echo=TRUE, include=TRUE}
+# Square Root
+sqrt(myNumber)
+```
+
+```{r natural_antilog, echo=TRUE, include=TRUE}
+# Natural antilog
+exp(myNumber)
+```
+
+#3. Use R to determine the area of a circle with a diameter of 20 cm
+```{r circle_area, echo=TRUE, include=TRUE}
+
+circle_diameter_cm <- 20
+circle_radius_cm <- circle_diameter_cm / 2
+area_circle <- pi * circle_radius_cm^2
+print(area_circle)
+```
+
+# 5. Vector exercise
+```{r vector_weight, echo=TRUE, include=TRUE}
+
+vc_weight_kg <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+print(vc_weight_kg)
+```
+
+#calculations with the weight data
+```{r weight_calc, echo=TRUE, include=TRUE}
+mean(vc_weight_kg)    # returns the mean of vc_weight_kg
+var(vc_weight_kg)     # returns the variance of vc_weight_kg
+sd(vc_weight_kg)      # returns the standard deviation of vc_weight_kg
+range(vc_weight_kg) #returns the range of vc_weight_kg
+length(vc_weight_kg)  # returns the number of elements in vc_weight_kg
+
+first_five <- vc_weight_kg[1:5] # returns the first five numbers in the weight vector
+print(first_five)
+```
+
+#new vector calculations
+```{r selection of heights, echo=TRUE, include=TRUE}
+
+vc_height_cm <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(vc_height_cm)
+
+some_child <- vc_height_cm[c(2, 3,9, 10)]
+print(some_child)
+
+shorter_child <- vc_height_cm[vc_height_cm <= 99]
+print(shorter_child)
+```
+
+#BMI calculations
+```{r BMI_calc, echo=TRUE, include=TRUE}
+
+vc_BMI <- vc_weight_kg / ((vc_height_cm/100)^2) #Calculation of BMI
+print(vc_BMI)
+```
+
+#Making sequences
+```{r seq_creation, echo=TRUE, include=TRUE}
+
+seq1 <- seq(from = 0, to = 1, by = 0.1)
+
+print(seq1)
+```
+
+#Making revese sequences
+```{r seq_creation_rev, echo=TRUE, include=TRUE}
+
+seq2 <- rev(seq(from = 1, to = 10, by = 0.5))
+
+print(seq2)
 ```
 
 # Session Information

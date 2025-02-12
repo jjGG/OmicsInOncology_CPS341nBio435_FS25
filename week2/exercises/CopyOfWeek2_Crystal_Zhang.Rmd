@@ -39,8 +39,77 @@ log2(myNumber)
 log(myNumber,2)
 ```
 ```{r lg2, echo=TRUE, include=TRUE}
-sqrt(myNumber)
+a <- sqrt(myNumber)
+print(a)
 ```
+# Calculate the area of a circle with a diameter of 20 cm
+```{r area circle, echo=TRUE, include=TRUE}
+# Area formula: πr²
+diameter <- 20
+radius <- diameter / 2
+area_circle <- pi * radius ^ 2
+print(area_circle)
+```
+#question 5
+```{r vector, echo=TRUE, include=TRUE}
+weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+mean(c)
+```
+# Question 5, 6
+```{r vector, echo=TRUE, include=TRUE}
+weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+
+# Calculate and display statistics
+mean_weight <- mean(weight)          
+variance_weight <- var(weight)       
+sd_weight <- sd(weight)             
+# Range (returns minimum and maximum)
+range_weight <- range(weight)        
+number_children <- length(weight)   
+
+# Print the results
+mean_weight
+variance_weight
+sd_weight
+range_weight
+number_children
+
+# Extract the weights for the first five children
+first_five <- weight[1:5]
+# Print the new variable
+first_five
+```
+# Question 7
+```{r vector, echo=TRUE, include=TRUE}
+height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(height)
+some_child <- height[c(2,3,9,10)]
+shorter_child <- height [height < 99]
+print(some_child)
+print(shorter_child)
+```
+
+#question 8
+```{r bmi, echo=TRUE, include=TRUE}
+height_meters <- height/100
+# Calculate BMI: weight (kg) / (height (m) ^ 2)
+bmi <- weight / ( (height / 100) ^ 2 )  
+print(bmi)
+```
+#question 9
+```{r seq, echo=TRUE, include=TRUE}
+seq1 <- seq(from = 0, to = 1, by = 0.1)
+seq1
+```
+#question 10
+```{r seq, echo=TRUE, include=TRUE}
+#sequences from 1 to 10
+seq2r <- seq (from = 1, to = 10, by = 0.5)
+#reverse it
+seq2 <- rev(seq2r)
+seq2
+```
+
 
 
 # Session Information
