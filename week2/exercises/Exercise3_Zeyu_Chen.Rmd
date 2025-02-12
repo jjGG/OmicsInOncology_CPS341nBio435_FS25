@@ -1,0 +1,64 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 3
+### Task 7
+* from https://alexd106.github.io/intro2R/exercise_2.html
+```{r Whale_datas, echo=FALSE, include=TRUE}
+whaledata <- readxl::read_excel("whaledata.xls")
+str(whaledata)
+# There are 100 observations, 8 variables, and water noise and month are character variables
+summary(whaledata)
+```
+
+### Task 9
+```{r Whale_data2, echo=TRUE, include=TRUE}
+Depth_greater1200 <- whaledata[whaledata$depth > 1200,]
+Gradient_larger200 <- whaledata[whaledata$gradient > 200,]
+Waternoiselow <- whaledata[whaledata$water.noise == "low", ]
+waternoisehigh_in_May <- whaledata[whaledata$water.noise == "high" & whaledata$month == "May",]
+October_waternoiselow_gradientgreaterthan132 <- whaledata[whaledata$water.noise == "high" & whaledata$month == "October" & whaledata$gradient > 132,]
+Latitude6061_longitude <- whaledata[whaledata$latitude > 60 & whaledata$latitude < 61 & whaledata$longitude > -0.6 & whaledata$longitude < -0.4, ] 
+waternoisenotmedium <- whaledata[whaledata$water.noise != "medium",]
+```
+
+### Task 10
+```{r Whale_data3, echo=TRUE, include=TRUE}
+
+waternoisehigh_in_May2 <- whaledata[whaledata$water.noise == "high" & whaledata$month == "May",]
+October_waternoiselow_gradientgreaterthan132 <- whaledata[whaledata$water.noise == "high" & whaledata$month == "October" & whaledata$gradient > median(whaledata$gradient),]
+```
+
+### Task 11
+```{r Whale_data4, echo=TRUE, include=TRUE}
+
+waternoisehigh_in_May2 <- whaledata[whaledata$water.noise == "high" & whaledata$month == "May",]
+Whalelarger1500 <- whaledata[whaledata$depth > 1500 & whaledata$number.whales > mean(whaledata$number.whales),]
+# This is because there is one NA in the number whales. We can use na.rm to ignore NA
+Whalelarger1500 <- whaledata[whaledata$depth > 1500 & whaledata$number.whales > mean(whaledata$number.whales, na.rm = TRUE),]
+# Also the column of number whales is character. So I need to convert it to numerical data. 
+whaledata$number.whales <- as.numeric(whaledata$number.whales)
+Whalelarger1500 <- whaledata[whaledata$depth > 1500 & whaledata$number.whales > mean(whaledata$number.whales, na.rm = TRUE),]
+```
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+

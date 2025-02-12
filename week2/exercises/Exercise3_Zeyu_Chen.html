@@ -345,107 +345,66 @@ display: none;
 
 <div id="exercises-for-the-r-beginner---the-fancy-calculator" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Exercises for the R-Beginner - The fancy calculator</h1>
-<div id="exercise-2" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Exercise 2</h2>
-<div id="task-2" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Task 2</h3>
+<div id="exercise-3" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Exercise 3</h2>
+<div id="task-7" class="section level3" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> Task 7</h3>
 <ul>
 <li>from <a href="https://alexd106.github.io/intro2R/exercise_2.html" class="uri">https://alexd106.github.io/intro2R/exercise_2.html</a></li>
 </ul>
-<pre class="r"><code>myNumber &lt;- 12.43
-
-# do some calculations
-# natural log
-log(12.43)</code></pre>
-<pre><code>## [1] 2.520113</code></pre>
-<pre class="r"><code># log10
-log10(12.43)</code></pre>
-<pre><code>## [1] 1.094471</code></pre>
-<pre class="r"><code>log2(12.43)</code></pre>
-<pre><code>## [1] 3.635754</code></pre>
-<pre class="r"><code>sqrt(12.43)</code></pre>
-<pre><code>## [1] 3.525621</code></pre>
-<pre class="r"><code>exp(12.43)</code></pre>
-<pre><code>## [1] 250196</code></pre>
+<pre><code>## tibble [100 × 8] (S3: tbl_df/tbl/data.frame)
+##  $ month          : chr [1:100] &quot;May&quot; &quot;May&quot; &quot;May&quot; &quot;May&quot; ...
+##  $ time.at.station: num [1:100] 1344 1633 743 1050 1764 ...
+##  $ water.noise    : chr [1:100] &quot;low&quot; &quot;medium&quot; &quot;medium&quot; &quot;medium&quot; ...
+##  $ number.whales  : chr [1:100] &quot;7&quot; &quot;13&quot; &quot;12&quot; &quot;10&quot; ...
+##  $ latitude       : num [1:100] 60.4 60.4 60.5 60.3 60.4 ...
+##  $ longitude      : num [1:100] -4.18 -4.19 -4.62 -4.35 -5.2 -5.22 -5.08 -5 -4.64 -4.84 ...
+##  $ depth          : num [1:100] 520 559 1006 540 1000 ...
+##  $ gradient       : num [1:100] 415 405 88 409 97 173 162 162 245 161 ...</code></pre>
+<pre><code>##     month           time.at.station  water.noise        number.whales     
+##  Length:100         Min.   :  60.0   Length:100         Length:100        
+##  Class :character   1st Qu.: 693.8   Class :character   Class :character  
+##  Mode  :character   Median :1077.5   Mode  :character   Mode  :character  
+##                     Mean   :1064.7                                        
+##                     3rd Qu.:1349.2                                        
+##                     Max.   :2158.0                                        
+##     latitude       longitude          depth         gradient     
+##  Min.   :60.29   Min.   :-6.330   Min.   : 120   Min.   :  0.00  
+##  1st Qu.:60.69   1st Qu.:-4.660   1st Qu.: 987   1st Qu.: 99.25  
+##  Median :61.29   Median :-4.185   Median :1086   Median :132.00  
+##  Mean   :61.16   Mean   :-3.813   Mean   :1087   Mean   :179.78  
+##  3rd Qu.:61.59   3rd Qu.:-2.888   3rd Qu.:1242   3rd Qu.:245.25  
+##  Max.   :62.10   Max.   :-1.530   Max.   :1610   Max.   :671.00</code></pre>
 </div>
-<div id="task-3" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Task 3</h3>
-<pre class="r"><code>Area_circle &lt;- pi*10^2
-print(Area_circle)</code></pre>
-<pre><code>## [1] 314.1593</code></pre>
+<div id="task-9" class="section level3" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> Task 9</h3>
+<pre class="r"><code>Depth_greater1200 &lt;- whaledata[whaledata$depth &gt; 1200,]
+Gradient_larger200 &lt;- whaledata[whaledata$gradient &gt; 200,]
+Waternoiselow &lt;- whaledata[whaledata$water.noise == &quot;low&quot;, ]
+waternoisehigh_in_May &lt;- whaledata[whaledata$water.noise == &quot;high&quot; &amp; whaledata$month == &quot;May&quot;,]
+October_waternoiselow_gradientgreaterthan132 &lt;- whaledata[whaledata$water.noise == &quot;high&quot; &amp; whaledata$month == &quot;October&quot; &amp; whaledata$gradient &gt; 132,]
+Latitude6061_longitude &lt;- whaledata[whaledata$latitude &gt; 60 &amp; whaledata$latitude &lt; 61 &amp; whaledata$longitude &gt; -0.6 &amp; whaledata$longitude &lt; -0.4, ] 
+waternoisenotmedium &lt;- whaledata[whaledata$water.noise != &quot;medium&quot;,]</code></pre>
 </div>
-<div id="task-5" class="section level3" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> Task 5</h3>
-<pre class="r"><code>Weight &lt;- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
-print(Weight)</code></pre>
-<pre><code>##  [1] 69 62 57 59 59 64 56 66 67 66</code></pre>
+<div id="task-10" class="section level3" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> Task 10</h3>
+<pre class="r"><code>waternoisehigh_in_May2 &lt;- whaledata[whaledata$water.noise == &quot;high&quot; &amp; whaledata$month == &quot;May&quot;,]
+October_waternoiselow_gradientgreaterthan132 &lt;- whaledata[whaledata$water.noise == &quot;high&quot; &amp; whaledata$month == &quot;October&quot; &amp; whaledata$gradient &gt; median(whaledata$gradient),]</code></pre>
 </div>
-<div id="task-6" class="section level3" number="1.1.4">
-<h3><span class="header-section-number">1.1.4</span> Task 6</h3>
-<pre class="r"><code>mean(Weight)</code></pre>
-<pre><code>## [1] 62.5</code></pre>
-<pre class="r"><code>var(Weight)</code></pre>
-<pre><code>## [1] 20.72222</code></pre>
-<pre class="r"><code>sd(Weight)</code></pre>
-<pre><code>## [1] 4.552167</code></pre>
-<pre class="r"><code>range(Weight)</code></pre>
-<pre><code>## [1] 56 69</code></pre>
-<pre class="r"><code>length(Weight)</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>first_five &lt;- Weight[1:5]
-print (first_five)</code></pre>
-<pre><code>## [1] 69 62 57 59 59</code></pre>
-</div>
-<div id="task-7" class="section level3" number="1.1.5">
-<h3><span class="header-section-number">1.1.5</span> Task 7</h3>
-<pre class="r"><code>Height &lt;- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
-summary(Height)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##    77.0    85.5   100.5   100.4   112.0   133.0</code></pre>
-<pre class="r"><code>some_child &lt;- Height[c(2, 3, 9, 10 )]
-shorter_child &lt;- Height[Height &lt;= 99]
-print(shorter_child)</code></pre>
-<pre><code>## [1] 83 84 99 90 77</code></pre>
-</div>
-<div id="task-8" class="section level3" number="1.1.6">
-<h3><span class="header-section-number">1.1.6</span> Task 8</h3>
-<pre class="r"><code>bmi &lt;- Weight/(Height/100)^2
-print(bmi)</code></pre>
-<pre><code>##  [1] 55.00638 59.59246 82.74060 83.61678 60.19794 79.01235 94.45100 52.61480
-##  [9] 37.87665 52.61480</code></pre>
-</div>
-<div id="task-9" class="section level3" number="1.1.7">
-<h3><span class="header-section-number">1.1.7</span> Task 9</h3>
-<pre class="r"><code>seq1 &lt;- seq(from = 0, to = 10, by = 0.1 )
-print(seq1)</code></pre>
-<pre><code>##   [1]  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4
-##  [16]  1.5  1.6  1.7  1.8  1.9  2.0  2.1  2.2  2.3  2.4  2.5  2.6  2.7  2.8  2.9
-##  [31]  3.0  3.1  3.2  3.3  3.4  3.5  3.6  3.7  3.8  3.9  4.0  4.1  4.2  4.3  4.4
-##  [46]  4.5  4.6  4.7  4.8  4.9  5.0  5.1  5.2  5.3  5.4  5.5  5.6  5.7  5.8  5.9
-##  [61]  6.0  6.1  6.2  6.3  6.4  6.5  6.6  6.7  6.8  6.9  7.0  7.1  7.2  7.3  7.4
-##  [76]  7.5  7.6  7.7  7.8  7.9  8.0  8.1  8.2  8.3  8.4  8.5  8.6  8.7  8.8  8.9
-##  [91]  9.0  9.1  9.2  9.3  9.4  9.5  9.6  9.7  9.8  9.9 10.0</code></pre>
-</div>
-<div id="task-10" class="section level3" number="1.1.8">
-<h3><span class="header-section-number">1.1.8</span> Task 10</h3>
-<pre class="r"><code>seq2 &lt;- rev(seq(from = 1, to = 10, by = 0.5 ))
-print(seq2)</code></pre>
-<pre><code>##  [1] 10.0  9.5  9.0  8.5  8.0  7.5  7.0  6.5  6.0  5.5  5.0  4.5  4.0  3.5  3.0
-## [16]  2.5  2.0  1.5  1.0</code></pre>
-</div>
-<div id="task-13" class="section level3" number="1.1.9">
-<h3><span class="header-section-number">1.1.9</span> Task 13</h3>
-<pre class="r"><code>child_name &lt;- c(&quot;Alfred&quot;, &quot;Barbara&quot;, &quot;James&quot;, &quot;Jane&quot;, &quot;John&quot;, &quot;Judy&quot;, &quot;Louise&quot;, &quot;Mary&quot;, &quot;Ronald&quot;, &quot;William&quot;)</code></pre>
-</div>
-<div id="task-14" class="section level3" number="1.1.10">
-<h3><span class="header-section-number">1.1.10</span> Task 14</h3>
-<pre class="r"><code>Height_ord &lt;- order(Height)  
-Names_sort &lt;- child_name[Height_ord]</code></pre>
-</div>
-<div id="task-15" class="section level3" number="1.1.11">
-<h3><span class="header-section-number">1.1.11</span> Task 15</h3>
-<pre class="r"><code>weight_ord &lt;- rev(order(Weight))
-weight_rev &lt;- child_name[weight_ord]</code></pre>
+<div id="task-11" class="section level3" number="1.1.4">
+<h3><span class="header-section-number">1.1.4</span> Task 11</h3>
+<pre class="r"><code>waternoisehigh_in_May2 &lt;- whaledata[whaledata$water.noise == &quot;high&quot; &amp; whaledata$month == &quot;May&quot;,]
+Whalelarger1500 &lt;- whaledata[whaledata$depth &gt; 1500 &amp; whaledata$number.whales &gt; mean(whaledata$number.whales),]</code></pre>
+<pre><code>## Warning in mean.default(whaledata$number.whales): argument is not numeric or
+## logical: returning NA</code></pre>
+<pre class="r"><code># This is because there is one NA in the number whales. We can use na.rm to ignore NA
+Whalelarger1500 &lt;- whaledata[whaledata$depth &gt; 1500 &amp; whaledata$number.whales &gt; mean(whaledata$number.whales, na.rm = TRUE),]</code></pre>
+<pre><code>## Warning in mean.default(whaledata$number.whales, na.rm = TRUE): argument is not
+## numeric or logical: returning NA</code></pre>
+<pre class="r"><code># Also the column of number whales is character. So I need to convert it to numerical data. 
+whaledata$number.whales &lt;- as.numeric(whaledata$number.whales)</code></pre>
+<pre><code>## Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>Whalelarger1500 &lt;- whaledata[whaledata$depth &gt; 1500 &amp; whaledata$number.whales &gt; mean(whaledata$number.whales, na.rm = TRUE),]</code></pre>
 </div>
 </div>
 </div>
@@ -460,7 +419,7 @@ en_US.UTF-8||en_US.UTF-8||en_US.UTF-8||C||en_US.UTF-8||en_US.UTF-8</p>
 <p><strong>other attached packages:</strong>
 readr(v.2.1.5)</p>
 <p><strong>loaded via a namespace (and not attached):</strong>
-<em>vctrs(v.0.6.5)</em>, <em>cli(v.3.6.3)</em>, <em>knitr(v.1.49)</em>, <em>rlang(v.1.1.4)</em>, <em>xfun(v.0.50)</em>, <em>jsonlite(v.1.8.9)</em>, <em>glue(v.1.7.0)</em>, <em>htmltools(v.0.5.8.1)</em>, <em>sass(v.0.4.9)</em>, <em>hms(v.1.1.3)</em>, <em>fansi(v.1.0.6)</em>, <em>rmarkdown(v.2.28)</em>, <em>pander(v.0.6.5)</em>, <em>evaluate(v.1.0.0)</em>, <em>jquerylib(v.0.1.4)</em>, <em>tibble(v.3.2.1)</em>, <em>tzdb(v.0.4.0)</em>, <em>fastmap(v.1.2.0)</em>, <em>yaml(v.2.3.10)</em>, <em>lifecycle(v.1.0.4)</em>, <em>bookdown(v.0.42)</em>, <em>compiler(v.4.4.1)</em>, <em>Rcpp(v.1.0.13)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>rstudioapi(v.0.16.0)</em>, <em>digest(v.0.6.37)</em>, <em>R6(v.2.5.1)</em>, <em>utf8(v.1.2.4)</em>, <em>pillar(v.1.9.0)</em>, <em>magrittr(v.2.0.3)</em>, <em>bslib(v.0.8.0)</em>, <em>tools(v.4.4.1)</em> and <em>cachem(v.1.1.0)</em></p>
+<em>vctrs(v.0.6.5)</em>, <em>cli(v.3.6.3)</em>, <em>knitr(v.1.49)</em>, <em>rlang(v.1.1.4)</em>, <em>xfun(v.0.50)</em>, <em>jsonlite(v.1.8.9)</em>, <em>glue(v.1.7.0)</em>, <em>htmltools(v.0.5.8.1)</em>, <em>sass(v.0.4.9)</em>, <em>readxl(v.1.4.3)</em>, <em>hms(v.1.1.3)</em>, <em>fansi(v.1.0.6)</em>, <em>rmarkdown(v.2.28)</em>, <em>pander(v.0.6.5)</em>, <em>cellranger(v.1.1.0)</em>, <em>evaluate(v.1.0.0)</em>, <em>jquerylib(v.0.1.4)</em>, <em>tibble(v.3.2.1)</em>, <em>tzdb(v.0.4.0)</em>, <em>fastmap(v.1.2.0)</em>, <em>yaml(v.2.3.10)</em>, <em>lifecycle(v.1.0.4)</em>, <em>bookdown(v.0.42)</em>, <em>compiler(v.4.4.1)</em>, <em>Rcpp(v.1.0.13)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>rstudioapi(v.0.16.0)</em>, <em>digest(v.0.6.37)</em>, <em>R6(v.2.5.1)</em>, <em>utf8(v.1.2.4)</em>, <em>pillar(v.1.9.0)</em>, <em>magrittr(v.2.0.3)</em>, <em>bslib(v.0.8.0)</em>, <em>tools(v.4.4.1)</em> and <em>cachem(v.1.1.0)</em></p>
 </div>
 
 
