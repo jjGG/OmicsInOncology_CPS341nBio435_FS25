@@ -80,10 +80,16 @@ num_weights <- length(weight)
 first_five <- weight[1:5]
 ```
 
-## excercise 2.7
+## excercise 2.7&2.8
 ```{r, echo=TRUE, include=TRUE}
 # height of children
-height
+height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(height)
+some_child <- height[c(2,3,9,10)]
+shorter_child <- height [height <= 99]
+
+#bmi of children
+bmi <- weight/(height^2)
 ```
 
 # Session Information
