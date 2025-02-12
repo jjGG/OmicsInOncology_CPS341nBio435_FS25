@@ -26,10 +26,14 @@ myNumber <- 12.43
 log(myNumber)
 ```
 
+
+### Task 2
+
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
 log10(myNumber)
 ```
+
 
 # Session Information
 
