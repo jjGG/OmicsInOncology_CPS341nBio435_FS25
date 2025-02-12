@@ -1,0 +1,61 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 2
+* from https://alexd106.github.io/intro2R/exercise_2.html
+
+### Question 2
+
+```{r myN, echo=TRUE, include=TRUE}
+myNumber <- 12.43
+
+# do some calculations
+# natural log
+log(myNumber)
+```
+
+```{r lg10, echo=TRUE, include=TRUE}
+# log10
+log10(myNumber)
+```
+
+```{r, echo=TRUE, include=TRUE}
+log2(myNumber)
+```
+```{r sqrt, echo=TRUE, include=TRUE}
+sqrt(myNumber)
+```
+
+```{r exp, echo=TRUE, include=TRUE}
+exp(myNumber)
+```
+### Question 3
+
+```{r, echo=TRUE, include=TRUE}
+r <- 20
+area <- pi*r*r
+print(area)
+```
+
+
+
+# Session Information
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+

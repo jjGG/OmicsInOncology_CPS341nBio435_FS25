@@ -16,7 +16,7 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 # Exercises for the R-Beginner - The fancy calculator
 
-## Exercise 2
+## Exercise 2.2
 * from https://alexd106.github.io/intro2R/exercise_2.html
 ```{r myN, echo=FALSE, include=TRUE}
 myNumber <- 12.43
@@ -29,6 +29,61 @@ log(myNumber)
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
 log10(myNumber)
+```
+
+```{r, echo=TRUE, include=TRUE}
+log2(myNumber)
+```
+```{r, echo=TRUE, include=TRUE}
+# squareroot
+sqrt(myNumber)
+```
+```{r, echo=TRUE, include=TRUE}
+# antilog
+exp(myNumber)
+```
+## excercise 2.3
+```{r, echo=TRUE, include=TRUE}
+# area of circle
+
+# Given diameter
+diameter <- 20
+
+# Calculate the radius
+radius <- diameter / 2
+
+# Calculate the area
+area_circle <- pi * radius^2
+```
+
+# excercise 2.5&2.6
+```{r, echo=TRUE, include=TRUE}
+# creating vector
+weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+
+# Calculate the mean
+weight_mean <- mean(weight)
+
+# Calculate variance
+variance_weight <- var(weight)
+
+# Calculate the standard deviation
+sd_weight <- sd(weight)
+
+# Calculate the range
+range_weight <- range(weight)
+
+# Calculate the number of elements in the vector
+num_weights <- length(weight)
+
+# Weight of first 5 children
+first_five <- weight[1:5]
+```
+
+## excercise 2.7
+```{r, echo=TRUE, include=TRUE}
+# height of children
+height <- 8
 ```
 
 # Session Information
