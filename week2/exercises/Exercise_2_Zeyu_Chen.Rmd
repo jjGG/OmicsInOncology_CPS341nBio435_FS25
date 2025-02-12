@@ -1,0 +1,109 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 2
+### Task 2
+* from https://alexd106.github.io/intro2R/exercise_2.html
+```{r myN, echo=TRUE, include=TRUE}
+myNumber <- 12.43
+
+# do some calculations
+# natural log
+log(12.43)
+```
+
+```{r lg10, echo=TRUE, include=TRUE}
+# log10
+log10(12.43)
+```
+
+```{r log2, echo=TRUE, include=TRUE}
+log2(12.43)
+```
+
+```{r sqrt, echo=TRUE, include=TRUE}
+sqrt(12.43)
+```
+
+```{r natural_log, echo=TRUE, include=TRUE}
+exp(12.43)
+```
+
+### Task 3
+
+```{r Area_of_circle, echo=TRUE, include=TRUE}
+Area_circle <- pi*10^2
+print(Area_circle)
+```
+
+### Task 5
+
+```{r Vector, echo=TRUE, include=TRUE}
+Weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+print(Weight)
+```
+
+### Task 6
+
+```{r Vector_2, echo=TRUE, include=TRUE}
+mean(Weight)
+var(Weight)
+sd(Weight)
+range(Weight)
+length(Weight)
+first_five <- Weight[1:5]
+print (first_five)
+```
+
+### Task 7
+
+```{r Vector_3, echo=TRUE, include=TRUE}
+Height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(Height)
+some_child <- Height[c(2, 3, 9, 10 )]
+shorter_child <- Height[Height <= 99]
+print(shorter_child)
+```
+
+### Task 8
+
+```{r weight_and_height, echo=TRUE, include=TRUE}
+bmi <- Weight/(Height/100)^2
+print(bmi)
+```
+
+### Task 9
+
+```{r sequences, echo=TRUE, include=TRUE}
+seq1 <- seq(from = 0, to = 10, by = 0.1 )
+print(seq1)
+```
+
+### Task 10
+
+```{r sequences 2, echo=TRUE, include=TRUE}
+seq2 <- rev(seq(from = 1, to = 10, by = 0.5 ))
+print(seq2)
+```
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
