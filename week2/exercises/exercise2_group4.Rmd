@@ -28,7 +28,33 @@ log(myNumber)
 
 ```{r lg10, echo=TRUE, include=TRUE}
 # log10
-log10(10)
+log10(myNumber)
+```
+
+```{r lg2, echo=TRUE, include=TRUE}
+# log2
+log2(myNumber)
+```
+```{r squarer, echo=TRUE, include=TRUE}
+# square root
+sqrt(myNumber)
+```
+```{r antilog, echo=TRUE, include=TRUE}
+# antilog
+exp(myNumber)
+```
+## Exercise 3
+```{r , echo=TRUE, include=TRUE}
+# circle diameter in meters
+area_circle <- (0.1)^2*pi
+print(area_circle)
+```
+
+## Exercise 5
+```{r , echo=TRUE, include=TRUE}
+# create a vectorfor weight in kg
+weight <- c(69,62,57,59,59,64,56,66,67,66)
+print (weight)
 ```
 
 # Session Information
