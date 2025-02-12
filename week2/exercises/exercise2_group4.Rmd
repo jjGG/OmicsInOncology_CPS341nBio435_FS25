@@ -43,20 +43,20 @@ sqrt(myNumber)
 # antilog
 exp(myNumber)
 ```
-## Exercise 3
+### Exercise 3
 ```{r , echo=TRUE, include=TRUE}
 # circle diameter in meters
 area_circle <- (0.1)^2*pi
 print(area_circle)
 ```
 
-## Exercise 5
+### Exercise 5
 ```{r , echo=TRUE, include=TRUE}
 # create a vectorfor weight in kg
 weight <- c(69,62,57,59,59,64,56,66,67,66)
 print (weight)
 ```
-## Exercise 6
+### Exercise 6
 ```{r , echo=TRUE, include=TRUE}
 # using the vector weight
 weight <- c(69,62,57,59,59,64,56,66,67,66)
@@ -69,7 +69,7 @@ length(weight)
 first_five <- weight[1:5]
 print(first_five)
 ```
-## Exercise 7
+### Exercise 7
 ```{r , echo=TRUE, include=TRUE}
 # create a vector height in cm
 
@@ -79,19 +79,26 @@ some_child <- height[c(2,3,9,10)]
 shorter_child <- height[height<=99]
 ```
 
-## Exercise 8
+### Exercise 8
 ```{r , echo=TRUE, include=TRUE}
 # calculate BMI
-
 bmi <- weight / (height/100)^2 
 ```
 
-## Exercise 9
+### Exercise 9
 ```{r , echo=TRUE, include=TRUE}
-# calculate BMI
-
-bmi <- weight / (height/100)^2 
+# create a sequence 
+seq1 <- c(seq(0,1,0.1))
+print(seq1)
 ```
+### Exercise 10
+```{r , echo=TRUE, include=TRUE}
+# new sequence 
+seq2 <- c(sort(seq(1,10,0.5),TRUE))
+print(seq2)
+```
+## Exercise 3
+
 
 # Session Information
 
