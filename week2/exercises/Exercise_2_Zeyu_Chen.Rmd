@@ -100,6 +100,24 @@ print(seq1)
 seq2 <- rev(seq(from = 1, to = 10, by = 0.5 ))
 print(seq2)
 ```
+
+### Task 13
+```{r sequences 3, echo=TRUE, include=TRUE}
+child_name <- c("Alfred", "Barbara", "James", "Jane", "John", "Judy", "Louise", "Mary", "Ronald", "William")
+```
+
+### Task 14
+```{r sequences 4, echo=TRUE, include=TRUE}
+Height_ord <- order(Height)  
+Names_sort <- child_name[Height_ord]
+```
+
+### Task 15
+```{r sequences 5, echo=TRUE, include=TRUE}
+weight_ord <- rev(order(Weight))
+weight_rev <- child_name[weight_ord]
+```
+
 # Session Information
 
 ```{r sessionInfo, echo=FALSE, include=TRUE}
