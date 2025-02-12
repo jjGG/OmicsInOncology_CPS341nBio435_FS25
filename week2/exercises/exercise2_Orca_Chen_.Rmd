@@ -34,7 +34,7 @@ log10(myNumber)
 
 ```{r lg2, echo=TRUE, include=TRUE}
 # lg2
-lg2(myNumber)
+log2(myNumber)
 ```
 
 ```{r square_root, echo=TRUE, include=TRUE}
