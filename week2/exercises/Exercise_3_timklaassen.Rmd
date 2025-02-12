@@ -14,21 +14,63 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
-# Exercises for the R-Beginner - The fancy calculator
+#Exercise 3: Importing and manipulating dataframes
 
-## Exercise 2
+## Exercise 3
 * from https://alexd106.github.io/intro2R/exercise_2.html
-```{r myN, echo=FALSE, include=TRUE}
-myNumber <- 12.43
+```{r 5., echo=TRUE, include=TRUE}
+whale <- read.table(file = '/Users/tim/Library/CloudStorage/OneDrive-UniversiteitUtrecht/Documents/☆Academische Bestanden/☆Universiteit Utrecht/3e jaar Bachelor/(FA-CPS341) Omics in Oncology/repo_clone_group1/week2/data4exercises/mywhaledata.tsv', header = TRUE, sep = "\t", stringsAsFactors = TRUE)
+head(whale)
+names(whale)
+str(whale)
 
-# do some calculations
-# natural log
-log(myNumber)
+# 'data.frame':	100 obs. of  8 variables:
+#  $ month          : Factor w/ 2 levels "May","October": 1 1 1 1 1 1 1 1 1 1 ...
+#  $ time.at.station: int  1344 1633 743 1050 1764 580 459 561 709 690 ...
+#  $ water.noise    : Factor w/ 3 levels "high","low","medium": 2 3 3 3 3 1 3 3 3 3 ...
+#  $ number.whales  : int  7 13 12 10 12 10 5 8 11 12 ...
+#  $ latitude       : num  60.4 60.4 60.5 60.3 60.4 ...
+#  $ longitude      : num  -4.18 -4.19 -4.62 -4.35 -5.2 -5.22 -5.08 -5 -4.64 -4.84 ...
+#  $ depth          : int  520 559 1006 540 1000 1000 993 988 954 984 ...
+#  $ gradient       : int  415 405 88 409 97 173 162 162 245 161 ...
+
+# Amount of observations: 100
+# Amoumt of variables: 8
+# month type of variable: factor w/ 2 levels
+# water.noise type of variable: factor w/ 3 levels
+
+summary(whale)
+#number.whales has one missing value, the others don't have missing values.
+#factors only have the correlating amounts depicted while on the numeric and integers show more statistics
 ```
 
-```{r lg10, echo=TRUE, include=TRUE}
-# log10
-log10(myNumber)
+```{r 9., echo=TRUE, include=TRUE}
+depths_gt_1200m <- whale[whale$depth > 1200,]
+
+gradient_st_200degrees <- whale[whale$gradient > 200,]
+
+low_level_waternoise <- whale[whale$water.noise == "Low",]
+
+High_level_waternoise_may <- whale[whale$water.noise == "high" & whale$month == "may",]
+
+low_level_waternoise_october_and_mediangradient132 <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > 132,]
+
+observations_between_lat_60.0_61.0_and_long_neg6_neg4 <- whale[whale$latitude > 60 & whale$latitude < 61 & whale$longitude > -6.0 & whale$longitude < -4.0,]
+
+observations_without_medium_waternoise <- whale[whale$water.noise != "medium",]
+print(depths_gt_1200m)
+print(low_level_waternoise)
+print(High_level_waternoise_may)
+print(low_level_waternoise_october_and_mediangradient132)
+print(observations_between_lat_60.0_61.0_and_long_neg6_neg4)
+print(observations_without_medium_waternoise)
+
+low_level_waternoise_october_and_mediangradient132median <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median(whale$gradient),]
+print(low_level_waternoise_october_and_mediangradient132median)
+
+spotted_whales_depthgreaterthan1500m <- whale[whale$depth > 1500 & whale$number.whales > median(whale$number.whales, na.rm = TRUE),]
+#problem arose because of the missing value in number.whales making the mean also NA messing up the whole depiction. Key is to neglect the missing data with na.rm = TRUE
+print(spotted_whales_depthgreaterthan1500m)
 ```
 
 # Session Information
