@@ -1,0 +1,165 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 2
+* from https://alexd106.github.io/intro2R/exercise_2.html
+```{r myN, echo=FALSE, include=TRUE}
+myNumber <- 12.43
+
+# do some calculations
+# natural log
+log(myNumber)
+```
+
+```{r lg10, echo=TRUE, include=TRUE}
+# log10
+log10(myNumber)
+```
+
+```{r lg2, echo=TRUE, include=TRUE}
+# lg2
+lg2(myNumber)
+```
+
+```{r square_root, echo=TRUE, include=TRUE}
+# square_root
+sqrt(myNumber)
+```
+
+```{r natural_antilog, echo=TRUE, include=TRUE}
+# natural_antilog
+exp(myNumber)
+```
+```{r circle_area, echo=TRUE, include=TRUE}
+# Q3: Circle_area calculations
+d <- 20
+(d/2)^2*pi*0.5
+```
+```{r cube_root, echo=TRUE, include=TRUE}
+# Q4: cube root
+(14*0.51)^(1/3)
+```
+
+```{r weight_vector, echo=TRUE, include=TRUE}
+# Q5: Weight_vector
+Weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+```
+
+```{r Weight_calculation, echo=TRUE, include=TRUE}
+# Q6:mean
+mean(Weight)
+# Variance
+var(Weight)
+# Standard deviation
+sd(Weight)
+# range of weight
+range(Weight)
+# number of children
+length(Weight)
+```
+
+```{r Height_vector, echo=TRUE, include=TRUE}
+# Q7: height_vector
+Height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary(Height)
+# position_index_extraction
+some_child <- Height[c(2,3,9,10)]
+summary(some_chil)
+# logical_index_extraction
+shorter_child <- Height[Height <= 99]
+summary(shorter_child)
+```
+```{r BMI, echo=TRUE, include=TRUE}
+# Q8: BMI
+BMI <- Weight/(sqrt(Height))
+```
+
+```{r sequence, echo=TRUE, include=TRUE}
+# Q9: Seq( )
+seq1 <- seq(from = 0, to = 1, by = 0.5)
+```
+
+```{r seq_2, echo=TRUE, include=TRUE}
+# Q10: sequence
+seq2 <- rev(seq(from = 1, to = 10, by = 0.5))
+```
+
+```{r seq_more, echo=TRUE, include=TRUE}
+# Q11: sequence
+seq3 <- rep(1:3, times = 3)
+seq3
+seq4 <- rep(c("a","e","c","g"), each =3)
+seq4
+seq5 <- rep(c("a","e","c","g"), times =3)
+seq5
+seq6 <- rep(1:3, times =3, each = 3)
+seq6
+seq7 <- rep(1:5, times = (5:1))
+seq7
+inc.vec1 <- c(7,2,8,1)
+inc.vec2 <- c(4,3,1,5)
+seq8 <- rep(inc.vec1, times = inc.vec2)
+seq8
+```
+
+```{r height_sorted, echo=TRUE, include=TRUE}
+# Q12: height_order
+height_sorted <- sort(Height, decreasing = F)
+height_sorted
+```
+```{r child_name, echo=TRUE, include=TRUE}
+child_name <- c("Alfred", "Barbara", "James", "Jane", "John", "Judy", "Louise", "Mary", "Ronald", "William")
+child_name
+```
+```{r Q14_child_sorted, echo=TRUE, include=TRUE}
+# order()
+height_ord <- order(Height)
+height_ord
+child_ord <- child_name[height_ord]
+child_ord
+# Louise is the shortes while Ronald is the tallest
+range(Height)
+```
+
+```{r Q15, echo=TRUE, include=TRUE}
+# order()
+weight_rev <- order(Weight, decreasing = T)
+child_weight_rev <- child_name[weight_rev]
+child_weight_rev
+# The fattest is Alfred while the thinnest is Louise
+```
+
+```{r Q16_NA_Managements, echo=TRUE, include=TRUE}
+Mydata <- c(2, 4, 1, 6, 8, 5, NA, 4, 7)
+mean (Mydata, na.rm = T) #na.rm = T: ignore the NA value
+```
+
+```{r Q17_List, echo=TRUE, include=TRUE}
+rm(seq_1)
+ls()
+```
+
+
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
