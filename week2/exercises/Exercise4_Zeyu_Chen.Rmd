@@ -1,0 +1,85 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 4
+### Task 4
+* from https://alexd106.github.io/intro2R/exercise_2.html
+```{r squid , echo=TRUE, include=TRUE}
+squid <- read.table('~/Downloads/r studio stuffs/omics 2/week2/exercises/squid1.txt', header = TRUE)
+str(squid)
+```
+
+### Task 5
+```{r squid 2 , echo=TRUE, include=TRUE}
+table(squid$month, squid$year)
+```
+
+### Task 9
+```{r squid 3 graph , echo=TRUE, include=TRUE}
+plot(squid$DML, squid$weight)
+plot(squid$DML, log(squid$weight))
+plot(squid$DML, sqrt(squid$weight))
+# I find it is easier to compare using separate plot, rather than creating new data frames
+jpeg('squidplot.jpeg')
+plot(squid$DML, sqrt(squid$weight))
+dev.off()
+```
+
+### Task 10
+```{r squid 4 graph , echo=TRUE, include=TRUE}
+library(vioplot)
+boxplot(DML ~ maturity.stage, data = squid, xlab = "maturity stage", ylab = "DML")
+vioplot(DML ~ maturity.stage, data = squid, xlab = "maturity stage", ylab = "DML")
+```
+
+### Task 12
+```{r squid 5 graph , echo=TRUE, include=TRUE}
+# This question I was struggled and used chatgpt. Because panel.cor and panel.hist isn't defined. 
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor) {
+  usr <- par("usr")
+  on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1), new = TRUE)  # `new = TRUE` prevents opening a new plot
+  
+  r <- cor(x, y, use = "complete.obs")
+  txt <- paste0(prefix, formatC(r, format = "f", digits = digits))
+  if (missing(cex.cor)) cex.cor <- 0.8 / strwidth(txt)
+  text(0.5, 0.5, txt, cex = cex.cor)
+}
+
+panel.hist <- function(x, ...) {
+  usr <- par("usr")  
+  on.exit(par(usr))  
+  par(usr = c(usr[1:2], 0, 1.5), new = TRUE)  # Set `new = TRUE` to prevent a new plot
+  
+  hist(x, col = "lightgray", probability = TRUE, main = "", axes = FALSE, ...)  
+  if (length(unique(na.omit(x))) > 1) {  
+    lines(density(x, na.rm = TRUE), col = "blue", lwd = 2)  
+  }
+}
+
+
+
+pairs(squid[, c("DML", "weight", "eviscerate.weight", "ovary.weight", "nid.length", "nid.weight")], diag.panel = panel.hist, lower.panel = panel.cor, upper.panel = panel.smooth)
+```
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
