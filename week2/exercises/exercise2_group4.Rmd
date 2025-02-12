@@ -103,16 +103,114 @@ print(seq2)
 # learn about whales
 whaledata <- readxl::read_xls("whaledata.xls")
 str(whaledata)
-# 100 observations about 8 variables, monrth and water.noise are character variables. 
+# 100 observations about 8 variables, month and water.noise are character variables. 
 ```
 ### Question 7
 ```{r , echo=TRUE, include=TRUE}
 # more whales 
 summary(whaledata)
+# it does not give the number of missing values, so we tried something else
+colSums(is.na(whaledata))
+# there are no missing values 
 
-# 
+```
+### Question 9
+```{r , echo=TRUE, include=TRUE}
+deep <- whaledata[whaledata$depth>1200,]
+steep <- whaledata[whaledata$gradient>200,]
+quiet <- whaledata[whaledata$water.noise=='low',]
+noisy_in_may <-whaledata[whaledata$month=='May' & whaledata$water.noise=='high',]
+oct_lowNoise_highGrad <- whaledata[whaledata$month == "October" & 
+                                   whaledata$water.noise == "low" & 
+                                   whaledata$gradient > 132, ]
+basic_lat_long <- whaledata[whaledata$latitude >= 60 & whaledata$latitude <= 61 &                    whaledata$longitude >= -6 & whaledata$longitude <= 4,]
+mediumnoise <- whaledata[whaledata$water.noise=='medium', ]
+```
+### Question 10
+```{r , echo=TRUE, include=TRUE}
+oct_lowNoise_highGrad <- whaledata[whaledata$month == "October" & 
+                                   whaledata$water.noise == "low" & 
+                                   whaledata$gradient > median(whaledata$gradient), ]
+```
+### Question 11
+```{r , echo=TRUE, include=TRUE}
+
+# mean(whaledata$number.whales) returns a NA, because the variable is listed as a character variable and not a numeric variable. 
+# So to fix that:
+
+whaledata$number.whales <- as.numeric(as.character(whaledata$number.whales))
+greatdepths <- whaledata[whaledata$depth>1500 & whaledata$number.whales>mean(whaledata$number.whales,na.rm=TRUE), ]
+
+# Just to check: 
+mean(whaledata$number.whales, na.rm=TRUE) # mean = 11
+# Yes, all values in greatdepths have a number.whales above 11 and a depth >1500
 ```
 
+## Exercise 4
+### Question 4
+```{r , echo=TRUE, include=TRUE}
+squid <- read.table('squid1.txt', header=TRUE)
+str(squid)
+summary(squid)
+
+squid$year <- factor(squid$year) #I dont know how to change the names of the variables, so just continuing like this: year
+squid$month <- factor(squid$month) #month
+squid$maturity.stage <- factor(squid$maturity.stage) #maturity stage
+```
+
+### Question 9
+```{r squid 3 graph , echo=TRUE, include=TRUE}
+plot(squid$DML, squid$weight) # Yes, pretty linear, but maybe a transformation would make it more linear.
+plot(squid$DML, log(squid$weight))
+squid$sqrtweight <- sqrt(squid$weight)
+plot(squid$DML, sqrt(squid$weight)) # This graph is fully linear, DML is proportional to the squareroot of weight. 
+```
+
+### Question 10
+```{r, echo=TRUE, include=TRUE}
+install.packages('vioplot', repos = "http://cran.us.r-project.org")
+library(vioplot)
+boxplot(DML ~ maturity.stage, data = squid, xlab = "maturity stage", ylab = "DML")
+vioplot(DML ~ maturity.stage, data = squid, xlab = "maturity stage", ylab = "DML")
+```
+### Question 11
+```{r , echo=TRUE, include=TRUE}
+coplot(squid$sqrtweight ~ squid$DML | squid$maturity.stage, columns=5, xlab = 'DML', ylab = 'Square root of weight')
+```
+### Question 12
+```{r, echo=TRUE, include=TRUE}
+pairs(squid[, c("DML", "weight", "eviscerate.weight", 
+                "ovary.weight", "nid.length", 'nid.weight')], 
+                 lower.panel = panel.cor,
+                 diag.panel = panel.hist,
+                 upper.panel = panel.smooth)
+
+# We used the following code from the Intro to R book: 
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
+{
+    usr <- par("usr")
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+panel.hist <- function(x, ...)
+{
+    usr <- par("usr")
+    par(usr = c(usr[1:2], 0, 1.5) )
+    h <- hist(x, plot = FALSE)
+    breaks <- h$breaks; nB <- length(breaks)
+    y <- h$counts; y <- y/max(y)
+    rect(breaks[-nB], 0, breaks[-1], y, col = 'pink', ...)
+}
+```
+### Question 13
+```{r , echo=TRUE, include=TRUE}
+coplot(squid$sqrtweight ~ squid$DML | squid$maturity.stage, columns=5, xlab = 'DML', ylab = 'Square root of weight')
+```
 
 # Session Information
 
