@@ -9,7 +9,6 @@ bibliography: bibliography.bib
 ---
 
 ```{r load libraries, include=FALSE}
-
 # install readr from CRAN
 # install.packages("readr")
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
@@ -19,16 +18,14 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 ## Exercise 2
 * from https://alexd106.github.io/intro2R/exercise_2.html
+
+### Q2
 ```{r myN, echo=FALSE, include=TRUE}
 myNumber <- 12.43
 
 # do some calculations
 # natural log
 log(myNumber)
-log10(myNumber)
-log2(myNumber)
-sqrt(myNumber)
-exp(myNumber)
 ```
 
 ```{r lg10, echo=TRUE, include=TRUE}
@@ -36,10 +33,19 @@ exp(myNumber)
 log10(myNumber)
 ```
 
+```{r lg2, echo=TRUE, include=TRUE}
+# log2
+log2(myNumber)
+log(myNumber,2)
+```
+```{r lg2, echo=TRUE, include=TRUE}
+sqrt(myNumber)
+```
+
+
 # Session Information
 
 ```{r sessionInfo, echo=FALSE, include=TRUE}
 pander::pander(sessionInfo())
 ```
-
 
