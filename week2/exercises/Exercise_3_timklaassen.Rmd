@@ -9,7 +9,6 @@ bibliography: bibliography.bib
 ---
 
 ```{r load libraries, include=FALSE}
-
 # install readr from CRAN
 # install.packages("readr")
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
@@ -25,10 +24,6 @@ myNumber <- 12.43
 # do some calculations
 # natural log
 log(myNumber)
-log10(myNumber)
-log2(myNumber)
-sqrt(myNumber)
-exp(myNumber)
 ```
 
 ```{r lg10, echo=TRUE, include=TRUE}
