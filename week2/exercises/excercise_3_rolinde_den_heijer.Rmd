@@ -14,13 +14,63 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
+```{r setup, include=FALSE}
+install.packages("readxl")  # Only install if not already installed
+library(readxl)  # Load the readxl package
+```
+
+
 # Exercises for the R-Beginner - The fancy calculator
 
 ## Exercise 3
-* from https://alexd106.github.io/intro2R/exercise_2.html
+* from https://alexd106.github.io/intro2R/exercise_3.html
+
+## excercise 3.4&3.5&3.7
 ```{r, echo=FALSE, include=TRUE}
+whale <- read_excel("C:/Users/rolin/Documents/OmicsInOncology_CPS341nBio435_FS25/week2/data4exercises/whaledata.xls")
+summary(whale)
+```
 
+## excercise 3.9
+```{r, echo=FALSE, include=TRUE}
+# Depths greater than 1200 meters
+depth_gt_1200 <- whale[whale$depth > 1200, ]
 
+# Gradient steeper than 200 degrees
+gradient_gt_200 <- whale[whale$gradient > 200, ]
+
+# Water noise level of 'low'
+low_noise <- whale[whale$water.noise == "low", ]
+
+# Water noise level of 'high' in the month of 'May'
+high_noise_may <- whale[whale$water.noise == "high" & whale$month == "May", ]
+
+# Month of 'October', water noise level of 'low', and gradient greater than the median value of gradient (132)
+october_low_noise_high_gradient <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > 132, ]
+
+# All observations from between latitudes 60.0 and 61.0 and longitudes -6.0 and -4.0
+lat_lon_range <- whale[whale$latitude >= 60.0 & whale$latitude <= 61.0 & whale$longitude >= -6.0 & whale$longitude <= -4.0, ]
+
+# All rows that do not have a water noise level of 'medium'
+not_medium_noise <- whale[whale$water.noise != "medium", ]
+```
+
+## excercise 3.10
+```{r, echo=FALSE, include=TRUE}
+# Calculate the median of the 'gradient' column
+median_gradient <- median(whale$gradient, na.rm = TRUE)
+
+# Extract rows where the month is 'October', the water noise level is 'low', and the gradient is greater than the median
+october_low_noise_high_gradient <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median_gradient, ]
+```
+
+## excercise 3.11
+```{r}
+# Extract rows with depths greater than 1500 m and with a greater number of whales spotted than average
+avg_number.whales <- mean(whale$whales_spotted, na.rm = TRUE)
+depth_gt_1500_number.whales_gt_avg <- whale[whale$depth > 1500 & whale$wales_spotted > avg_number.whales, ]
+
+# The conditions are never both true for the same row, check each condition separately and adjust
 ```
 
 
