@@ -48,11 +48,50 @@ exp(myNumber)
 
 ```{r, echo=TRUE, include=TRUE}
 r <- 20
-area <- pi*r*r
-print(area)
+area_circle <- pi*r*r
+print(area_circle)
 ```
-
-
+Question 4
+```{r, echo=TRUE, include=TRUE}
+x <- 14* 0.51
+x^(1/3)
+print (x)
+```
+Question 5
+```{r, echo=TRUE, include=TRUE}
+weight <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
+```
+Question 6
+```{r, echo=TRUE, include=TRUE}
+var (weight)
+sd (weight)
+range (weight)
+length (weight)
+first_5 <- weight [1:5]
+```
+Question 7
+```{r, echo=TRUE, include=TRUE}
+height <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
+summary (height)
+some_child <- height [c(2,3,9,10)]
+shorter_child <- height [height <= 99]
+```
+Question 8
+```{r, echo=TRUE, include=TRUE}
+bmi <- weight/((height/100)^2)
+print (bmi)
+```
+Question 9
+```{r, echo=TRUE, include=TRUE}
+seq1 <- seq(0, 1, by = 0.1)
+print (seq1)
+```
+Question 10
+```{r, echo=TRUE, include=TRUE}
+seq2 <- seq(1, 10, by = 0.5)
+seq2 <- rev(seq2)
+print(seq2)
+```
 
 # Session Information
 ```{r sessionInfo, echo=FALSE, include=TRUE}
