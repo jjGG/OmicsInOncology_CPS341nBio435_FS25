@@ -1,0 +1,106 @@
+---
+title: "Exercise_4_Crystal_Zhang"
+author: "Crystal"
+date: "2025-02-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Q2
+```{r 2, echo=TRUE, include=TRUE}
+squid <- read.table("C:/Users/zhang/Downloads/OmicsInOncology_Bio435_FS25_Crystal/week2/data4exercises/squid1.txt", header = TRUE, sep = "\t")
+```
+
+# Q3 & 4
+```{r 3,4, echo=TRUE, include=TRUE}
+str(squid)
+summary(squid)
+
+# Recode
+squid$year <- as.factor(squid$year)
+squid$month <- as.factor(squid$month)
+squid$maturity.stage <- as.factor(squid$maturity.stage)
+str(squid)
+```
+
+# Q5
+```{r 5, echo=TRUE, include=TRUE}
+table(squid$year, squid$month)
+ftable(xtabs(~ year + maturity.stage + month, data = squid))
+```
+
+# Q6
+```{r 6, echo=TRUE, include=TRUE}
+#save as pdf
+pdf(file="C:/Users/zhang/Downloads/OmicsInOncology_Bio435_FS25_Crystal/week2/exercises/output/squid_dotplots.pdf")
+par(mfrow = c(2, 2))  # Split plotting device into 2 rows and 2 columns
+dotchart(squid$DML, main = "DML")
+dotchart(squid$weight, main = "Weight")
+dotchart(squid$nid.length, main = "Nidamental Length")
+dotchart(squid$ovary.weight, main = "Ovary Weight")
+dev.off()
+```
+
+# Q7
+```{r 7, echo=TRUE, include=TRUE}
+which(squid$nid.length > 400)  # Returns 11
+squid$nid.length[11] <- 43.2
+dotchart(squid$nid.length, main = "Corrected Nidamental Length")
+```
+# Q8
+```{r 8, echo=TRUE, include=TRUE}
+par(mfrow = c(2, 2))
+hist(squid$DML, main = "DML", xlab = "DML", breaks = 20)
+hist(squid$weight, main = "Weight", xlab = "Weight")
+hist(squid$eviscerate.weight, main = "Eviscerate Weight", xlab = "Eviscerate Weight")
+hist(squid$ovary.weight, main = "Ovary Weight", xlab = "Ovary Weight")
+```
+
+# Q9
+```{r 9, echo=TRUE, include=TRUE}
+plot(squid$DML, squid$weight, main = "DML vs Weight", xlab = "DML", ylab = "Weight")
+
+#Transformations
+squid$log_weight <- log(squid$weight)
+squid$sqrt_weight <- sqrt(squid$weight)
+
+plot(squid$DML, squid$log_weight, main = "DML vs log(Weight)", xlab = "DML", ylab = "log(Weight)")
+plot(squid$DML, squid$sqrt_weight, main = "DML vs sqrt(Weight)", xlab = "DML", ylab = "sqrt(Weight)")
+```
+
+
+# Q10
+```{r 10, echo=TRUE, include=TRUE}
+boxplot(squid$DML ~ squid$maturity.stage, main = "DML by Maturity Stage", 
+        xlab = "Maturity Stage", ylab = "DML")
+
+# vioplot
+install.packages("vioplot")
+library(vioplot)
+
+vioplot(squid$DML ~ squid$maturity.stage, main = "DML by Maturity Stage", 
+        xlab = "Maturity Stage", ylab = "DML")
+```
