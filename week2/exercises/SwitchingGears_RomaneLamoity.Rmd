@@ -1,0 +1,117 @@
+---
+title: "SwitchingGears_RomaneLamoity"
+output: html_document
+---
+
+```{r}
+
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("tidyverse", repos = "https://cloud.r-project.org/")
+```
+
+## Load Required Libraries
+```{r load-libraries}
+library(tidyverse) 
+```
+
+## Import Data
+```{r import-data}
+squid <- read.table("../data4exercises/squid1.txt", header = TRUE, stringsAsFactors = FALSE)
+```
+
+## Data Wrangling using Pipes
+Convert necessary variables into factors and filter out missing values.
+```{r data-wrangling}
+squid <- squid %>%
+  mutate(
+    year_factor = as.factor(year),
+    month_factor = as.factor(month),
+    maturity_stage_factor = as.factor(maturity.stage)
+  ) %>%
+  drop_na()
+```
+
+## DML vs Weight Scatter Plot
+Let's create a scatter plot showing the relationship between `DML` and `weight`.
+```{r ggplot-scatter}
+ggplot(squid, aes(x = DML, y = weight)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    title = "Scatter Plot of DML vs. Weight",
+    x = "Dorsal Mantle Length (DML)",
+    y = "Weight (g)"
+  ) +
+  theme_minimal()
+```
+
+## DML vs Weight Box Plot
+```{r boxplot-maturity}
+
+ggplot(squid, aes(x = factor(maturity.stage), y = DML, fill = factor(maturity.stage))) +
+  geom_boxplot() +
+  labs(
+    title = "DML Distribution Across Maturity Stages",
+    x = "Maturity Stage",
+    y = "Dorsal Mantle Length (DML)"
+  ) +
+  theme_minimal()
+```
+
+## Occupational Group vs Smoking Mortality Bar Chat
+```{r barchart-smoking}
+getwd()
+smoking <- read.table("../data4exercises/smoking.txt", header = TRUE, stringsAsFactors = TRUE) 
+
+smoking_summary <- smoking%>%
+    group_by(occupational.group) %>%
+    summarise(avg_smoking = mean(smoking, na.rm = TRUE))
+
+ggplot(smoking_summary, aes(x = occupational.group, y = avg_smoking, fill = occupational.group)) + 
+    geom_bar(stat = "identity") + 
+    labs(title = "Occupational Group vs Smoking Mortality", 
+         x = "Occupational Group", 
+         y = "Smoking Mortality"
+         ) + 
+    theme_minimal()
+```
+
+## Occupational Group vs Smoking Mortality Boxplot
+```{r barchart-smoking-boxplot}
+getwd()
+smoking <- read.table("../data4exercises/smoking.txt", header = TRUE, stringsAsFactors = TRUE) 
+ggplot(smoking, aes(x = occupational.group, y = smoking, fill = occupational.group)) +
+    geom_boxplot() +
+    labs(title = "Occupational Group vs Smoking Mortality", 
+         x = "Occupational_Group",
+         y = "Smoking Mortality"
+    ) + 
+    theme_minimal()
+```
+
+## Speed vs Distance
+```{r barchart-cars}
+getwd()
+smoking <- read.table("../data4exercises/cars.txt", header = TRUE, stringsAsFactors = TRUE) 
+ggplot(cars, aes(x = speed, y = dist)) +
+  geom_point(color = "blue") +  
+  geom_smooth(method = "lm", se = FALSE, color = "red") + 
+  labs(title = "Speed vs Distance",
+       x = "Speed (mph)",
+       y = "Stopping Distance (ft)") +
+  theme_minimal()
+```
+##Pollution
+```{r boxplot-atmosphere}
+
+atmosphere <- read.table("../data4exercises/atmosphere.txt", header = TRUE, stringsAsFactors = FALSE)
+
+ggplot(atmosphere, aes(x = factor(treatment), y = moisture, fill = factor(treatment))) +
+  geom_boxplot() +
+  labs(
+    title = "Moisture in different Treatments",
+    x = "TREATMENT",
+    y = "MOISTURE"
+  ) +
+  theme_minimal()
+```
