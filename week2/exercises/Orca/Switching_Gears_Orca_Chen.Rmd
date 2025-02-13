@@ -1,0 +1,28 @@
+---
+title: "Week2_self_study_Orca_Chen"
+output: html_document
+date: "2025-02-13"
+---
+
+```{r setup, echo=TRUE, include=FALSE}
+library(readr)
+install.packages("conflicted")
+library(tidyverse) 
+```
+
+
+```{r pipes, echo=TRUE, include=FALSE}
+# pipes
+# %>% %>% %>% %>% %>% %>% %>% 
+mpg_df <- mpg # this dataset is based in package'tidyvese'- remember to install it first
+mpg_df %>% head() # %>% can chain multiple functions
+head(mpg_df)
+mpg_df %>% ggplot() 
+```
+
+```{r ggplot, echo=TRUE, include=FALSE}
+getwd()
+flower <- read.table("data/flower.csv", stringsAsFactors = TRUE, header = TRUE, sep = ",")
+str(flower)
+ggplot(mapping = aes(x = weight, y = shootarea), data = flower)
+```
