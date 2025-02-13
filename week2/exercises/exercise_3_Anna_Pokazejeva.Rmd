@@ -18,12 +18,44 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 ## Exercise 3
 * from https://alexd106.github.io/intro2R/exercise_2.html
-
+Question 5
 ```{r, echo=TRUE, include=TRUE}
-read.table(".week2/data4exercises/whaledata.txt")
-getwd()
+whale <- read.table("whaledata.txt", header = TRUE)
+print(whale)
 ```
-
+Question 7
+```{r, echo=TRUE, include=TRUE}
+summary (whale)
+colSums(is.na(whale))
+# 1 value missing from number of whales
+```
+Question 9
+```{r, echo=TRUE, include=TRUE}
+#Deeper than 1200m
+deep_samples <- whale[whale$depth > 1200, ]
+#Steeper than 200 degrees
+steep_samples <- whale[whale$gradient > 200, ]
+#Low water noise level
+low_noise <- whale[whale$`water.noise` == "low", ]
+#High water noise in May
+high_may_noise <- whale[whale$`water.noise` == "high" & whale$month == "May", ]
+#October water noise level low and gradient greater than the median value of gradient (132)
+high_october_noise_gradient <- whale[whale$`water.noise` == "low" & whale$month == "October" & whale$gradient > 132, ]
+#all observations from between latitudes 60.0 and 61.0 and longitudes -6.0 and -4.0
+certain_latitudes_longitudes <- whale[whale$latitude >= 60.0 & whale$latitude <= 61.0 & whale$longitude >= -6.0 & whale$longitude <= -4.0, ]
+#noise level not medium
+non_medium_noise <- whale[whale$`water.noise` != "medium", ]
+```
+Question 10
+```{r, echo=TRUE, include=TRUE}
+high_october_noise_gradient_modified <- whale[whale$`water.noise` == "low" & whale$month == "October" & whale$gradient > median(whale$gradient), ]
+```
+Question 11
+```{r, echo=TRUE, include=TRUE}
+depth_greater_than_1500 <- whale[whale$depth > 1500 & whale$`number.whales` > mean(whale$`number.whales`), ]
+#issue -> missing value in number of whales
+depth_greater_than_1500 <- whale[whale$depth > 1500 & whale$`number.whales` > mean(whale$`number.whales`, na.rm = TRUE), ]
+```
 # Session Information
 
 ```{r sessionInfo, echo=FALSE, include=TRUE}

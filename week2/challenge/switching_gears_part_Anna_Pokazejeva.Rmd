@@ -1,0 +1,110 @@
+---
+title: "trial"
+output: html_document
+---
+GG plot exercise
+```{r myN, echo=TRUE, include=TRUE}
+install.packages("ggplot2")  
+library(ggplot2)
+
+mpg <- ggplot2::mpg  
+ggplot(mpg, aes(x = class, y = displ, color = manufacturer)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.6, colour = "black") +  # Boxplot with black outlines
+  geom_jitter(width = 0.2, size = 2, alpha = 0.7) +  # Add individual points
+  scale_y_continuous(limits = c(0, 10)) +  # Set y-axis limits from 0 to 10
+  labs(
+    title = "Engine Size per Car Class",
+    x = "Car Class",
+    y = "Engine Size (Liters)"
+  ) +
+  theme_classic()
+
+```
+Pipes exercise
+```{r myN, echo=TRUE, include=TRUE}
+library(dplyr)
+avg_engine_size <- mpg %>%
+  select(displ) %>%     
+  pull() %>%            
+  mean()             
+avg_engine_size
+```
+Exercise 5
+###Question 1
+```{r myN, echo=TRUE, include=TRUE}
+
+
+```
+Exercise 6
+Question 1
+```{r myN, echo=TRUE, include=TRUE}
+circle_area <- function(diameter) {radius <- diameter / 2 
+area <- radius^2 * pi
+return(area)}
+diameter <- 3.4
+area <- circle_area(diameter)
+print(area)
+#yes, the function can be used on a vector of data
+```
+Question 2
+```{r myN, echo=TRUE, include=TRUE}
+fahrenheit_to_centigrade <- function(fahrenheit) {
+  centigrade <- (fahrenheit - 32) * (5 / 9)  
+  cat("Fahrenheit:", fahrenheit, "is equivalent to", centigrade, "Celsius.\n")
+}
+fahrenheit_to_centigrade(100)
+
+```
+Question 3
+```{r myN, echo=TRUE, include=TRUE}
+data <- rnorm(100, mean = 35, sd = 15)
+calculate_stats <- function(data_vector) {
+  # Calculate mean, median, and range
+  mean_val <- mean(data_vector)
+  median_val <- median(data_vector)
+  range_val <- range(data_vector)
+  
+  # Print the results
+  cat("Mean: ", mean_val, "\n")
+  cat("Median: ", median_val, "\n")
+  cat("Range: ", range_val[1], "to", range_val[2], "\n")
+  
+  # Plot a histogram (as a proportion) and add a density curve
+  hist(data_vector, probability = TRUE, 
+       main = "Histogram with Density Curve", 
+       xlab = "Values", )
+  lines(density(data_vector),) 
+
+}
+calculate_stats(data)
+
+```
+Question 4
+```{r myN, echo=TRUE, include=TRUE}
+custom_median <- function(x) {
+  x_sorted <- sort(x)
+  n <- length(x_sorted)
+  if (n %% 2 == 1) {
+    median_value <- x_sorted[(n + 1) / 2]
+  } else {
+    median_value <- mean(x_sorted[(n / 2):(n / 2 + 1)])
+  }
+  return(median_value)
+}
+#testing fction
+odd_vector <- c(5, 2, 8, 1, 9)
+odd_median <- custom_median(odd_vector)
+print(paste("Median of odd vector:", odd_median))
+
+```
+Question 5
+```{r myN, echo=TRUE, include=TRUE}
+ricker_model <- function(nzero, r, time, K = 100) {
+  population <- numeric(time)
+  population[1] <- nzero
+  for (t in 2:time) {
+    population[t] <- population[t - 1] * exp(r * (1 - population[t - 1] / K))
+  }
+  return(population)
+}
+```

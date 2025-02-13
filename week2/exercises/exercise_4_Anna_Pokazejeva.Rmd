@@ -14,21 +14,95 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
-# Exercises for the R-Beginner - The fancy calculator
-
-## Exercise 2
+## Exercise 4
 * from https://alexd106.github.io/intro2R/exercise_2.html
+Question 4
 ```{r myN, echo=FALSE, include=TRUE}
-myNumber <- 12.43
-
-# do some calculations
-# natural log
-log(myNumber)
+squid <- read.table("squid1.txt", header = TRUE)
+str(squid)
+summary(squid)
+# 519 observations, 13 variables
+squid$year <- factor(squid$year)
+squid$month <-factor(squid$month)
+squid$maturity.stage <- factor(squid$maturity.stage)
+str(squid)
 ```
+Question 5
+```{r myN, echo=FALSE, include=TRUE}
+month_year_counts <- table(squid$year, squid$month)
+#no data for each month of each year
+month_year_counts
+#year 1990- most observations
+contingency_table <- xtabs(~ year + maturity.stage + month, data = squid)
+flattened_table <- ftable(contingency_table)
+print(flattened_table)
 
-```{r lg10, echo=TRUE, include=TRUE}
-# log10
-log10(myNumber)
+```
+Question 6
+```{r myN, echo=FALSE, include=TRUE}
+pdf("output/dotchart_DML.pdf")
+dotchart(squid$DML, main = "Dotchart for DML", xlab = "DML Values")
+dev.off()
+pdf("output/dotchart_Weight.pdf")
+dotchart(squid$weight, main = "Dotchart for Weight", xlab = "Weight Values")
+dev.off()
+pdf("output/dotchart_NID.pdf")
+dotchart(squid$nid.length, main = "Dotchart for NID Length", xlab = "NID Length Values")
+dev.off()
+pdf("output/dotchart_OvaryWeight.pdf")
+dotchart(squid$ovary.weight, main = "Dotchart for Ovary Weight", xlab = "Ovary Weight Values")
+dev.off()
+#yes, they contain some unusually large and small numbers
+
+```
+Question 7
+```{r myN, echo=FALSE, include=TRUE}
+which(squid$nid.length > 400)
+squid$nid.length[11]
+squid$nid.length[11] <- 43.2
+squid$nid.length[11]
+dotchart(squid$nid.length, main = "Dotchart corrected for NID length", xlab = "NID length values")
+```
+Question 8
+```{r myN, echo=FALSE, include=TRUE}
+pdf("output/histogram_DML.pdf")
+hist(squid$DML, main= "Histogram for DML", xlab = "DML values")
+dev.off()
+pdf("output/histogram_Ovary.pdf")
+hist(squid$ovary.weight, main= "Histogram for Ovary weight", xlab = "Ovary weight values")
+dev.off()
+pdf("output/histogram_Weight.pdf")
+hist(squid$weight, main= "Histogram for weight", xlab = "Weight values")
+dev.off()
+pdf("output/histogram_eviscerate.pdf")
+hist(squid$eviscerate.weight, main= "Histogram for Eviscerate weight", xlab = "Eviscerate weight values")
+dev.off()
+
+```
+Question 9
+```{r myN, echo=FALSE, include=TRUE}
+pdf("output/DMLweightplot.pdf")
+plot(squid$DML , squid$weight , main = "Weight depending on DML", xlab = "Weight" , ylab= "DML" )
+dev.off()
+logweight <- log(squid$weight)
+logDML <- log(squid$DML)
+pdf("output/DMLweightplotlog.pdf")
+plot(logweight,logDML, main = "Weight depending on DML logarithmic", xlab = "Weight" , ylab= "DML" )
+dev.off()
+sqrtweight <- sqrt(squid$weight)
+sqrtDML <- sqrt(squid$DML)
+pdf("output/DMLweightplotsqrt.pdf")
+plot(sqrtweight,sqrtDML, main = "Weight depending on DML sqrt", xlab = "Weight" , ylab= "DML" )
+dev.off()
+#log transformation linearises the best
+
+```
+Question 10
+```{r myN, echo=FALSE, include=TRUE}
+boxplot(squid$DML ~ squid$maturity.stage, main = "DML depending on maturity stage", xlab= "Maturity stage", ylab= "DML")
+install.packages("vioplot")
+library("vioplot")
+vioplot(squid$DML ~ squid$maturity.stage, main = "DML depending on maturity stage", xlab= "Maturity stage", ylab= "DML")
 ```
 
 # Session Information
