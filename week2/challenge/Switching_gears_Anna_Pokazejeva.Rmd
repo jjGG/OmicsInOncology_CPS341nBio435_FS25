@@ -1,5 +1,0 @@
----
-title: "Switching_gears_Anna_Pokazejeva"
-output: html_document
----
-
