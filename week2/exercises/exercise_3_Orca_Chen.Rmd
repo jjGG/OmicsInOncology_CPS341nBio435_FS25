@@ -1,0 +1,54 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 3
+* from https://alexd106.github.io/intro2R/exercise_3.html
+```{r Q5, echo=FALSE, include=TRUE}
+getwd()
+whale <- read.table("../data4exercises/mywhaledata.tsv", header = T, stringsAsFactors = T)
+head(whale)
+names(whale)
+summary(whale)
+# The variable 'Number of whales' has one missing value. 
+```
+
+```{r Q9&10, echo=TRUE, include=TRUE}
+# logical index
+deep_whale <- whale[whale$depth > 1200, ]
+highgradient_whale <- whale[whale$gradient > 200, ]
+Low_Noise <- whale[whale$water.noise == "low", ]
+High_Noise_May <- whale[whale$month == "May" & whale$water.noise == "high", ]
+Low_Noise_High_Gradient <- whale[whale$month == "October" & whale$water.noise == "Low" & whale$gradient > median(whale$gradient), ]
+Middle_Observations <- whale[whale$latitude >= 60.0 & whale$latitude <= 61.0 & whale$longitude >= -6.0 & whale$longitude <= -4.0, ]
+No_Noise_Medium <- whale[whale$water.noise != "medium", ]
+head(No_Noise_Medium)
+```
+
+```{r Q11, echo=FALSE, include=TRUE}
+deep_more_whale <- whale[whale$depth > 1500 & whale$number.whales > mean(whale$number.whales, na.rm = T), ]
+summary (deep_more_whale)
+# Remove the missing data while using mean function before extracting the rows.
+```
+
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
