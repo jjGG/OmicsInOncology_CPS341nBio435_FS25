@@ -16,25 +16,123 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 # Exercises for the R-Beginner - The fancy calculator
 
-## Exercise 2
-* from https://alexd106.github.io/intro2R/exercise_2.html
-```{r myN, echo=FALSE, include=TRUE}
-myNumber <- 12.43
+## Exercise 3
+* from https://alexd106.github.io/intro2R/exercise_3.html
 
-# do some calculations
-# natural log
-log(myNumber)
+### Task 4
+
+#### Observations (rows) → Each row is an individual station where data was collected.
+#### Variables (columns) → Includes whale count, time spent at station, latitude, longitude, depth, seabed gradient, noise level, etc.
+#### No missing data → Every row is complete.
+#### Tidy format → Each column is a variable, and each row is an observation.
+
+
+### Task 5
+
+```{r}
+# Import the mywhaledata.tsv file
+
+getwd()
+whale <- read.table("../data4exercises/mywhaledata.tsv", header = T, stringsAsFactors = T)
+
+# Check the first few rows to confirm import
+head(whale)
+
+# Get a summary of the dataset
+summary(whale)
+
+# Check the structure of the dataset
+str(whale)
+
+# Check for missing values (should be 0)
+sum(is.na(whale))
+
 ```
 
-```{r lg10, echo=TRUE, include=TRUE}
-# log10
-log10(myNumber)
+### Task 7
+
+```{r}
+
+# Get a summary of the dataset
+summary(whale)
+
+# Count missing values in each column
+colSums(is.na(whale))
+
+# One value is missing in "number of whales"
+
 ```
 
-# Session Information
+### Task 9
 
-```{r sessionInfo, echo=FALSE, include=TRUE}
-pander::pander(sessionInfo())
+```{r}
+
+# Extract rows where depth is greater than 1200 meters
+depths_greater_than_1200 <- whale[whale$depth > 1200, ]
+depths_greater_than_1200
+
+# Extract rows where the gradient is steeper than 200 degrees
+steeper_than_200 <- whale[whale$gradient > 200, ]
+steeper_than_200
+
+# Extract rows where the water noise level is 'low'
+low_noise <- whale[whale$water.noise == "low", ]
+low_noise
+
+# Extract rows where the water noise level is 'high' and the month is 'May'
+high_noise_may <- whale[whale$water.noise == "high" & whale$month == "May", ]
+high_noise_may
+
+# Extract rows where the month is 'October', water noise level is 'low', and gradient is greater than the median value of 132
+october_low_noise_steep_gradient <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > 132, ]
+october_low_noise_steep_gradient
+
+# Extract rows where the latitude is between 60.0 and 61.0 and longitude is between -6.0 and -4.0
+lat_lon_range <- whale[whale$latitude >= 60.0 & whale$latitude <= 61.0 & whale$longitude >= -6.0 & whale$longitude <= -4.0, ]
+lat_lon_range
+
+# Extract rows where the water noise level is not 'medium'
+not_medium_noise <- whale[whale$water.noise != "medium", ]
+not_medium_noise
+
+```
+
+### Task 10
+
+```{r}
+
+# Calculate the median of the gradient variable
+median_gradient <- median(whale$gradient, na.rm = TRUE)
+median_gradient
+
+# Extract rows where the month is 'October', water noise level is 'low', and gradient is greater than the median value of gradient
+october_low_noise_steep_gradient <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median_gradient, ]
+october_low_noise_steep_gradient
+
+## OR
+
+# Calculate the median of the gradient variable (R will handle NAs in the column by returning NA)
+median_gradient <- median(whale$gradient)
+median_gradient
+
+# Extract rows where the month is 'October', water noise level is 'low', and gradient is greater than the median value of gradient
+october_low_noise_steep_gradient <- whale[whale$month == "October" & whale$water.noise == "low" & whale$gradient > median_gradient, ]
+october_low_noise_steep_gradient
+
 ```
 
 
+### Task 11
+
+```{r}
+# Calculate the mean number of whales spotted, ignoring NA values
+mean_whales <- mean(whale$number.whales, na.rm = TRUE)
+mean_whales
+
+# Extract rows where depth is greater than 1500 meters and number of whales spotted is greater than the calculated mean
+depth_greater_1500_and_whales_greater_than_avg <- whale[whale$depth > 1500 & whale$number.whales > mean_whales, ]
+
+
+head(depth_greater_1500_and_whales_greater_than_avg)
+
+```
