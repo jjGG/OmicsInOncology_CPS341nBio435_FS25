@@ -1,0 +1,108 @@
+---
+title: "Exercise 3"
+author: "Crystal"
+date: "2025-02-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Exercise 3
+#question 4,5
+```{r data, echo=TRUE, include=TRUE}
+# Import the whaledata.xls file
+whale <- read.table(file = "C:/Users/zhang/Downloads/OmicsInOncology_Bio435_FS25_Crystal/week2/data4exercises/mywhaledata.tsv", header = TRUE, sep = "\t")
+
+# Display the first few rows of the dataset to check if it loaded correctly
+head(whale)
+
+```
+
+#question 7
+```{r sum, echo=TRUE, include=TRUE}
+summary(whale)
+# Check for missing values in each column
+colSums(is.na(whale))
+
+```
+
+#question 9
+```{r data, echo=TRUE, include=TRUE}
+# Depths greater than 1200 m
+depth_gt_1200 <- whale[whale$depth > 1200, ]
+
+# Gradient steeper than 200 degrees
+gradient_gt_200 <- whale[whale$gradient > 200, ]
+
+# Water noise level of 'low'
+noise_low <- whale[whale$water.noise == "low", ]
+
+# Water noise level of 'high' in the month of 'May'
+noise_high_may <- whale[whale$water.noise == "high" & whale$month == "May", ]
+
+# Month of 'October', water noise level 'low', and gradient greater than the median value of gradient
+october_low_noise_high_gradient <- whale[whale$month == "October" & 
+                                         whale$water.noise == "low" & 
+                                         whale$gradient > median(whale$gradient), ]
+
+# Observations between latitudes 60.0 and 61.0 and longitudes -6.0 and -4.0
+lat_long_range <- whale[whale$latitude >= 60.0 & whale$latitude <= 61.0 & 
+                       whale$longitude >= -6.0 & whale$longitude <= -4.0, ]
+
+# All rows that do not have a water noise level of 'medium'
+not_medium_noise <- whale[whale$water.noise != "medium", ]
+
+depth_gt_1200
+gradient_gt_200
+noise_low
+noise_high_may
+october_low_noise_high_gradient
+lat_long_range
+not_medium_noise
+
+```
+
+#question 10
+```{r median, echo=TRUE, include=TRUE}
+# Gradient steeper than the median value
+gradient_gt_median <- whale[whale$gradient > median(whale$gradient), ]
+gradient_gt_median
+```
+
+
+#question 11
+```{r logic, echo=TRUE, include=TRUE}
+# Extract rows where depth > 1500 m and number of whales > mean number of whales
+depth_gt_1500_mean_whales <- whale[whale$depth > 1500 & whale$num.whales > mean(whale$num.whales), ]
+depth_gt_1500_mean_whales
+```
+```{r logic, echo=TRUE, include=TRUE}
+#Problem: the mean() function will return NA 
+depth_gt_1500_mean_whales <- whale[whale$depth > 1500 & whale$num.whales > mean(whale$num.whales, na.rm = TRUE), ]
+depth_gt_1500_mean_whales
+``` 
+
+
+

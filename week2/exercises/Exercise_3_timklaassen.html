@@ -343,142 +343,384 @@ display: none;
 </div>
 
 
-<div id="exercises-for-the-r-beginner---the-fancy-calculator" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Exercises for the R-Beginner - The fancy calculator</h1>
-<div id="exercise-2" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Exercise 2</h2>
+<p>#Exercise 3: Importing and manipulating dataframes</p>
+<div id="exercise-3" class="section level2" number="0.1">
+<h2><span class="header-section-number">0.1</span> Exercise 3</h2>
 <ul>
 <li>from <a href="https://alexd106.github.io/intro2R/exercise_2.html" class="uri">https://alexd106.github.io/intro2R/exercise_2.html</a></li>
 </ul>
-<pre><code>## [1] 2.520113</code></pre>
-<div id="task-2" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Task 2</h3>
-<pre class="r"><code># log10 of my number
-log10(myNumber)</code></pre>
-<pre><code>## [1] 1.094471</code></pre>
-<pre class="r"><code>#log2 of my number
-log2(myNumber)</code></pre>
-<pre><code>## [1] 3.635754</code></pre>
-<pre class="r"><code>log(myNumber, 2)</code></pre>
-<pre><code>## [1] 3.635754</code></pre>
-<pre class="r"><code>#square root of my number
-sqrt(myNumber)</code></pre>
-<pre><code>## [1] 3.525621</code></pre>
-<pre class="r"><code># antilog of my number
-exp(myNumber)</code></pre>
-<pre><code>## [1] 250196</code></pre>
+<pre class="r"><code>whale &lt;- read.table(file = &#39;/Users/tim/Library/CloudStorage/OneDrive-UniversiteitUtrecht/Documents/☆Academische Bestanden/☆Universiteit Utrecht/3e jaar Bachelor/(FA-CPS341) Omics in Oncology/repo_clone_group1/week2/data4exercises/mywhaledata.tsv&#39;, header = TRUE, sep = &quot;\t&quot;, stringsAsFactors = TRUE)
+head(whale)</code></pre>
+<pre><code>##   month time.at.station water.noise number.whales latitude longitude depth
+## 1   May            1344         low             7    60.37     -4.18   520
+## 2   May            1633      medium            13    60.38     -4.19   559
+## 3   May             743      medium            12    60.54     -4.62  1006
+## 4   May            1050      medium            10    60.29     -4.35   540
+## 5   May            1764      medium            12    60.41     -5.20  1000
+## 6   May             580        high            10    60.38     -5.22  1000
+##   gradient
+## 1      415
+## 2      405
+## 3       88
+## 4      409
+## 5       97
+## 6      173</code></pre>
+<pre class="r"><code>names(whale)</code></pre>
+<pre><code>## [1] &quot;month&quot;           &quot;time.at.station&quot; &quot;water.noise&quot;     &quot;number.whales&quot;  
+## [5] &quot;latitude&quot;        &quot;longitude&quot;       &quot;depth&quot;           &quot;gradient&quot;</code></pre>
+<pre class="r"><code>str(whale)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    100 obs. of  8 variables:
+##  $ month          : Factor w/ 2 levels &quot;May&quot;,&quot;October&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ time.at.station: int  1344 1633 743 1050 1764 580 459 561 709 690 ...
+##  $ water.noise    : Factor w/ 3 levels &quot;high&quot;,&quot;low&quot;,&quot;medium&quot;: 2 3 3 3 3 1 3 3 3 3 ...
+##  $ number.whales  : int  7 13 12 10 12 10 5 8 11 12 ...
+##  $ latitude       : num  60.4 60.4 60.5 60.3 60.4 ...
+##  $ longitude      : num  -4.18 -4.19 -4.62 -4.35 -5.2 -5.22 -5.08 -5 -4.64 -4.84 ...
+##  $ depth          : int  520 559 1006 540 1000 1000 993 988 954 984 ...
+##  $ gradient       : int  415 405 88 409 97 173 162 162 245 161 ...</code></pre>
+<pre class="r"><code># &#39;data.frame&#39;: 100 obs. of  8 variables:
+#  $ month          : Factor w/ 2 levels &quot;May&quot;,&quot;October&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+#  $ time.at.station: int  1344 1633 743 1050 1764 580 459 561 709 690 ...
+#  $ water.noise    : Factor w/ 3 levels &quot;high&quot;,&quot;low&quot;,&quot;medium&quot;: 2 3 3 3 3 1 3 3 3 3 ...
+#  $ number.whales  : int  7 13 12 10 12 10 5 8 11 12 ...
+#  $ latitude       : num  60.4 60.4 60.5 60.3 60.4 ...
+#  $ longitude      : num  -4.18 -4.19 -4.62 -4.35 -5.2 -5.22 -5.08 -5 -4.64 -4.84 ...
+#  $ depth          : int  520 559 1006 540 1000 1000 993 988 954 984 ...
+#  $ gradient       : int  415 405 88 409 97 173 162 162 245 161 ...
+
+# Amount of observations: 100
+# Amoumt of variables: 8
+# month type of variable: factor w/ 2 levels
+# water.noise type of variable: factor w/ 3 levels
+
+summary(whale)</code></pre>
+<pre><code>##      month    time.at.station  water.noise number.whales      latitude    
+##  May    :50   Min.   :  60.0   high  :15   Min.   : 0.00   Min.   :60.29  
+##  October:50   1st Qu.: 693.8   low   :28   1st Qu.: 9.00   1st Qu.:60.69  
+##               Median :1077.5   medium:57   Median :11.00   Median :61.29  
+##               Mean   :1064.7               Mean   :11.53   Mean   :61.16  
+##               3rd Qu.:1349.2               3rd Qu.:14.00   3rd Qu.:61.59  
+##               Max.   :2158.0               Max.   :28.00   Max.   :62.10  
+##                                            NA&#39;s   :1                      
+##    longitude          depth         gradient     
+##  Min.   :-6.330   Min.   : 120   Min.   :  0.00  
+##  1st Qu.:-4.660   1st Qu.: 987   1st Qu.: 99.25  
+##  Median :-4.185   Median :1086   Median :132.00  
+##  Mean   :-3.813   Mean   :1087   Mean   :179.78  
+##  3rd Qu.:-2.888   3rd Qu.:1242   3rd Qu.:245.25  
+##  Max.   :-1.530   Max.   :1610   Max.   :671.00  
+## </code></pre>
+<pre class="r"><code>#number.whales has one missing value, the others don&#39;t have missing values.
+#factors only have the correlating amounts depicted while on the numeric and integers show more statistics</code></pre>
+<pre class="r"><code>depths_gt_1200m &lt;- whale[whale$depth &gt; 1200,]
+
+gradient_st_200degrees &lt;- whale[whale$gradient &gt; 200,]
+
+low_level_waternoise &lt;- whale[whale$water.noise == &quot;Low&quot;,]
+
+High_level_waternoise_may &lt;- whale[whale$water.noise == &quot;high&quot; &amp; whale$month == &quot;may&quot;,]
+
+low_level_waternoise_october_and_mediangradient132 &lt;- whale[whale$month == &quot;October&quot; &amp; whale$water.noise == &quot;low&quot; &amp; whale$gradient &gt; 132,]
+
+observations_between_lat_60.0_61.0_and_long_neg6_neg4 &lt;- whale[whale$latitude &gt; 60 &amp; whale$latitude &lt; 61 &amp; whale$longitude &gt; -6.0 &amp; whale$longitude &lt; -4.0,]
+
+observations_without_medium_waternoise &lt;- whale[whale$water.noise != &quot;medium&quot;,]
+print(depths_gt_1200m)</code></pre>
+<pre><code>##      month time.at.station water.noise number.whales latitude longitude depth
+## 15     May            1451         low            12    61.42     -3.51  1259
+## 16     May            1441         low            12    61.40     -3.41  1277
+## 17     May            1566      medium            17    61.38     -3.32  1288
+## 46     May            1216        high            17    61.99     -2.26  1593
+## 47     May             905        high             7    61.94     -2.41  1601
+## 48     May            1329        high            28    61.59     -3.06  1425
+## 49     May             787      medium            13    61.33     -3.50  1204
+## 50     May             803      medium            13    61.36     -3.46  1238
+## 52 October            1137        high            12    62.10     -2.01  1610
+## 53 October             948        high             9    61.91     -2.48  1600
+## 54 October            1041        high             9    62.07     -2.06  1600
+## 55 October            1454        high            25    62.01     -2.18  1596
+## 56 October             792        high             1    62.04     -2.12  1592
+## 57 October            1096        high            10    62.07     -2.01  1584
+## 58 October             787        high             8    61.62     -3.00  1455
+## 59 October            1252        high            15    62.01     -2.00  1553
+## 60 October            1076      medium             6    61.82     -2.00  1502
+## 61 October            1140      medium             8    61.78     -2.00  1488
+## 62 October            1419      medium            17    61.72     -2.01  1448
+## 63 October            1272      medium            11    61.66     -2.02  1406
+## 64 October            1071      medium             7    61.90     -2.01  1517
+## 65 October             901        high             8    61.87     -2.58  1587
+## 66 October            1335      medium            12    61.57     -2.01  1256
+## 67 October             658      medium             7    61.42     -3.33  1300
+## 68 October             790      medium            11    61.46     -3.28  1321
+## 69 October             824        high             9    61.65     -2.96  1484
+## 73 October            1164        high            19    61.78     -2.74  1549
+##    gradient
+## 15      109
+## 16      111
+## 17      100
+## 46      120
+## 47      118
+## 48      106
+## 49      134
+## 50      126
+## 52      134
+## 53      110
+## 54      123
+## 55      125
+## 56      115
+## 57      124
+## 58      103
+## 59      122
+## 60      128
+## 61      135
+## 62      183
+## 63      248
+## 64      151
+## 65       88
+## 66      356
+## 67      104
+## 68       95
+## 69       94
+## 73       63</code></pre>
+<pre class="r"><code>print(low_level_waternoise)</code></pre>
+<pre><code>## [1] month           time.at.station water.noise     number.whales  
+## [5] latitude        longitude       depth           gradient       
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code>print(High_level_waternoise_may)</code></pre>
+<pre><code>## [1] month           time.at.station water.noise     number.whales  
+## [5] latitude        longitude       depth           gradient       
+## &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code>print(low_level_waternoise_october_and_mediangradient132)</code></pre>
+<pre><code>##      month time.at.station water.noise number.whales latitude longitude depth
+## 75 October            1512         low            16    61.36     -2.00   735
+## 77 October             521         low             9    60.44     -4.26   687
+## 78 October             625         low            12    60.45     -4.30   765
+## 85 October            1579         low            12    60.45     -4.38   900
+##    gradient
+## 75      400
+## 77      421
+## 78      397
+## 85      333</code></pre>
+<pre class="r"><code>print(observations_between_lat_60.0_61.0_and_long_neg6_neg4)</code></pre>
+<pre><code>##       month time.at.station water.noise number.whales latitude longitude depth
+## 1       May            1344         low             7    60.37     -4.18   520
+## 2       May            1633      medium            13    60.38     -4.19   559
+## 3       May             743      medium            12    60.54     -4.62  1006
+## 4       May            1050      medium            10    60.29     -4.35   540
+## 5       May            1764      medium            12    60.41     -5.20  1000
+## 6       May             580        high            10    60.38     -5.22  1000
+## 7       May             459      medium             5    60.40     -5.08   993
+## 8       May             561      medium             8    60.41     -5.00   988
+## 9       May             709      medium            11    60.44     -4.64   954
+## 10      May             690      medium            12    60.43     -4.84   984
+## 11      May             634      medium             9    60.43     -4.75   965
+## 33      May            1087         low            18    60.98     -4.26  1100
+## 37      May            1148      medium            21    60.92     -4.40  1100
+## 39      May             816         low            14    60.64     -4.88  1000
+## 40      May             663         low            NA    60.67     -4.83  1016
+## 41      May             605      medium            10    60.54     -4.96  1000
+## 42      May             651      medium            11    60.52     -5.05  1000
+## 43      May             754      medium            14    60.51     -5.14  1000
+## 44      May             615      medium             8    60.58     -5.00  1000
+## 45      May             647      medium            10    60.52     -5.14  1000
+## 77  October             521         low             9    60.44     -4.26   687
+## 78  October             625         low            12    60.45     -4.30   765
+## 79  October            1871      medium            18    60.83     -4.34  1100
+## 80  October            1942         low            21    60.79     -4.33  1100
+## 81  October            1592      medium             9    60.74     -4.33  1084
+## 82  October            1539      medium            10    60.50     -4.35   905
+## 83  October            1672      medium            14    60.56     -4.33   934
+## 84  October            1854      medium            19    60.69     -4.33  1024
+## 85  October            1579         low            12    60.45     -4.38   900
+## 86  October             555      medium            18    60.92     -4.98   951
+## 87  October              60      medium             0    60.92     -5.08   912
+## 88  October             480      medium            16    60.92     -4.87   993
+## 89  October            2158      medium            25    60.92     -4.77  1000
+## 90  October            1583      medium             5    60.92     -4.65  1033
+## 91  October            1754         low            12    60.92     -4.50  1100
+## 92  October            1854      medium            15    60.92     -4.58  1054
+## 93  October             652      medium            13    60.75     -4.53  1100
+## 94  October             441      medium             6    60.75     -4.62  1100
+## 95  October             775      medium            20    60.75     -4.99   946
+## 96  October             506      medium            10    60.75     -4.89  1009
+## 97  October             695      medium            16    60.75     -4.80  1057
+## 98  October             519      medium             9    60.75     -4.69  1099
+## 99  October             563      medium             6    60.58     -4.79  1000
+## 100 October             659      medium            10    60.58     -4.70  1016
+##     gradient
+## 1        415
+## 2        405
+## 3         88
+## 4        409
+## 5         97
+## 6        173
+## 7        162
+## 8        162
+## 9        245
+## 10       161
+## 11       127
+## 33         0
+## 37        49
+## 39       102
+## 40       114
+## 41         8
+## 42        33
+## 43        56
+## 44        54
+## 45        73
+## 77       421
+## 78       397
+## 79        22
+## 80        79
+## 81       148
+## 82       326
+## 83       285
+## 84       213
+## 85       333
+## 86       246
+## 87       364
+## 88       177
+## 89       171
+## 90       131
+## 91       100
+## 92       105
+## 93        41
+## 94        41
+## 95       210
+## 96       188
+## 97       135
+## 98        69
+## 99        46
+## 100       69</code></pre>
+<pre class="r"><code>print(observations_without_medium_waternoise)</code></pre>
+<pre><code>##      month time.at.station water.noise number.whales latitude longitude depth
+## 1      May            1344         low             7    60.37     -4.18   520
+## 6      May             580        high            10    60.38     -5.22  1000
+## 12     May             422         low            11    60.86     -1.53   120
+## 14     May            1232         low            12    61.25     -2.76  1088
+## 15     May            1451         low            12    61.42     -3.51  1259
+## 16     May            1441         low            12    61.40     -3.41  1277
+## 18     May            1578         low            11    61.52     -3.94  1200
+## 23     May            1206         low            13    61.61     -6.33   195
+## 24     May            1092         low            11    61.51     -4.16  1124
+## 25     May            1134         low            12    61.55     -4.18  1076
+## 26     May            1079         low            11    61.47     -4.16  1133
+## 28     May            1024         low            10    61.39     -4.16  1105
+## 29     May            1086         low            12    61.43     -4.15  1125
+## 30     May            1341         low            18    61.64     -4.18   934
+## 31     May             840         low             0    61.67     -4.18   869
+## 32     May            1254         low            14    61.72     -4.18   757
+## 33     May            1087         low            18    60.98     -4.26  1100
+## 34     May             832         low             7    61.10     -4.20  1100
+## 35     May            1030         low            11    61.34     -4.16  1100
+## 36     May             935         low            10    61.14     -4.21  1100
+## 38     May             945         low            10    61.19     -4.20  1100
+## 39     May             816         low            14    60.64     -4.88  1000
+## 40     May             663         low            NA    60.67     -4.83  1016
+## 46     May            1216        high            17    61.99     -2.26  1593
+## 47     May             905        high             7    61.94     -2.41  1601
+## 48     May            1329        high            28    61.59     -3.06  1425
+## 52 October            1137        high            12    62.10     -2.01  1610
+## 53 October             948        high             9    61.91     -2.48  1600
+## 54 October            1041        high             9    62.07     -2.06  1600
+## 55 October            1454        high            25    62.01     -2.18  1596
+## 56 October             792        high             1    62.04     -2.12  1592
+## 57 October            1096        high            10    62.07     -2.01  1584
+## 58 October             787        high             8    61.62     -3.00  1455
+## 59 October            1252        high            15    62.01     -2.00  1553
+## 65 October             901        high             8    61.87     -2.58  1587
+## 69 October             824        high             9    61.65     -2.96  1484
+## 73 October            1164        high            19    61.78     -2.74  1549
+## 75 October            1512         low            16    61.36     -2.00   735
+## 77 October             521         low             9    60.44     -4.26   687
+## 78 October             625         low            12    60.45     -4.30   765
+## 80 October            1942         low            21    60.79     -4.33  1100
+## 85 October            1579         low            12    60.45     -4.38   900
+## 91 October            1754         low            12    60.92     -4.50  1100
+##    gradient
+## 1       415
+## 6       173
+## 12       23
+## 14      261
+## 15      109
+## 16      111
+## 18      152
+## 23      133
+## 24      232
+## 25      306
+## 26      166
+## 28      118
+## 29      141
+## 30      394
+## 31      361
+## 32      361
+## 33        0
+## 34       29
+## 35       78
+## 36       29
+## 38        7
+## 39      102
+## 40      114
+## 46      120
+## 47      118
+## 48      106
+## 52      134
+## 53      110
+## 54      123
+## 55      125
+## 56      115
+## 57      124
+## 58      103
+## 59      122
+## 65       88
+## 69       94
+## 73       63
+## 75      400
+## 77      421
+## 78      397
+## 80       79
+## 85      333
+## 91      100</code></pre>
+<pre class="r"><code>low_level_waternoise_october_and_mediangradient132median &lt;- whale[whale$month == &quot;October&quot; &amp; whale$water.noise == &quot;low&quot; &amp; whale$gradient &gt; median(whale$gradient),]
+print(low_level_waternoise_october_and_mediangradient132median)</code></pre>
+<pre><code>##      month time.at.station water.noise number.whales latitude longitude depth
+## 75 October            1512         low            16    61.36     -2.00   735
+## 77 October             521         low             9    60.44     -4.26   687
+## 78 October             625         low            12    60.45     -4.30   765
+## 85 October            1579         low            12    60.45     -4.38   900
+##    gradient
+## 75      400
+## 77      421
+## 78      397
+## 85      333</code></pre>
+<pre class="r"><code>spotted_whales_depthgreaterthan1500m &lt;- whale[whale$depth &gt; 1500 &amp; whale$number.whales &gt; median(whale$number.whales, na.rm = TRUE),]
+#problem arose because of the missing value in number.whales making the mean also NA messing up the whole depiction. Key is to neglect the missing data with na.rm = TRUE
+print(spotted_whales_depthgreaterthan1500m)</code></pre>
+<pre><code>##      month time.at.station water.noise number.whales latitude longitude depth
+## 46     May            1216        high            17    61.99     -2.26  1593
+## 52 October            1137        high            12    62.10     -2.01  1610
+## 55 October            1454        high            25    62.01     -2.18  1596
+## 59 October            1252        high            15    62.01     -2.00  1553
+## 73 October            1164        high            19    61.78     -2.74  1549
+##    gradient
+## 46      120
+## 52      134
+## 55      125
+## 59      122
+## 73       63</code></pre>
 </div>
-<div id="task-3" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Task 3</h3>
-<pre class="r"><code># Define the radius
-radius &lt;- 20 / 2  
-
-# Calculate the area of the circle
-area_circle &lt;- pi * radius^2  
-
-# Print the result
-area_circle </code></pre>
-<pre><code>## [1] 314.1593</code></pre>
-</div>
-<div id="task-5" class="section level3" number="1.1.3">
-<h3><span class="header-section-number">1.1.3</span> Task 5</h3>
-<pre class="r"><code># Create vector containing the weight of 10 children
-
-weight &lt;- c(69,62,57,59,59,64,56,66,67,66)
-
-# Print the vector
-weight</code></pre>
-<pre><code>##  [1] 69 62 57 59 59 64 56 66 67 66</code></pre>
-</div>
-<div id="task-6" class="section level3" number="1.1.4">
-<h3><span class="header-section-number">1.1.4</span> Task 6</h3>
-<pre class="r"><code># Mean of weight
-mean(weight)    </code></pre>
-<pre><code>## [1] 62.5</code></pre>
-<pre class="r"><code># Variance of weight
-var(weight)    </code></pre>
-<pre><code>## [1] 20.72222</code></pre>
-<pre class="r"><code># Standard deviation of weight
-sd(weight)    </code></pre>
-<pre><code>## [1] 4.552167</code></pre>
-<pre class="r"><code># Range of weight
-range(weight)</code></pre>
-<pre><code>## [1] 56 69</code></pre>
-<pre class="r"><code># Number of elements in weight
-length(weight) </code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code># Remind ourselves what weight looks like
-weight</code></pre>
-<pre><code>##  [1] 69 62 57 59 59 64 56 66 67 66</code></pre>
-<pre class="r"><code># Get 5 first values
-weight[c(1, 2, 3, 4, 5)]</code></pre>
-<pre><code>## [1] 69 62 57 59 59</code></pre>
-<pre class="r"><code># Extract the weights of the first five children using positional indexing
-first_five &lt;- weight[1:5]
-
-# Print the new variable
-first_five</code></pre>
-<pre><code>## [1] 69 62 57 59 59</code></pre>
-</div>
-<div id="task-7" class="section level3" number="1.1.5">
-<h3><span class="header-section-number">1.1.5</span> Task 7</h3>
-<pre class="r"><code># Creating vector called height containing the height (in cm) of 10 previous children
-height &lt;- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
-
-# Print vector
-height</code></pre>
-<pre><code>##  [1] 112 102  83  84  99  90  77 112 133 112</code></pre>
-<pre class="r"><code>#Summarise
-summary(height)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##    77.0    85.5   100.5   100.4   112.0   133.0</code></pre>
-<pre class="r"><code># Extract the heights of the 2nd, 3rd, 9th and 10th child and assign to new variable
-some_child &lt;- height[c(2,3,9,10)]
-
-# Print new variable
-some_child</code></pre>
-<pre><code>## [1] 102  83 133 112</code></pre>
-<pre class="r"><code># Extract heights of children that are less than or equal to 99 cm
-shorter_child &lt;- height[height &lt;= 99]
-
-# Print the extracted heights
-shorter_child</code></pre>
-<pre><code>## [1] 83 84 99 90 77</code></pre>
-</div>
-<div id="task-8" class="section level3" number="1.1.6">
-<h3><span class="header-section-number">1.1.6</span> Task 8</h3>
-<pre class="r"><code># Convert height from cm to meters
-height_m &lt;- height / 100  
-
-# Calculate BMI using vectorization
-bmi &lt;- weight / (height_m^2)  
-
-# Print the BMI values
-bmi</code></pre>
-<pre><code>##  [1] 55.00638 59.59246 82.74060 83.61678 60.19794 79.01235 94.45100 52.61480
-##  [9] 37.87665 52.61480</code></pre>
-</div>
-<div id="task-9" class="section level3" number="1.1.7">
-<h3><span class="header-section-number">1.1.7</span> Task 9</h3>
-<pre class="r"><code># Create a sequence from 0 to 1 in steps of 0.1 using seq()
-seq1 &lt;- seq(from = 0, to = 1, by = 0.1)
-seq1</code></pre>
-<pre><code>##  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0</code></pre>
-</div>
-<div id="task-10" class="section level3" number="1.1.8">
-<h3><span class="header-section-number">1.1.8</span> Task 10</h3>
-<pre class="r"><code># Create a sequence from 1 to 10 in steps of 0.5
-seq_reverse &lt;- seq(from = 1, to = 10, by = 0.5)
-
-# Reverse the sequence to get it from 10 to 1
-seq2 &lt;- rev(seq_reverse)
-
-# Print the sequence
-seq2</code></pre>
-<pre><code>##  [1] 10.0  9.5  9.0  8.5  8.0  7.5  7.0  6.5  6.0  5.5  5.0  4.5  4.0  3.5  3.0
-## [16]  2.5  2.0  1.5  1.0</code></pre>
-</div>
-</div>
+<div id="session-information" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Session Information</h1>
+<p><strong>R version 4.4.2 (2024-10-31)</strong></p>
+<p><strong>Platform:</strong> aarch64-apple-darwin20</p>
+<p><strong>locale:</strong>
+en_US.UTF-8||en_US.UTF-8||en_US.UTF-8||C||en_US.UTF-8||en_US.UTF-8</p>
+<p><strong>attached base packages:</strong>
+<em>stats</em>, <em>graphics</em>, <em>grDevices</em>, <em>utils</em>, <em>datasets</em>, <em>methods</em> and <em>base</em></p>
+<p><strong>other attached packages:</strong>
+readr(v.2.1.5)</p>
+<p><strong>loaded via a namespace (and not attached):</strong>
+<em>vctrs(v.0.6.5)</em>, <em>cli(v.3.6.3)</em>, <em>knitr(v.1.49)</em>, <em>rlang(v.1.1.5)</em>, <em>xfun(v.0.50)</em>, <em>jsonlite(v.1.8.9)</em>, <em>glue(v.1.8.0)</em>, <em>htmltools(v.0.5.8.1)</em>, <em>sass(v.0.4.9)</em>, <em>hms(v.1.1.3)</em>, <em>rmarkdown(v.2.29)</em>, <em>pander(v.0.6.5)</em>, <em>evaluate(v.1.0.3)</em>, <em>jquerylib(v.0.1.4)</em>, <em>tibble(v.3.2.1)</em>, <em>tzdb(v.0.4.0)</em>, <em>fastmap(v.1.2.0)</em>, <em>yaml(v.2.3.10)</em>, <em>lifecycle(v.1.0.4)</em>, <em>bookdown(v.0.42)</em>, <em>compiler(v.4.4.2)</em>, <em>Rcpp(v.1.0.14)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>rstudioapi(v.0.17.1)</em>, <em>digest(v.0.6.37)</em>, <em>R6(v.2.5.1)</em>, <em>pillar(v.1.10.1)</em>, <em>magrittr(v.2.0.3)</em>, <em>bslib(v.0.9.0)</em>, <em>tools(v.4.4.2)</em> and <em>cachem(v.1.1.0)</em></p>
 </div>
 
 
