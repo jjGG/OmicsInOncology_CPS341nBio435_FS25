@@ -51,9 +51,41 @@ squid$weight_sqrt <- sqrt(squid$weight)
 plot(x = squid$DML, y = squid$weight_log)
 plot(x = squid$DML, y = squid$weight_sqrt)
 
-#TODO saving the plot in pdf format
-pdf(file = )
+pdf(file = '/Users/tim/Library/CloudStorage/OneDrive-UniversiteitUtrecht/Documents/☆Academische Bestanden/☆Universiteit Utrecht/3e jaar Bachelor/(FA-CPS341) Omics in Oncology/repo_clone_group1/week2/exercises/squid_scatterplot_sqrt.pdf')
+plot(x = squid$DML, y = squid$weight_sqrt)
+dev.off()
 ```
+
+```{r 10., echo=TRUE, include=TRUE}
+boxplot(DML ~ maturity_factor, data = squid, ylab = "Dorsal Mantle Length", xlab = "maturity stage")
+
+library(vioplot)
+vioplot(DML ~ maturity_factor, data = squid, ylab = "Dorsal Mantle Length", xlab = "Maturity Stage", col = "lightblue")
+```
+
+```{r 12., echo=TRUE, include=TRUE}
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
+{
+    usr <- par("usr")
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+panel.hist <- function(x, ...)
+{
+    usr <- par("usr")
+    par(usr = c(usr[1:2], 0, 1.5) )
+    h <- hist(x, plot = FALSE)
+    breaks <- h$breaks; nB <- length(breaks)
+    y <- h$counts; y <- y/max(y)
+    rect(breaks[-nB], 0, breaks[-1], y, col = "cyan", ...)
+}
+pairs(squid[, c("DML", "weight", "eviscerate.weight", "ovary.weight", "nid.length", "nid.weight")], lower.panel = panel.smooth, diag.panel = panel.hist, upper.panel = panel.cor)
+```
+
 # Session Information
 
 ```{r sessionInfo, echo=FALSE, include=TRUE}
