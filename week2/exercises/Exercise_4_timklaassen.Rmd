@@ -14,23 +14,46 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
-# Exercises for the R-Beginner - The fancy calculator
+# Exercise 4: Visualising data using base R and lattice graphics
 
-## Exercise 2
+## Exercise 4
 * from https://alexd106.github.io/intro2R/exercise_2.html
-```{r myN, echo=FALSE, include=TRUE}
-myNumber <- 12.43
-
-# do some calculations
-# natural log
-log(myNumber)
+```{r template_chunk., echo=TRUE, include=TRUE}
 ```
 
-```{r lg10, echo=TRUE, include=TRUE}
-# log10
-log10(myNumber)
+```{r 4., echo=TRUE, include=TRUE}
+squid <- read.table(file = '/Users/tim/Library/CloudStorage/OneDrive-UniversiteitUtrecht/Documents/☆Academische Bestanden/☆Universiteit Utrecht/3e jaar Bachelor/(FA-CPS341) Omics in Oncology/repo_clone_group1/week2/data4exercises/squid1.txt', header = TRUE, sep = "\t", stringsAsFactors = TRUE)
+
+squid$year_factor <- factor(squid$year) 
+squid$month_factor <- factor(squid$month)
+squid$maturity_factor <- factor(squid$maturity.stage)
+#squid <- squid[, !(names(squid) %in% c("year", "month", "maturity.stage"))]
+
+summary(squid)
+str(squid)
+
 ```
 
+```{r 5., echo=TRUE, include=TRUE}
+xtabs(~ month_factor + year_factor, data = squid)
+#xtabs is just faster to write when using more variables
+
+#you can use a ftable when combining a contingency table with more than 2 variables, otherwise it will give multiple tables for the third variable.
+ftable(xtabs(~ month_factor + year_factor + maturity_factor, data = squid))
+```
+
+```{r 9., echo=TRUE, include=TRUE}
+plot(x = squid$DML, y = squid$weight)
+
+squid$weight_log <- log(squid$weight)
+squid$weight_sqrt <- sqrt(squid$weight)
+
+plot(x = squid$DML, y = squid$weight_log)
+plot(x = squid$DML, y = squid$weight_sqrt)
+
+#TODO saving the plot in pdf format
+pdf(file = )
+```
 # Session Information
 
 ```{r sessionInfo, echo=FALSE, include=TRUE}
