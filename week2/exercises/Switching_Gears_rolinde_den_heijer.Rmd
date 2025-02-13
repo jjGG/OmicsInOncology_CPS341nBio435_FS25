@@ -1,0 +1,187 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+## Switching Gears
+
+# The pipe
+```{r, echo=FALSE, include=TRUE}
+mpg_df <- mpg
+
+#see the first six rows of the mpg data set
+
+#call mpg_df first, then 'send it into' the head function, using the pipe %>%
+
+mpg_df %>% head()
+```
+
+## Tidy principles, tidyverse packages
+```{r, echo=FALSE, include=TRUE}
+library(tidyverse)
+# Compute rate per 10,000
+table1 |>
+  mutate(rate = cases / population * 10000)
+#> # A tibble: 6 × 5
+#>   country      year  cases population  rate
+#>   <chr>       <dbl>  <dbl>      <dbl> <dbl>
+#> 1 Afghanistan  1999    745   19987071 0.373
+#> 2 Afghanistan  2000   2666   20595360 1.29 
+#> 3 Brazil       1999  37737  172006362 2.19 
+#> 4 Brazil       2000  80488  174504898 4.61 
+#> 5 China        1999 212258 1272915272 1.67 
+#> 6 China        2000 213766 1280428583 1.67
+
+# Compute total cases per year
+table1 |> 
+  group_by(year) |> 
+  summarize(total_cases = sum(cases))
+#> # A tibble: 2 × 2
+#>    year total_cases
+#>   <dbl>       <dbl>
+#> 1  1999      250740
+#> 2  2000      296920
+
+# Visualize changes over time
+ggplot(table1, aes(x = year, y = cases)) +
+  geom_line(aes(group = country), color = "grey50") +
+  geom_point(aes(color = country, shape = country)) +
+  scale_x_continuous(breaks = c(1999, 2000)) # x-axis breaks at 1999 and 2000
+
+billboard |> 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    values_to = "rank"
+  )
+#> # A tibble: 24,092 × 5
+#>    artist track                   date.entered week   rank
+#>    <chr>  <chr>                   <date>       <chr> <dbl>
+#>  1 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk1      87
+#>  2 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk2      82
+#>  3 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk3      72
+#>  4 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk4      77
+#>  5 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk5      87
+#>  6 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk6      94
+#>  7 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk7      99
+#>  8 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk8      NA
+#>  9 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk9      NA
+#> 10 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk10     NA
+#> # ℹ 24,082 more rows
+
+billboard |> 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
+#> # A tibble: 5,307 × 5
+#>   artist track                   date.entered week   rank
+#>   <chr>  <chr>                   <date>       <chr> <dbl>
+#> 1 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk1      87
+#> 2 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk2      82
+#> 3 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk3      72
+#> 4 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk4      77
+#> 5 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk5      87
+#> 6 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk6      94
+#> # ℹ 5,301 more rows
+
+billboard_longer <- billboard |> 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) |> 
+  mutate(
+    week = parse_number(week)
+  )
+billboard_longer
+#> # A tibble: 5,307 × 5
+#>   artist track                   date.entered  week  rank
+#>   <chr>  <chr>                   <date>       <dbl> <dbl>
+#> 1 2 Pac  Baby Don't Cry (Keep... 2000-02-26       1    87
+#> 2 2 Pac  Baby Don't Cry (Keep... 2000-02-26       2    82
+#> 3 2 Pac  Baby Don't Cry (Keep... 2000-02-26       3    72
+#> 4 2 Pac  Baby Don't Cry (Keep... 2000-02-26       4    77
+#> 5 2 Pac  Baby Don't Cry (Keep... 2000-02-26       5    87
+#> 6 2 Pac  Baby Don't Cry (Keep... 2000-02-26       6    94
+#> # ℹ 5,301 more rows
+
+billboard_longer |> 
+  ggplot(aes(x = week, y = rank, group = track)) + 
+  geom_line(alpha = 0.25) + 
+  scale_y_reverse()
+```
+
+## ggplot, piping and R-functions
+```{r, echo=FALSE, include=TRUE}
+# Load the dataset
+data(mtcars)
+head(mtcars) 
+str(mtcars)
+
+# Create a scatter plot of mpg vs. wt, filtering, and transforming data using pipes
+mtcars %>%
+  filter(cyl == 6) %>%  # Filter for cars with 6 cylinders
+  mutate(mpg_transformed = mpg * 1.2) %>%  # Create a transformed mpg column
+  ggplot(aes(x = wt, y = mpg_transformed, color = factor(cyl))) + 
+  geom_point(size = 3) +  # Add points to the plot
+  labs(title = "Transformed mpg vs. Weight (for 6 cylinders)",
+       x = "Weight",
+       y = "Transformed mpg",
+       color = "Cylinder Count") +
+  theme_minimal()  # Use a minimal theme for the plot
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(plotly)
+
+# Ensure mtcars dataset is loaded
+data(mtcars)
+
+# Create a cool plot
+cool_plot <- mtcars %>%
+  filter(cyl == 6) %>%  # Filter for 6-cylinder cars
+  mutate(mpg_transformed = mpg * 1.2) %>%  # Transform mpg values
+  ggplot(aes(x = wt, y = mpg_transformed, color = factor(cyl))) + 
+  geom_point(size = 4, alpha = 0.7) +  # Add points with transparency
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +  # Add regression line
+  scale_color_brewer(palette = "Set2") +  # Use a cool color palette
+  labs(title = "Transformed MPG vs. Weight (6 Cylinders)",
+       subtitle = "With a Regression Line and Custom Colors",
+       x = "Weight of Car (1000 lbs)",
+       y = "Transformed MPG",
+       color = "Cylinder Count") +
+  theme_minimal() +  # Minimalistic theme
+  theme(legend.position = "top",  # Move the legend to the top
+        plot.title = element_text(hjust = 0.5))  # Center the title
+
+# Make it interactive using plotly
+interactive_plot <- ggplotly(cool_plot)
+
+# Show the plot
+interactive_plot
+```
+
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
