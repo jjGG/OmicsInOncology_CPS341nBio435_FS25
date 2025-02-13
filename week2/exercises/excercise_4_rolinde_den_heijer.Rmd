@@ -1,0 +1,105 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 4
+* from https://alexd106.github.io/intro2R/exercise_4.html
+
+## exercise 4.4
+```{r, echo=FALSE, include=TRUE}
+squid <- read.table("C:/Users/rolin/Documents/OmicsInOncology_CPS341nBio435_FS25/week2/data4exercises/squid1.txt")
+str(squid)
+summary(squid)
+colnames(squid)
+# 520 observations, 13 variables
+# Recode year, month, and maturity.stage as factors
+squid$year_factor <- factor(squid$V3)
+squid$month_factor <- factor(squid$V4)
+squid$maturity_stage_factor <- factor(squid$V7)
+
+# Check the structure of the dataset again to verify the recoding
+str(squid)
+```
+
+## exercise 4.5
+```{r, echo=FALSE, include=TRUE}
+# Count the number of observations per month and year combination
+monthly_yearly_count <- table(squid$year_factor, squid$month_factor)
+
+# Print the table to see the counts
+print(monthly_yearly_count)
+
+# Sum the observations per year to see which years have the most data
+yearly_totals <- rowSums(monthly_yearly_count)
+
+# Print the yearly totals
+print(yearly_totals)
+
+# Create a contingency table of observations by year, maturity.stage, and month
+contingency_table <- xtabs(~ year_factor + maturity_stage_factor + month_factor, data = squid)
+
+# Flatten the table for easier reading
+flattened_table <- ftable(contingency_table)
+
+# Print the flattened table
+print(flattened_table)
+```
+
+## exercise 4.9
+```{r, echo=FALSE, include=TRUE}
+# Create a scatterplot of DML vs weight
+plot(squid$V8, squid$V5, 
+     xlab = "DML", 
+     ylab = "Weight", 
+     main = "Scatterplot of DML vs Weight")
+
+# Convert the column to numeric (will introduce NA for non-numeric values)
+squid$V5 <- as.numeric(squid$V5)
+
+# Create a new variable for the log-transformed weight
+squid$log_weight <- log(squid$V5)
+
+# Scatterplot of DML vs log-transformed weight
+plot(squid$V8, squid$log_weight, 
+     xlab = "DML", 
+     ylab = "Log of Weight", 
+     main = "Scatterplot of DML vs Log(Weight)")
+
+# Create a new variable for the square root-transformed weight
+squid$sqrt_weight <- sqrt(squid$V5)
+
+# Remove rows where either DML or log_weight is NA
+squid_clean <- squid[!is.na(squid$V8) & !is.na(squid$log_weight), ]
+
+# Scatterplot of DML vs square root-transformed weight
+plot(squid$V8, squid$sqrt_weight, 
+     xlab = "DML", 
+     ylab = "Sqrt of Weight", 
+     main = "Scatterplot of DML vs Sqrt(Weight)")
+
+# Save all plots to a PDF file
+pdf("scatterplots_DML_weight_transformed.pdf")
+```
+
+
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
