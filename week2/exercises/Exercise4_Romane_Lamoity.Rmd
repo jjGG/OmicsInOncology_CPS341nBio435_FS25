@@ -1,0 +1,134 @@
+---
+title: "Week 2: Starting with R"
+author: "UZH n UU: tested by Jonas"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+# install readr from CRAN
+# install.packages("readr")
+library(readr) # make sure your R has this library loaded, if not install it (see line above)
+```
+
+# Exercises for the R-Beginner - The fancy calculator
+
+## Exercise 4
+* from https://alexd106.github.io/intro2R/exercise_4.html
+
+### Task 2
+
+#### file squid1.txt was already converted in text tab delimited (txt) format
+
+
+### Task 3
+
+#### info on study dataset
+
+```{r}
+
+# Import the 'squid1.txt' file into R
+
+getwd()
+squid <- read.table("../data4exercises/squid1.txt", header = TRUE, stringsAsFactors = TRUE)
+
+# Display the structure of the dataset using the str() function
+str(squid)
+
+# Summarize the dataset using the summary() function
+summary(squid)
+
+# Check how many observations (rows) and variables (columns) and use nrow() and ncol() functions to get the number of rows and columns
+num_observations <- nrow(squid)
+num_variables <- ncol(squid)
+cat("Number of observations:", num_observations, "\n")
+cat("Number of variables:", num_variables, "\n")
+
+# Recode the 'year', 'month', and 'maturity.stage' variables as factors
+# For each variable, create a new column and convert it to a factor
+squid$year_factor <- as.factor(squid$year)
+squid$month_factor <- as.factor(squid$month)
+squid$maturity_stage_factor <- as.factor(squid$maturity.stage)
+
+# Check the coding of these new variables
+str(squid)
+
+```
+
+### Task 5
+
+```{r}
+
+# Create frequency table 
+table(squid$year_factor, squid$month_factor)
+
+# Create contigency table 
+xtabs(~ year_factor + month_factor, data = squid)
+
+# Which year has the most observations
+yearly_counts <- tapply(squid$year_factor, squid$year_factor, length)
+yearly_counts
+
+# Flattened contigency table 
+ftable(squid$year_factor, squid$maturity_stage_factor, squid$month_factor)
+
+```
+
+
+### Task 9
+
+```{r}
+
+# Scatterplot of DML vs. weight
+plot(squid$DML, squid$weight, 
+     xlab = "Dorsal Mantle Length (DML)", 
+     ylab = "Weight", 
+     main = "Scatterplot of DML vs. Weight")
+
+# Create new variable for the log-transformed weight 
+squid$log_weight <- log(squid$weight)
+
+# Scatterplot of DML vs. log-transformed weight
+plot(squid$DML, squid$log_weight, 
+     xlab = "Dorsal Mantle Length (DML)", 
+     ylab = "Log of Weight", 
+     main = "Scatterplot of DML vs. Log(Weight)")
+
+# Create new variable for the squareroot-transformed weight 
+squid$sqrt_weight <- sqrt(squid$weight)
+
+# Scatterplot of DML vs. square root-transformed weight
+plot(squid$DML, squid$sqrt_weight, 
+     xlab = "Dorsal Mantle Length (DML)", 
+     ylab = "Square Root of Weight", 
+     main = "Scatterplot of DML vs. Sqrt(Weight)")
+
+```
+
+
+### Task 10
+
+```{r}
+
+# Create a boxplot for DML across maturity stages
+boxplot(squid$DML ~ squid$maturity_stage_factor, 
+        main = "DML by Maturity Stage", 
+        xlab = "Maturity Stage", 
+        ylab = "Dorsal Mantle Length (DML)", 
+        col = "lightblue", 
+        border = "black")
+    
+```
+
+### Task 12
+
+```{r}
+
+# Basic pairs plot for selected continuous variables
+pairs(squid[, c("DML", "weight", "eviscerate.weight", "ovary.weight", "nid.length", "nid.weight")], 
+      main = "Pairs Plot of Squid Measurements")
+
+```
