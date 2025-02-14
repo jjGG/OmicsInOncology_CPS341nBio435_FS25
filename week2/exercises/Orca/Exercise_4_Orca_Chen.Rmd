@@ -14,18 +14,28 @@ bibliography: bibliography.bib
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
 ```
 
-# Exercises for the R-Beginner - The fancy calculator
-
 ## Exercise 4
 * from https://alexd106.github.io/intro2R/exercise_4.html
 ```{r myN, echo=FALSE, include=TRUE}
+squid <- read.table("../data/squid1.txt", header = T, sep = "\t", stringsAsFactors = T)
+summary(squid)
+str(squid)
+# 519 observations with 13 variables
 
+squid$year <- factor(squid$year)
+squid$month <- factor(squid$month)
+squid$maturity.stage <- factor(squid$maturity.stage)
+str(squid)
+```
+```{r question5, echo=FALSE, include=TRUE}
+# table function
+time <- table(squid$year, squid$month)
+summary(time)
+# ftable function
+time_c <- xtabs(~year + month + maturity.stage, data = squid)
+time_F <- ftable(time_c)
 ```
 
-```{r lg10, echo=TRUE, include=TRUE}
-# log10
-log10(myNumber)
-```
 
 # Session Information
 
