@@ -19,10 +19,11 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 ## Exercise 3
 * from https://alexd106.github.io/intro2R/exercise_2.html
 ```{r 5., echo=TRUE, include=TRUE}
+#import dataframe, tab spaced table, setting first row as header and make strings/character data factors
 whale <- read.table(file = '/Users/tim/Library/CloudStorage/OneDrive-UniversiteitUtrecht/Documents/☆Academische Bestanden/☆Universiteit Utrecht/3e jaar Bachelor/(FA-CPS341) Omics in Oncology/repo_clone_group1/week2/data4exercises/mywhaledata.tsv', header = TRUE, sep = "\t", stringsAsFactors = TRUE)
-head(whale)
-names(whale)
-str(whale)
+head(whale) #gives the first rows o the imported table
+names(whale) #gives the variable/column names
+str(whale) #gives a summary of the data, not the statistics, use summary command for statistical summary
 
 # 'data.frame':	100 obs. of  8 variables:
 #  $ month          : Factor w/ 2 levels "May","October": 1 1 1 1 1 1 1 1 1 1 ...
@@ -45,6 +46,7 @@ summary(whale)
 ```
 
 ```{r 9., echo=TRUE, include=TRUE}
+#logical index with / datawrangling to filter specific data from the table
 depths_gt_1200m <- whale[whale$depth > 1200,]
 
 gradient_st_200degrees <- whale[whale$gradient > 200,]
