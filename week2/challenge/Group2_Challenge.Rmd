@@ -10,6 +10,8 @@ bibliography: bibliography.bib
 
 ```{r load libraries, include=FALSE}
 library(tidyverse)
+library(dplyr)
+library(gplots)
 ```
 
 
@@ -29,8 +31,8 @@ ggplot(agr, aes(x=Time, y= OD600_blank_corrected, color = Growth_Medium)) +
     geom_line() +
     geom_point() +
     labs(title = "Growth Curve for Different Media",
-       x = "Time (hours)",
-       y = "Mean OD660 (Growth)",
+       x = "Hours",
+       y = "Mean OD660",
        color = "Growth Medium")
 
 #without aggregating
@@ -38,10 +40,13 @@ ggplot(dd, aes(x=Time, y= OD600_blank_corrected, color = Growth_Medium)) +
     geom_line() +
     geom_point() +
     labs(title = "Growth Curve for Different Media",
-       x = "Time (hours)",
-       y = "Mean OD660 (Growth)",
+       x = "Hours",
+       y = "Mean OD660",
        color = "Growth Medium")
 ```
+
+
+One way Anova
 ```{r 2, eval=TRUE, include=TRUE, echo=TRUE}
 m1 <- lm(OD600_blank_corrected ~ Growth_Medium, data = dd)
 
@@ -52,6 +57,17 @@ anova(m1)
 
 
 ```
+
+Heatmap Proteins
+```{r heatmap, eval=TRUE, include=TRUE}
+#file.choose()
+dd2 <- read.delim("/Users/lish/Desktop/data_omics/qmat_1198.txt")
+mat <- as.matrix(dd2[,2:ncol(dd2)])
+mat[mat == 0] <- NA
+logmat <- log2(na.omit(mat))
+heatmap.2(logmat)
+```
+
 
 # Session Information
 
