@@ -1,6 +1,6 @@
 ---
 title: "Week 2: Starting with R"
-author: "UZH n UU: tested by Jonas"
+author: "Orca Chen"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   bookdown::html_document2: default
@@ -16,17 +16,28 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 ## Exercise 4
 * from https://alexd106.github.io/intro2R/exercise_4.html
-```{r myN, echo=FALSE, include=TRUE}
-squid <- read.table("../data/squid1.txt", header = T, sep = "\t", stringsAsFactors = T)
+```{r import_squid_data, echo=FALSE, include=TRUE}
+getwd()
+squid <- read.table("../../data4exercises/squid1.txt", header = T, sep = "\t", stringsAsFactors = T)
 summary(squid)
 str(squid)
 # 519 observations with 13 variables
-
-squid$year <- factor(squid$year)
-squid$month <- factor(squid$month)
-squid$maturity.stage <- factor(squid$maturity.stage)
+```
+```{r Question_4 transform_strings_into_integers, echo=FALSE, include=TRUE}
+squid$Fyear <- factor(squid$year)
+squid$Fmonth <- factor(squid$month)
+squid$Fmaturity.stage <- factor(squid$maturity.stage)
 str(squid)
 ```
+
+
+
+```{r Question_6 echo=FALSE, include=TRUE}
+dotchart(squid$DML, xlab = "DML") # outlier is below DML = 100
+dotchart(squid$weight, xlab = "weight")
+dotchart(squid$nid.length)
+```
+
 ```{r question5, echo=FALSE, include=TRUE}
 # table function
 time <- table(squid$year, squid$month)
