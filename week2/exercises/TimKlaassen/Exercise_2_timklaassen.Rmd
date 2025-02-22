@@ -51,6 +51,7 @@ exp(myNumber)
 #3. Use R to determine the area of a circle with a diameter of 20 cm
 ```{r circle_area, echo=TRUE, include=TRUE}
 
+#calculate area of a circle
 circle_diameter_cm <- 20
 circle_radius_cm <- circle_diameter_cm / 2
 area_circle <- pi * circle_radius_cm^2
@@ -59,13 +60,14 @@ print(area_circle)
 
 # 5. Vector exercise
 ```{r vector_weight, echo=TRUE, include=TRUE}
-
+#make a vector to print multiple numbers
 vc_weight_kg <- c(69, 62, 57, 59, 59, 64, 56, 66, 67, 66)
 print(vc_weight_kg)
 ```
 
 #calculations with the weight data
 ```{r weight_calc, echo=TRUE, include=TRUE}
+#doing calculations with the vector values
 mean(vc_weight_kg)    # returns the mean of vc_weight_kg
 var(vc_weight_kg)     # returns the variance of vc_weight_kg
 sd(vc_weight_kg)      # returns the standard deviation of vc_weight_kg
@@ -82,9 +84,11 @@ print(first_five)
 vc_height_cm <- c(112, 102, 83, 84, 99, 90, 77, 112, 133, 112)
 summary(vc_height_cm)
 
+#Positional index
 some_child <- vc_height_cm[c(2, 3,9, 10)]
 print(some_child)
 
+#Logical index
 shorter_child <- vc_height_cm[vc_height_cm <= 99]
 print(shorter_child)
 ```
@@ -92,6 +96,7 @@ print(shorter_child)
 #BMI calculations
 ```{r BMI_calc, echo=TRUE, include=TRUE}
 
+#Vectorisation
 vc_BMI <- vc_weight_kg / ((vc_height_cm/100)^2) #Calculation of BMI
 print(vc_BMI)
 ```
