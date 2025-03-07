@@ -155,8 +155,8 @@ renderGraph(example_graph_plot)
 Do you understand why the plot looks the way it looks?
 
 ``` {r}
-baits <- c("A", "A", "A", "A")
-preys <- c("B", "C", "D", "E")
+baits <- c("A", "A", "A", "A","B","B")
+preys <- c("B", "C", "D", "E", "F", "G")
 
 
 #First we use our function to create the graph
@@ -176,8 +176,8 @@ renderGraph(example_graph_plot)
 Do you understand why the plot looks the way it looks?
 
 ``` {r}
-baits <- c("A", "A", "A", "A")
-preys <- c("B", "C", "D", "E")
+baits <- c("A", "A", "A", "A", "I", "I")
+preys <- c("B", "C", "D", "E", "F", "G")
 
 
 #First we use our function to create the graph
@@ -211,7 +211,9 @@ For this you can use the print() or head() function. However also just typing th
 
 ```{r}
 ## lets load our supplementary data
-SuppS6 <- 
+SuppS6 <- read_excel('science.abf3066_Table_S6.xlsx', sheet = 2)
+SuppS6
+
 
 ```
 
@@ -231,18 +233,22 @@ For convenience we will first store the content of these columns in their own va
 ### 1. Store the content of the *Bait column* in a variable **baits** and the *Prey column* in **preys**
 
 ```{r}
+baits <- SuppS6$Bait
+preys <- SuppS6$Prey
 
 ```
 
 ### 2. use the *makeproteingraph(.. , ..)* function and store the output in the variable **interactionGraph** (this is now a *graphNEL-object*)
 
 ```{r}
-
+InteractionGraph <- makeproteingraph(baits, preys, weight=1)
+InteractionGraph
 ```
 
 3. "print" the content of the interactionGraph variable (don't use head or print, just type the variable name)
 
 ```{r}
+print(InteractionGraph)
 
 ```
 
@@ -252,7 +258,7 @@ We will make use of the neato layout **layoutType="neato"** (there are more layo
 
 
 ```{r}
-
+renderGraph(layoutGraph(InteractionGraph, layoutType="neato"))
 ```
 
 
@@ -303,6 +309,12 @@ Of course we like to plot this as well, like we did with the complete dataset.
 *All the steps above are similar to the steps you did for the 'complete' dataset*
 
 ```{r}
+baits <- SuppS6_sub$Bait
+preys <- SuppS6_sub$Prey
+InteractionGraph2 <- makeproteingraph (baits, preys, weight=1)
+print (InteractionGraph2)
+
+
 
 ```
 
@@ -310,7 +322,8 @@ Of course we like to plot this as well, like we did with the complete dataset.
 4. render the graph.
 
 ```{r}
-
+ppiGraph <- (layoutGraph(InteractionGraph2, layoutType="neato"))
+renderGraph(ppiGraph)
 ```
 
 ## Let's make the plot more informative
@@ -387,8 +400,11 @@ We've loaded the 'graph' package and are therefore using GraphNEL graphs.
 The number of connections per node can be found with the 'degree' function.
 Sort the output of this function to give a nice overview of what proteins have the most connected proteins.
 
-```{r}
 
+```{r}
+node_degrees <- degree (ppiGraph)
+sorted_degrees <- sort (node_degrees, decreasing = TRUE)
+print (sorted_degrees)
 
 ```
 
@@ -398,6 +414,8 @@ In R, there is a function called 'table', that will give you the possibility to 
 Use this function to analyze the output of the degree function from above
 
 ```{r}
+degree_distribution <- table(node_degrees)
+print (degree_distribution)
 
 ```
 ```{r}
@@ -411,7 +429,15 @@ Explain why you see this. Think about it, also in terms of the experiment we're 
 
 _______________________________
 
-Type your answer here!
+I did not find any proteins with a degree of 0.
+I found 15 proteins with a degree of 1.
+I found 3 proteins with a degree greater than 40. 
+
+in protin interaction network a protein with degree 0 means it has no recorded interactions, and it is a dataset from experimental data so only proteins with detected interactions are included and therefore protein with degree 0 would not appear in the network. 
+
+the proteins with degree 1 can be low condifence interactions or experiment limitations 
+
+the protein with degree>40, are highly connected proteins which most likely play central role in cellular function.
 
 _______________________________
 
@@ -421,7 +447,7 @@ Extract the connected components from our graph using the connectedComp method. 
 Assign the outcome to a variable with a name you will still understand when we wake you up at night (hypothetically of course!).
 
 ```{r}
-
+connectedComp (ppiGraph)
 ```
 
 ### Find all connections to a particular protein
