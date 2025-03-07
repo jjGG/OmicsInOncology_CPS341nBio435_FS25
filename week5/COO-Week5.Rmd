@@ -211,7 +211,6 @@ For this you can use the print() or head() function. However also just typing th
 
 ```{r}
 ## lets load our supplementary data
-SuppS6 <- 
 
 ```
 
