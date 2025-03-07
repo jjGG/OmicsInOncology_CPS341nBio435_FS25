@@ -17,7 +17,8 @@ library(readr) # make sure your R has this library loaded, if not install it (se
 
 ## Exercise 4
 * from https://alexd106.github.io/intro2R/exercise_4.html
-```{r myN, echo=FALSE, include=TRUE}
+```{r myN, echo=FALSE, include=FALSE}
+# jonas comment about "include=FALSE/TRUE
 data <- read.table("../data4exercises/squid1.txt", header = TRUE, sep = "\t")
 data
 ```

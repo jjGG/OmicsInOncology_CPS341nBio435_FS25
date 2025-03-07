@@ -1,0 +1,105 @@
+---
+title: "Plotting Growth Curves"
+author: "UZH n UU: Who is the author here"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=TRUE, echo=FALSE}
+library(readr) # this package is for loading files (e.g. tsv, csv, ..)
+
+```
+
+
+# Introduction
+
+The data that we are going to use for this exercise is published in the mBio paper [@niggli2023mbio]. 
+It can be found online on: https://doi.org/10.6084/m9.figshare.23578086.v1
+It describes the OD600 (growth) of the *Staphylococcus aureus* strain **JE2** in different media.
+
+# Reading in Data and Plotting Growth Curves
+
+```{r load data, eval=TRUE, include=TRUE, echo=TRUE}
+fN <- "JE_growth_final.txt" # us this txt file that is copy pasted spread sheet from excel tab separated 
+dat <- read.table(fN, header = T, sep = "\t", stringsAsFactors = TRUE)
+```
+
+```{r , eval=TRUE, include=TRUE, echo=TRUE}
+fN <- "JE_growth_final.txt" # us this txt file that is copy pasted spread sheet from excel tab separated 
+dat <- read.table(fN, header = T, sep = "\t", stringsAsFactors = TRUE)
+```
+
+```{r print data, eval=TRUE, include=FALSE, echo=TRUE}
+# this print command is only shown on the html if include = TRUE
+print("these are so called junks of code, you may include them to be shown in the rendered document (html here) each junk has a unique name next to it and then some additional arguments")
+print(fN)
+```
+
+```{r dimensions, eval=TRUE, include=TRUE, echo=FALSE}
+
+# Making a nice plot
+
+
+library(ggplot2)
+library(dplyr)
+
+
+# Plotting the OD600 Growth Curves
+ggplot(dat, aes(x = Time, y = OD600_blank_corrected, color = Growth_Medium, group = interaction(Growth_Medium, Replicate))) +
+    geom_line(alpha = 0.6) +
+    geom_point(alpha = 0.8) +
+    stat_summary(aes(group=Growth_Medium), fun=mean, geom="line", size=1.2) +
+    labs(title = "Growth Curves (OD600 vs. Time)",
+         x = "Time (hours)",
+         y = "OD600 (Blank Corrected)",
+         color = "Growth Medium") +
+    theme_minimal()
+
+# Anova test 
+anova_result <- aov(OD600_blank_corrected ~ Growth_Medium, data = dat)
+summary(anova_result)
+
+# T-test after Anova
+if (length(unique(dat$Growth_Medium)) == 2) {
+    t_test_result <- t.test(OD600_blank_corrected ~ Growth_Medium, data = dat)
+    print(t_test_result)
+} else {
+    # Post-hoc Tukey test for multiple comparisons
+    tukey_result <- TukeyHSD(anova_result)
+    print(tukey_result)
+}
+
+
+
+dat$Growth_Medium <- as.factor(dat$Growth_Medium)
+
+# Plot OD600 Growth Curves with Regressionline
+ggplot(dat, aes(x = Time, y = OD600_blank_corrected, color = Growth_Medium)) +
+    geom_smooth(method = "loess", se = TRUE, size = 1.2) +  
+    labs(title = "Growth Curves (Smoothed Regression)",
+         x = "Time (hours)",
+         y = "OD600 (Blank Corrected)",
+         color = "Growth Medium") +
+    theme_minimal()
+dd <- dim(dat)
+```
+
+The dimensions of this dataset are shown above.
+It is easy possible to show also content of variables in the html part.  
+Note: if you end a line with 2 spaces you go to a new paragraph.  
+  
+Like here: `r dd`
+
+
+# Session Information
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
+# References {-}
+

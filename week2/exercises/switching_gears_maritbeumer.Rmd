@@ -12,14 +12,10 @@ bibliography: bibliography.bib
 # install readr from CRAN
 # install.packages("readr")
 library(readr) # make sure your R has this library loaded, if not install it (see line above)
+library(tidyverse)
 ```
 
 # Switching gears
-
-```{r load libraries, include=FALSE}
-library(readr)
-library(tidyverse)
-```
 
 ### Recreating engine size per car class plot
 

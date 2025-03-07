@@ -1,0 +1,56 @@
+---
+title: "Visualize Quantitative Matrix"
+author: "UZH n UU -> One of the teacher"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+bibliography: bibliography.bib
+---
+
+```{r load libraries, include=FALSE}
+library(readr)
+library(gplots)
+```
+
+
+```{r load data, eval=TRUE, include=FALSE, echo=FALSE}
+fN <- "qmat_1198.txt"
+dat <- read_tsv(fN)
+```
+
+
+
+# Visualize Using Heatmap2 from gplots
+
+We are using `r fN` here to visualize these values as a heatmap. We will do this on raw linear values as well as on $\log_{2}$ transformed values.
+
+```{r hmNoTrafo, fig.height=8, fig.width=8, fig.cap="(ref:hmNoTrafo)", eval=TRUE}
+mat <- as.matrix(dat[,2:ncol(dat)])
+heatmap.2(mat, na.rm = TRUE, margins = c(10,3), trace="none")
+```
+(ref:hmNoTrafo) Shown is the visualization of the quantitative matrix as a heatmap (used here are the linear values)
+
+This representation shows, the matrix mostly consists of small values, while there are very few large ones.
+
+```{r hmlg2Trafo, fig.height=8, fig.width=8, fig.cap="(ref:hmlg2Trafo)", eval=TRUE}
+mat <- as.matrix(dat[,2:ncol(dat)])
+# replace zero with NA
+mat[mat == 0] <- NA
+lg2mat <- log2(na.omit(mat))
+heatmap.2(lg2mat, na.rm = TRUE, margins = c(10,3), trace="none")
+```
+(ref:hmlg2Trafo) Shown is the visualization of the quantitative matrix as a heatmap using log2-transformed values
+
+Now using $\log_{2}$ transformed values it should actually look better in (ref:hmlg2Trafo). But because there are a lot of zeros, we are replacing these with NAs and removing these before plotting the heatmap.
+
+
+
+
+# Session Information
+
+```{r sessionInfo, eval=TRUE, include=TRUE, echo=FALSE}
+pander::pander(sessionInfo())
+```
+
+
