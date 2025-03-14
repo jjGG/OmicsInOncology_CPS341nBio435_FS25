@@ -85,53 +85,103 @@ library(RColorBrewer)
 
 Below here we show the Figure 1E from the article. We will try to reproduce this figure with the data provided in as supplement in an excel file.
 _Try first to understand what this plot is showing. And explain it here, also indicate what columns are potentially relevant in this sheet (not all of them you need to use). Something like: on this volcano we see .. _ 
+```{r}
+#Proteins expressed on MM cells more often than ALL cells on the right (+ve values for log2 fold-change). Y-axis is how statistically significant the differential expression is. 
+```
  
 ![NatCom: Ferguson et. al, Figure 1E](img/Fig1E.png)
 ```{r readInData, echo=FALSE, include=TRUE}
-# read in the data and put it into an object (e.g. dat) have a look at the head of the data
+# Load necessary library
+library(readxl)
 
-print("here we look into head of the data")
+# Define the file path
+file_path <- "41467_2022_31810_MOESM3_ESM.xlsx"
+
+# Read the first sheet of the Excel file
+dat <- read_excel(file_path)
+
+
+# Display the first few rows
+head(dat)
 
 ```
 
 
 ```{r reshapeData, echo=FALSE, include=TRUE}
-# ideally you reshape the data into another object by selecting only necessairy columns
-# maybe also rename the columns to make it easier to work with
+# Load necessary library
+library(dplyr)
 
-# rename columns
+# Select necessary columns and rename them
+dat_reshaped <- dat %>%
+  select(MM_vs_Leukemia_difference, MM_vs_Leukemia_pvalue) %>%
+  rename( X_axis = MM_vs_Leukemia_difference, 
+         Y_axis = MM_vs_Leukemia_pvalue)
 
+
+# Display the first few rows
+head(dat_reshaped)
 ```
 
 
 ```{r someFirstVolcano, echo=FALSE, include=TRUE}
-# do a minimal volcano plot just to see if it works
+# Load necessary libraries
+library(ggplot2)
+
+# Minimal volcano plot
+ggplot(dat_reshaped, aes(x = X_axis, y = -log10(Y_axis))) +
+  geom_point() +
+  labs(title = "Minimal Volcano Plot",
+       x = "MM vs Leukemia Difference",
+       y = "-log10(P-value)") +
+  theme_minimal()
+
 
 ```
 
 
+```{r add_some_labels, echo=FALSE, include=TRUE}
 
-```{r volcano With Significance colored, echo=FALSE, include=TRUE}
-# usually proteins with a p-value < 0.05 and a log2FC > 1 (or -1) are considered significant
+# Define the list of proteins of interest
+pois <- c("CD19", "GGT1", "FLT3", "CD22", "CD72", "SELPL", "CADM1", "CD138", 
+          "ICAM1", "ICAM5", "BCMA", "TXNDC11", "CD28", "CCR10", "SLAMF7", 
+          "CD48", "MUC1", "ICAM3", "CD38", "SDC1", "CD99", "GGT1", "TOR1AIP2")
 
-# define threshold for significance and use different color
+# Define thresholds
 abs_log2_threshold <- 1
 pvalue_threshold <- 0.05
 
-```
+# Ensure the "Protein" column exists in `dat`
+if ("Protein" %in% colnames(dat)) {
+  
+  # Merge the Protein column into dat_reshaped
+  dat_reshaped$Protein <- dat$Protein
+  
+  # Define color categories based on thresholds
+  dat_reshaped$color <- case_when(
+    abs(dat_reshaped$X_axis) > abs_log2_threshold & dat_reshaped$Y_axis > pvalue_threshold ~ "green",
+    abs(dat_reshaped$X_axis) > abs_log2_threshold ~ "blue",
+    TRUE ~ "black"
+  )
+  
+  # Volcano plot with added labels and colored points
+  ggplot(dat_reshaped, aes(x = X_axis, y = -log10(Y_axis), color = color)) +
+    geom_point() +
+    geom_text_repel(aes(label = ifelse(Protein %in% pois, Protein, "")),
+                    size = 3, box.padding = 0.3, max.overlaps = 1000) +
+    scale_color_manual(values = c("green" = "green", "blue" = "blue","black" = "black")) +
+    labs(title = "Volcano Plot with Labels and Colored Points",
+         x = "MM vs Leukemia Difference",
+         y = "-log10(P-value)") +
+    theme_minimal()
 
-
-
-```{r add some lables found in a file, echo=FALSE, include=TRUE}
-# Now in the plot, some labels are added to some interesting proteins (POIs)
-# read in another txt with the proteins of interest
-
-
+} else {
+  print("Error: The column 'Protein' does not exist in `dat`. Please check the dataset.")
+}
 ```
 
 
 ```{r maybe there is overplotting try with ai, echo=FALSE, include=TRUE}
-
+#a
 ```
 
 
