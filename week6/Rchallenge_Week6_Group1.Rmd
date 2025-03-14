@@ -379,28 +379,27 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = Condition)) +
 ```{r corrPlot like in week 3, echo=TRUE, include=TRUE, warning=FALSE}
 # Pearson correlation plot
 
-# Compute Pearson correlation matrix for the variance-stabilized data (vsdSE)
+
+# Compute Pearson correlation matrix
 cor_matrix <- cor(vsdSE, method = "pearson")
 
-# Load necessary libraries
-library(ggplot2)
-library(reshape2)
-library(RColorBrewer)
+# Define a smooth color gradient
+color_palette <- colorRampPalette(c("blue", "green", "yellow"))(50)
 
-# Reshape the correlation matrix for ggplot
-cor_matrix_melted <- melt(cor_matrix)
-
-# Create a Pearson correlation heatmap
-ggplot(cor_matrix_melted, aes(Var1, Var2, fill = value)) +
-  geom_tile() +  # Use tiles to visualize correlation
-  scale_fill_gradient2(low = "blue", high = "yellow", mid = "green", midpoint = 0, 
-                       limits = c(-1, 1), name = "Correlation") +  # Color scale
-  theme_minimal() +
-  labs(title = "Pearson Correlation Heatmap of Protein Expression Data",
-       x = "Samples", y = "Samples") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),  # Rotate x-axis labels
-        axis.text.y = element_text(angle = 0, hjust = 1)) +  # Keep y-axis labels horizontal
-  coord_fixed()  # Fix aspect ratio to make it square
+# Generate heatmap with clustering trees
+pheatmap(cor_matrix, 
+         color = color_palette, 
+         display_numbers = TRUE,   # Show correlation values
+         number_color = "black",   # Make numbers clear
+         fontsize_number = 3,      # Reduce font size for better readability
+         cellwidth = 7,           # Increase cell width for better spacing
+         cellheight = 7,          # Increase cell height
+         clustering_distance_rows = "correlation",  # Cluster by correlation similarity
+         clustering_distance_cols = "correlation",
+         treeheight_row = 100,       # Increase tree height for visibility
+         treeheight_col = 100)       # Increase tree height for columns
+         
+         #border_color = NA)  # Remove grid lines
 ```
 
 # Session Information
