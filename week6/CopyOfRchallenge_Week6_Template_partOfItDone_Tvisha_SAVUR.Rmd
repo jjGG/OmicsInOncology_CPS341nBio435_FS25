@@ -113,7 +113,20 @@ print("look into reshaped data") # these statements can also be commented afterw
 
 ```{r someFirstVolcano, echo=FALSE, include=TRUE}
 # do a minimal volcano plot just to see if it works
+library(ggplot2)
 
+# Convert p-values to -log10 scale
+vdat$neg_log10_pval <- -log10(vdat$Pvalue)
+
+# Volcano Plot
+ggplot(vdat, aes(x = log2Ratio, y = neg_log10_pval)) +
+  geom_point(alpha = 0.6) +
+  theme_minimal() +
+  xlab("Log2 Fold Change") +
+  ylab("-Log10 P-value") +
+  ggtitle("Volcano Plot") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "red") +
+  geom_vline(xintercept = c(-1, 1), linetype = "dashed", color = "blue")
 ```
 
 
