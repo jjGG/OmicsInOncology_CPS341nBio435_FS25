@@ -120,7 +120,7 @@ vdat$neg_log10_pval <- -log10(vdat$Pvalue)
 
 # Volcano Plot
 ggplot(vdat, aes(x = log2Ratio, y = neg_log10_pval)) +
-  geom_point(alpha = 0.6) +
+  geom_point(alpha = 0.6,color = "red") +
   theme_minimal() +
   xlab("Log2 Fold Change") +
   ylab("-Log10 P-value") +
@@ -137,6 +137,7 @@ ggplot(vdat, aes(x = log2Ratio, y = neg_log10_pval)) +
 # define threshold for significance and use different color
 abs_log2_threshold <- 1
 pvalue_threshold <- 0.05
+
 
 ```
 
