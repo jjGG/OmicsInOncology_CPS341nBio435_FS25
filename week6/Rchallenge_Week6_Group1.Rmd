@@ -1,0 +1,419 @@
+---
+title: "Get more experience with R"
+author: "Group 1"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+bibliography: COILbibliography.bib
+---
+
+# Introduction
+
+In this R-challenge we would first like to reproduce a volcano plot from an article using the provided supplementary data and then apply some of the skills we have learned in the previous weeks. Basically, in the same article, the authors also provide a matrix with the expression of the proteins in the surfaceome of multiple myeloma cells. We will try to visualize this matrix as a heatmap, a correlation heatmap or a PCA/MDS plot.
+
+__Article: The surfaceome of multiple myeloma cells suggests potential immunotherapeutic strategies and protein markers of drug resistance__
+DOI: 10.1038/s41467-022-31810-6
+
+The article "The surfaceome of multiple myeloma cells suggests potential immunotherapeutic strategies and protein markers of drug resistance" by Ferguson et al. presents a comprehensive investigation of the surface proteome, or surfaceome, of multiple myeloma cells. This study is pivotal as it explores how the surfaceome influences the interaction between tumor cells and their microenvironment, making it a critical area for potential therapeutic advancements and understanding drug resistance mechanisms [@Ferguson2022-sc].
+
+The authors employed glycoprotein capture proteomics to systematically characterize the myeloma surfaceome under various conditions: at baseline, when facing drug resistance, and in response to acute drug treatments. This methodology allowed for a detailed examination of surface antigens that could be targeted for immunotherapy. The findings from this study include the establishment of a scoring system to evaluate and prioritize these surface antigens based on their potential therapeutic value [@Ferguson2022-sc].
+
+One of the most significant outcomes of the study is the identification of CCR10 as a promising target for immunotherapeutic intervention. The expression of CCR10 was noted to be prevalent among malignant plasma cells, suggesting that therapies targeting this marker could enhance treatment efficacy. This provides a strategic direction for developing new immunotherapies aimed specifically at overcoming the challenges associated with drug resistance in multiple myeloma [@Ferguson2022-sc].
+
+Overall, the article provides vital insights into the complexity of the myeloma surfaceome and reinforces the need for continued exploration into targeted therapies that can improve clinical outcomes in patients suffering from multiple myeloma.
+*the article (pdf) is available in the folder of this tutorial*
+
+
+## Libraries used for this tutorial:
+You may not need all of these listed here.
+
+- tidyr, dplyr: data handling from the tidyverse
+- magrittr: together with tidyverse it allows the use of %&lt;&gt;%
+- readxl and openxlsx: libraries to open and write microsoft excel files
+- ggplot2: produce nice plots
+- pheatmap: to great nice (pretty) heatmaps from matrices
+- ggtree: to plot phylogenetic trees
+- ape: to read and manipulate phylogenetic trees
+- viridis: to get nice color scales
+- DESeq2, plotly, limma, SummarizedExperiment: to generate similar QC plots as in week 2
+- ggrepel: to avoid overplotting of labels in ggplot2
+
+## Idea in this R-challenge:
+* Find the excel sheet, look at it, see what is relevant and then try to do the coding
+* One sheet in this excel book is relevant but only part of it, try to restructure it R the way you need it
+* Try to use AI in this challenge at multiple steps (restructure the data, plotting w/ ggplot) if it is not immediately obvious to you how to do it.
+
+
+```{r setup, include=FALSE}
+
+if (! "BiocManager" %in% installed.packages()[,1]) {
+  install.packages("BiocManager")
+}
+
+library(BiocManager)
+
+# you may eventually need one of these packages.. therefore we directly install all of them
+needed_packages <- c("tidyverse", "tidyr", "dplyr", "readxl", "ggplot2","openxlsx", 
+                     "ggtree", "viridis", "ggrepel", "pheatmap", "SummarizedExperiment", 
+                     "RColorBrewer", "magrittr", "DESeq2", "ape", "tibble", "plotly", "limma")
+
+for (package in needed_packages) {
+  if(! package %in% installed.packages()[,1]) {
+    install(package, update = FALSE, ask=FALSE)
+  }
+  library(package, character.only = TRUE)
+}
+library(limma)
+library(SummarizedExperiment)
+library(plotly)
+library(tibble)
+library(magrittr)
+library(DESeq2)
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(openxlsx)
+library(ggtree)
+library(ape)
+library(viridis)
+library(pheatmap)
+library(ggrepel)
+library(RColorBrewer)
+```
+
+
+# Goal 1: Redo Figure 1E from the article
+
+Below here we show the Figure 1E from the article. We will try to reproduce this figure with the data provided in as supplement in an excel file.
+_Try first to understand what this plot is showing. And explain it here, also indicate what columns are potentially relevant in this sheet (not all of them you need to use). Something like: on this volcano we see THE Log2-fold change in surface-protein expression on the x-axis (change between multiple myeloma cells and B-ALL) while on the y-axis the p value of each change is depicted. We can see in this plot that proteins like CD19, CD72 en FLT3 are significantly lower abundant on MM vs B-all and that GGT1, SELPL, ICAM1 etc. are significantly higher abundant on the cell surface of MM cells   _ 
+ 
+![NatCom: Ferguson et. al, Figure 1E](img/Fig1E.png)
+```{r readInData, echo=FALSE, include=TRUE}
+# read in the data and put it into an object (e.g. dat) have a look at the head of the data
+
+dat <- read.xlsx("41467_2022_31810_MOESM3_ESM.xlsx", sheet = "Supplementary Dataset 1")
+head(dat)
+
+print("here we look into head of the data")
+
+```
+
+
+```{r reshapeData, echo=FALSE, include=TRUE}
+# ideally you reshape the data into another object by selecting only necessairy columns
+# maybe also rename the columns to make it easier to work with
+vdat <- dat |> select(Protein, MM_vs_Leukemia_difference, MM_vs_Leukemia_pvalue)
+
+# rename columns
+colnames(vdat) <- c("Gene", "log2Ratio", "Pvalue")
+head(vdat)
+print("look into reshaped data") # these statements can also be commented afterwards (put a hash-tag infront of print)
+
+```
+
+
+```{r someFirstVolcano, echo=FALSE, include=TRUE}
+# do a minimal volcano plot just to see if it works
+
+# Minimal volcano plot
+ggplot(vdat, aes(x = log2Ratio, y = -log10(Pvalue))) +
+  geom_point(alpha = 0.7) +  # Scatter points with some transparency
+  theme_minimal() +          # Use a clean theme
+  labs(
+    x = "Log2 Fold Change (MM vs B-ALL)",
+    y = "-log10(P-value)",
+    title = "Volcano Plot of Surface Protein Expression"
+  )
+```
+
+
+
+```{r volcano With Significance colored, echo=FALSE, include=TRUE}
+# usually proteins with a p-value < 0.05 and a log2FC > 1 (or -1) are considered significant
+
+# define threshold for significance and use different color
+abs_log2_threshold <- 1
+pvalue_threshold <- 0.05
+
+# Define significance based on thresholds
+vdat$Significant <- ifelse(abs(vdat$log2Ratio) > abs_log2_threshold & vdat$Pvalue < pvalue_threshold, "Significant", "Not Significant")
+
+# Volcano plot with color-coded significance
+ggplot(vdat, aes(x = log2Ratio, y = -log10(Pvalue), color = Significant)) +
+  geom_point(alpha = 0.7) +  # Scatter points with transparency
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "black")) +  # Color mapping
+  theme_minimal() +
+  labs(
+    x = "Log2 Fold Change (MM vs B-ALL)",
+    y = "-log10(P-value)",
+    title = "Volcano Plot of Surface Protein Expression"
+  ) +
+  theme(legend.title = element_blank())  # Remove legend title
+```
+
+
+
+```{r add some lables found in a file, echo=FALSE, include=TRUE}
+# Now in the plot, some labels are added to some interesting proteins (POIs)
+
+# read in another txt with the proteins of interest
+membrane_proteins <- read.table("MarkerProteinsPOIs.txt", header = TRUE, sep = "\t")
+
+colnames(membrane_proteins) <- "Gene"
+
+# Identify which genes should be labeled
+vdat$Label <- ifelse(vdat$Gene %in% membrane_proteins$Gene, vdat$Gene, NA)
+
+# Volcano plot with POI labels
+ggplot(vdat, aes(x = log2Ratio, y = -log10(Pvalue), color = Significant)) +
+  geom_point(alpha = 0.7) +  # Scatter points
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "black")) +  
+  theme_minimal() +
+  labs(
+    x = "Log2 Fold Change (MM vs B-ALL)",
+    y = "-log10(P-value)",
+    title = "Volcano Plot of Surface Protein Expression"
+  ) +
+  theme(legend.title = element_blank()) +  # Remove legend title
+  geom_text(aes(label = Label), hjust = 0, vjust = 0)  # Add labels without handling overplotting
+
+```
+
+
+```{r maybe there is overplotting try with ai, echo=FALSE, include=TRUE}
+colnames(membrane_proteins) <- "Gene"
+
+# Identify which genes should be labeled
+vdat$Label <- ifelse(vdat$Gene %in% membrane_proteins$Gene, vdat$Gene, NA)
+
+# Volcano plot with labels for POIs
+ggplot(vdat, aes(x = log2Ratio, y = -log10(Pvalue), color = Significant)) +
+  geom_point(alpha = 0.7) +  # Scatter points
+  scale_color_manual(values = c("Significant" = "red", "Not Significant" = "black")) +  
+  theme_minimal() +
+  labs(
+    x = "Log2 Fold Change (MM vs B-ALL)",
+    y = "-log10(P-value)",
+    title = "Volcano Plot of Surface Protein Expression"
+  ) +
+  theme(legend.title = element_blank()) +  # Remove legend title
+  geom_text_repel(data = subset(vdat, !is.na(Label)), aes(label = Label), 
+                max.overlaps = 15, box.padding = 0.3)  # Prevent label overlap
+```
+
+
+```{r next version some labels are overplotted can you do it better with ai, echo=FALSE, include=TRUE}
+# a nicer version of it with ggrepel
+
+# Define new color scheme
+colors <- c("Significant" = "cyan", "Not Significant" = "black", "Labeled" = "blue")
+
+# Mark proteins that should be labeled
+vdat$Label <- ifelse(vdat$Gene %in% membrane_proteins$Gene, vdat$Gene, NA)
+
+# Create a new category for labeled proteins
+vdat$ColorCategory <- ifelse(!is.na(vdat$Label), "Labeled", "Significant")
+
+# Volcano plot with label connection lines, improved colors, and recolored labels to blue
+ggplot(vdat, aes(x = log2Ratio, y = -log10(Pvalue))) +
+  geom_point(aes(color = ifelse(!is.na(Label), "Labeled", ifelse(Pvalue < 0.05 & abs(log2Ratio) > 1, "Significant", "Not Significant"))), alpha = 0.7, show.legend = FALSE) +  # Scatter points with Labeled in blue
+  scale_color_manual(values = colors) +  # Apply custom colors for Significant, Labeled, and Not Significant
+  theme_minimal() +
+  labs(
+    x = "Log2 Fold Change (MM vs B-ALL)",
+    y = "-log10(P-value)",
+    title = "Volcano Plot of Surface Protein Expression"
+  ) +
+  theme(
+    legend.title = element_blank(),
+    legend.position = "none",  # Remove the legend entirely
+    aspect.ratio = 0.7  # Adjust the aspect ratio to make the plot less wide and more vertical
+  ) +  
+  # Add text labels (without box) only for proteins in the POI list, recolored to blue
+  geom_text_repel(
+    data = subset(vdat, !is.na(Label)), 
+    aes(label = Label),
+    box.padding = 0.4,  # Slight padding for better positioning
+    segment.color = "blue",  # Connect lines in blue
+    color = "blue",  # Color the labels blue
+    show.legend = FALSE  # Remove "Labeled" category from legend
+  )
+  
+```
+
+# Goal 2: Try to visualize the expression matrix as a heatmap and make some QC plots
+
+The authors of the article also provide a matrix with the expression of the proteins in the surfaceome of multiple myeloma cells. 
+Please also remember the QC-plots from week 3. We will try to visualize this matrix as a heatmap and do some more QC plots such as correlation heatmap or a PCA/MDS plot.
+
+
+```{r look at excel sheet again and get matrix out, echo=TRUE, include=TRUE}
+# Do you find a pattern that matches all the columns that you want? yes, al proteins are grouped) There is a regEx pattern that matches the columns of interest
+dat_wide <- dat |> select(Protein, matches("\\.\\d+$"))
+head(dat_wide)
+```
+First some reshaping is necessairy again.
+
+### A heatmap with clustering 
+
+```{r pheatmap, echo=FALSE, include=TRUE}
+# use the pheatmap package. It works on wide format
+# Generate the heatmap with clustering (using pheatmap)
+
+# Check for duplicate protein names
+duplicated_proteins <- duplicated(dat_wide$Protein)
+
+# If there are duplicates, create unique names
+if (any(duplicated_proteins)) {
+  dat_wide$Protein <- make.unique(as.character(dat_wide$Protein))
+}
+
+# Convert the protein names to row names
+dat_wide_matrix <- dat_wide |> column_to_rownames(var = "Protein")
+
+# Check the first few rows to verify
+head(dat_wide_matrix)
+
+# Generate the heatmap with clustering
+pheatmap(dat_wide_matrix, 
+         scale = "row",  # Scale the data by column (protein)
+         clustering_distance_rows = "euclidean",  # Hierarchical clustering using Euclidean distance for rows
+         clustering_distance_cols = "euclidean",  # Hierarchical clustering using Euclidean distance for columns
+         clustering_method = "complete",  # Complete linkage for clustering
+         show_rownames = FALSE,  # Hide row names (optional)
+         show_colnames = TRUE,  # Show column names (optional)
+         color = colorRampPalette(c("green", "blue", "yellow"))(100),  # Color scale from blue to red
+         main = "Protein Expression Heatmap"
+)
+```
+
+### A Correlation-Heatmap
+
+```{r correlation plot or pca, echo=FALSE, include=TRUE}
+# corr
+# Compute the correlation matrix (without scaling)
+cor_matrix <- cor(dat_wide_matrix, method = "pearson")  # You can use "spearman" or "kendall" if needed
+
+# Generate the correlation heatmap with adjusted size and smoother colors
+pheatmap(cor_matrix, 
+         clustering_distance_rows = "euclidean",  # Use Euclidean distance for rows
+         clustering_distance_cols = "euclidean",  # Use Euclidean distance for columns
+         clustering_method = "complete",  # Complete linkage for clustering
+         show_rownames = TRUE,  # Show row names
+         show_colnames = TRUE,  # Show column names
+         color = colorRampPalette(c("blue", "green", "yellow"))(1000),  # Smooth color gradient with more colors
+         main = "Protein Expression Correlation Heatmap",
+         legend = TRUE,   # Show legend for the correlations
+         fontsize_row = 6,  # Reduce row name font size to avoid cramming
+         fontsize_col = 6,  # Reduce column name font size (optional)
+         height = 10,  # Adjust height of the plot (increased for readability)
+         width = 12,   # Adjust width of the plot
+         border_color = "azure3" # remove the gray borders around each cell
+)
+```
+
+## Some QC plots like in week 3
+
+### First again some reshaping
+Here we take the recipe from week 3 and apply it to the data we have here.
+Important here is that the __protein names__ are redundant that causes problems. 
+Therefore we take the Uniprot_ID instead of the protein names to generate the SummarizedExperiment object.
+
+```{r qc plots ala week3 prepare it, echo=TRUE, include=TRUE, warning=FALSE}
+# extract again relevant columns but here UniProt Ids (since unique) for all rows
+dat_wide2 <- dat |> select(Uniprot_ID, matches("\\.\\d+$"))
+# only quantitative matrix in a data frame and uniprot Ids as rownames
+qMat <- dat_wide2 %>% select(-Uniprot_ID)
+rownames(qMat) <- dat_wide$UniProt_ID
+# qMat should have integer values to minimize rounding effect errors we multiply it with 100
+qMat100 <- round(qMat*100, 0)
+
+
+# extract conditions (cell types) from column names with regular expression
+cellTypes <- gsub("\\.\\d+$", "", colnames(qMat100))
+
+# Define meta dataframe for later use
+meta <- data.frame(
+  Condition=as.factor(cellTypes),
+  row.names=colnames(qMat100)
+)
+
+conditionColours <- scales::hue_pal()(length(unique(meta$Condition)))
+names(conditionColours) <- unique(meta$Condition)
+sampleColours <- conditionColours[meta$Condition]
+
+dds <- DESeq2::DESeqDataSetFromMatrix(countData=qMat100,
+                                      colData=meta,
+                                      design=~Condition)
+vsd <- DESeq2::vst(dds)
+
+# Extract normalized counts
+vsdSE <- SummarizedExperiment::assay(vsd)
+```
+### PCA and MDS plots like in Week 3
+
+```{r PCA plot, echo=TRUE, include=TRUE, warning=FALSE}
+# Do PCA
+# Perform PCA on variance-stabilized data (vsdSE)
+pca_res <- prcomp(t(vsdSE))  # Transpose the data matrix to have samples as rows
+
+# Extract PCA results for plotting
+pca_data <- as.data.frame(pca_res$x)  # Principal component scores (coordinates)
+
+# Add condition labels to the PCA data
+pca_data$Condition <- meta$Condition
+
+# Create the PCA plot
+ggplot(pca_data, aes(x = PC1, y = PC2, color = Condition)) +
+  geom_point(size = 4) +
+  scale_color_manual(values = conditionColours) +  # Color based on conditions
+  theme_minimal() +
+  labs(title = "PCA Plot of Protein Expression Data",
+       x = paste("PC1 (", round(100 * summary(pca_res)$importance[2, 1]), "%)", sep = ""),
+       y = paste("PC2 (", round(100 * summary(pca_res)$importance[2, 2]), "%)", sep = "")) +
+  theme(legend.title = element_blank())
+
+```
+
+### Correlation plot like in week 3
+
+```{r corrPlot like in week 3, echo=TRUE, include=TRUE, warning=FALSE}
+# Pearson correlation plot
+
+# Compute Pearson correlation matrix for the variance-stabilized data (vsdSE)
+cor_matrix <- cor(vsdSE, method = "pearson")
+
+# Load necessary libraries
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
+
+# Reshape the correlation matrix for ggplot
+cor_matrix_melted <- melt(cor_matrix)
+
+# Create a Pearson correlation heatmap
+ggplot(cor_matrix_melted, aes(Var1, Var2, fill = value)) +
+  geom_tile() +  # Use tiles to visualize correlation
+  scale_fill_gradient2(low = "blue", high = "yellow", mid = "green", midpoint = 0, 
+                       limits = c(-1, 1), name = "Correlation") +  # Color scale
+  theme_minimal() +
+  labs(title = "Pearson Correlation Heatmap of Protein Expression Data",
+       x = "Samples", y = "Samples") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),  # Rotate x-axis labels
+        axis.text.y = element_text(angle = 0, hjust = 1)) +  # Keep y-axis labels horizontal
+  coord_fixed()  # Fix aspect ratio to make it square
+```
+
+# Session Information
+
+Here we show the session information of the packages used in this tutorial as well as the references can be found below.
+
+```{r sessionInfo, echo=FALSE, include=TRUE}
+pander::pander(sessionInfo())
+```
+
+
+# References
+
+
+
+
