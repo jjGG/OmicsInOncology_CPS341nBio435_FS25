@@ -14,21 +14,17 @@ bibliography: report_assets/references.bib
 
 # Bulk RNA-seq Quantification
 
-In this tutorial, we look at the results of bulk RNA-seq quantification. Our data
-comes from the [following paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC9674345/).
+In this tutorial, we look at the results of bulk RNA-seq quantification. Our data comes from the [following paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC9674345/).
 
-It is not important to understand the paper in detail. Just know we are dealing 
-with two colon cancer cell-lines "HCT116" and "SW480" which have been FACS-sorted
-according to the expression of CD44 and EpCAM, "EpCAMhigh" and "EpCAMlow", 
-resulting in 4 groups with 4 replicates each.
+It is not important to understand the paper in detail. Just know we are dealing with two colon cancer cell-lines "HCT116" and "SW480" which have been FACS-sorted according to the expression of CD44 and EpCAM, "EpCAMhigh" and "EpCAMlow", resulting in 4 groups with 4 replicates each.
 
-- HCT116: EpCAMhigh
+-   HCT116: EpCAMhigh
 
-- HCT116: EpCAMlow
+-   HCT116: EpCAMlow
 
-- SW480: EpCAMhigh
+-   SW480: EpCAMhigh
 
-- SW480: EpCAMlow
+-   SW480: EpCAMlow
 
 We will focus on the tools available for QC rather than the underlying biology.
 
@@ -49,7 +45,7 @@ suppressPackageStartupMessages({
 
 ### Downloading counts
 
-First, let's fetch the input count files generated from featureCounts for each sample. 
+First, let's fetch the input count files generated from featureCounts for each sample.
 
 ```{r setup}
 ftpLocation <- "https://fgcz-gstore.uzh.ch/public/OmicsInOncology_CPS341nBio435_FS25_week3/feature_counts"
@@ -83,36 +79,27 @@ for (fn in countFilenames) {
 }
 ```
 
-You will notice a new directory called "feature_counts" in the same folder where
-you executed this code. Take a quick look inside.
+You will notice a new directory called "feature_counts" in the same folder where you executed this code. Take a quick look inside.
 
 How were these counts generated?
 
-  - Trimming with `fastp`
-  
-  - Alignment with `STAR` to the GRCh38.p13 reference genome
-  
-  - Running featureCounts from the Rsubread package using the GENCODE Release 42 
-  GTF file. The file used can be found here on our [public FTP](https://fgcz-gstore.uzh.ch/public/OmicsInOncology_CPS341nBio435_FS25_week3)
-  
-The file is quite large and you need not be familiar with its format at this 
-point or download it. What is important to know is that this file has been subset 
-to only the protein_coding genes.
+-   Trimming with `fastp`
 
-There are a few reasons why we might rather exclude transcript types such as 
-lncRNA and snRNA.
+-   Alignment with `STAR` to the GRCh38.p13 reference genome
 
-- Including these other transcript types increase the number of tests, meaning 
-more false positives, and less power to detect protein-coding genes
+-   Running featureCounts from the Rsubread package using the GENCODE Release 42 GTF file. The file used can be found here on our [public FTP](https://fgcz-gstore.uzh.ch/public/OmicsInOncology_CPS341nBio435_FS25_week3)
 
-- non-coding RNAs do not have poly-A tails and can't be detected with mRNA 
-sequencing, so their absence might be misinterpreted
+The file is quite large and you need not be familiar with its format at this point or download it. What is important to know is that this file has been subset to only the protein_coding genes.
 
-- They are sometimes not well annotated and this can adversely affect enrichment 
-analysis
+There are a few reasons why we might rather exclude transcript types such as lncRNA and snRNA.
 
-In general, a good strategy is to exclude them by default and include them by 
-demand (i.e. if the research question explicitly demands it).
+-   Including these other transcript types increase the number of tests, meaning more false positives, and less power to detect protein-coding genes
+
+-   non-coding RNAs do not have poly-A tails and can't be detected with mRNA sequencing, so their absence might be misinterpreted
+
+-   They are sometimes not well annotated and this can adversely affect enrichment analysis
+
+In general, a good strategy is to exclude them by default and include them by demand (i.e. if the research question explicitly demands it).
 
 ### Loading counts
 
@@ -192,57 +179,31 @@ plot_ly(
 
 ![Raw fastq read counts for each sample](report_assets/fastq_counts.png)
 
-2.  How many features (in %) are above threshold? Do you think re-sequencing the 
-samples with relatively low counts will be useful or provide a significant 
-return on investment?
+2.  How many features (in %) are above threshold? Do you think re-sequencing the samples with relatively low counts will be useful or provide a significant return on investment?
 
 ::: {.callout-note appearance="simple" collapse="true"}
 ### Solutions
 
 1.  The counts after mapping and quantification are lower.
 
-2.  All around 50-60%. Re-sequencing is unlikely to be worth our time, unless we 
-are interested in very lowly-expressed genes. Even the sample with the lowest 
-counts has almost as many features expressed above threshold as the sample 
-with the highest read counts, despite having only a fraction of the counts.
+2.  All around 50-60%. Re-sequencing is unlikely to be worth our time, unless we are interested in very lowly-expressed genes. Even the sample with the lowest counts has almost as many features expressed above threshold as the sample with the highest read counts, despite having only a fraction of the counts.
 :::
 
 ## Filtering Counts
 
-Before continuing, we should filter out genes which are lowly expressed or absent, 
-which we do on a per-group basis (think about why this might be). Next, 
-we generate normalised counts using "Variance Stabilisation" as provided in 
-the DESeq2 package. As per the documentation, this function calculates a 
-variance stabilizing transformation (VST) from the fitted dispersion-mean 
-relation(s) and then transforms the count data (normalized by division by the 
-size factors or normalization factors), yielding a matrix of values which now 
-have constant variance along the range of mean values (homoskedastic)[@DESeq2]. 
-There are other functions we could use, such as `rlog` which is less sensitive 
-to size factors, but VST works well in the general case.
+Before continuing, we should filter out genes which are lowly expressed or absent, which we do on a per-group basis (think about why this might be). Next, we generate normalised counts using "Variance Stabilisation" as provided in the DESeq2 package. As per the documentation, this function calculates a variance stabilizing transformation (VST) from the fitted dispersion-mean relation(s) and then transforms the count data (normalized by division by the size factors or normalization factors), yielding a matrix of values which now have constant variance along the range of mean values (homoskedastic)[@DESeq2]. There are other functions we could use, such as `rlog` which is less sensitive to size factors, but VST works well in the general case.
 
-First though, we want to filter the count matrix for genes which are 
-informative, i.e. which are sufficiently expressed in the dataset and which
-can stratify our data. Before, we defined a minimum threshold of `r sigThresh` 
-at which we consider a gene expressed in a sample. Below, we do some 
-calculations to determine if a gene is sufficiently expressed in our dataset at 
-this treshold.
+First though, we want to filter the count matrix for genes which are informative, i.e. which are sufficiently expressed in the dataset and which can stratify our data. Before, we defined a minimum threshold of `r sigThresh` at which we consider a gene expressed in a sample. Below, we do some calculations to determine if a gene is sufficiently expressed in our dataset at this treshold.
 
-A simple approach would be to say that we want the gene expressed in at least,
-for example, 25% of the samples. However, this simple approach might let some 
-genes through which are in fact just noise in our data. Would we for example 
-consider a gene to be important if it is expressed in only a single replicate
-for every group? Probably not. So we can try something else.
+A simple approach would be to say that we want the gene expressed in at least, for example, 25% of the samples. However, this simple approach might let some genes through which are in fact just noise in our data. Would we for example consider a gene to be important if it is expressed in only a single replicate for every group? Probably not. So we can try something else.
 
 Our strategy:
 
-1. Within a group, do at least half the samples express the gene? If yes, we
-consider the gene expressed in that group.
+1.  Within a group, do at least half the samples express the gene? If yes, we consider the gene expressed in that group.
 
-2. Do at least half the groups express the gene? If yes, we keep it. If no,
-we toss it.
+2.  Do at least half the groups express the gene? If yes, we keep it. If no, we toss it.
 
-For our data, this means that we keep a gene if it is expressed in 2 or more 
-samples within 2 or more groups.
+For our data, this means that we keep a gene if it is expressed in 2 or more samples within 2 or more groups.
 
 ```{r filtering}
 # First filter genes 
@@ -278,30 +239,15 @@ head(as.data.frame(vsdSE))
 
 ## Dimensionality Reduction
 
-We now have a count matrix of with the following dimensions: 16 x 14'392. In 
-other words, we have represented each sample by a vector of 14'392 features. 
-In order to adequately QC our samples, one important aspect is determining how 
-similar or dissimilar one vector of genes from a specific sample is to that of 
-another. However, interpreting 14'392 dimensions directly is not something that 
-humans are generally capable of doing. This is where dimensionality reduction 
-comes in. We would ideally like to *reduce* the given *dimensions* (a 
-14'392-dimensional space), down to a 2- or 3-dimensional space, so we can 
-visualise the result.
+We now have a count matrix of with the following dimensions: 16 x 14'392. In other words, we have represented each sample by a vector of 14'392 features. In order to adequately QC our samples, one important aspect is determining how similar or dissimilar one vector of genes from a specific sample is to that of another. However, interpreting 14'392 dimensions directly is not something that humans are generally capable of doing. This is where dimensionality reduction comes in. We would ideally like to *reduce* the given *dimensions* (a 14'392-dimensional space), down to a 2- or 3-dimensional space, so we can visualise the result.
 
-Two approaches, which are in fact related, are PCA (*principal component 
-analysis*) and MDS (*multidimensional scaling*).
+Two approaches, which are in fact related, are PCA (*principal component analysis*) and MDS (*multidimensional scaling*).
 
 ### PCA
 
-PCA is a linear dimensionality reduction technique which, in essence, tries to 
-find a rotation of the data in order to maximise the variance. This is a common
-method for dimensionality reduction across many different disciplines within 
-Computer Science and beyond. We will use the built-in R-method `prcomp` below to 
-calculate the principal components and manually calculate the variance explained 
-by each component.
+PCA is a linear dimensionality reduction technique which, in essence, tries to find a rotation of the data in order to maximise the variance. This is a common method for dimensionality reduction across many different disciplines within Computer Science and beyond. We will use the built-in R-method `prcomp` below to calculate the principal components and manually calculate the variance explained by each component.
 
-Additionally, we will plot a 'scree' plot, which aims to visualise the variance 
-explained by each principal component.
+Additionally, we will plot a 'scree' plot, which aims to visualise the variance explained by each principal component.
 
 ```{r PCA scree}
 # Run PCA
@@ -336,15 +282,9 @@ plot_ly(as.data.frame(pcDat$x),
 
 ### Multi-dimensional scaling (MDS)
 
-Multi-dimensional scaling is another dimensionality reduction which aims to best 
-reconstruct pairwise distances between a set of points given a set of distances. 
-Since in the case of RNA-seq we are given the data vectors directly rather than 
-the distance matrices, methods must calculate the distance matrix first upon which 
-the MDS algorithm is then performed. PCA is used in the process to produce a 
-reduced dimensionality projection from the similarities.
+Multi-dimensional scaling is another dimensionality reduction which aims to best reconstruct pairwise distances between a set of points given a set of distances. Since in the case of RNA-seq we are given the data vectors directly rather than the distance matrices, methods must calculate the distance matrix first upon which the MDS algorithm is then performed. PCA is used in the process to produce a reduced dimensionality projection from the similarities.
 
-Here, we use limma [@limma] to calculate the MDS and use plotly to visualise the 
-pairwise distances in 3-dimensions.
+Here, we use limma [@limma] to calculate the MDS and use plotly to visualise the pairwise distances in 3-dimensions.
 
 ```{r MDS plot}
 mds <- limma::plotMDS(vsdSE, plot=FALSE)
@@ -372,19 +312,15 @@ plot_ly(toPlot,
 ::: {.callout-note appearance="simple" collapse="true"}
 #### PCA vs MDS
 
-The following image and linked StackedOverflow post explains well the difference 
-between the two methods.
+The following image and linked StackedOverflow post explains well the difference between the two methods.
 
-[![](https://i.stack.imgur.com/WvnU7.png){fig-alt="Visual explanation of the 
-difference between PCA and MDS" fig-align="center"}](https://stats.stackexchange.com/questions/14002/whats-the-difference-between-principal-component-analysis-and-multidimensional)
+[![](https://i.stack.imgur.com/WvnU7.png){fig-alt="Visual explanation of the  difference between PCA and MDS" fig-align="center"}](https://stats.stackexchange.com/questions/14002/whats-the-difference-between-principal-component-analysis-and-multidimensional)
 :::
 
 ### Exercise #2
 
-1.  How many genes are used by the function `plotMDS` as inputs. What kind of 
-genes are these?
-2.  Change the above function call so that all genes in the count matrix are 
-used as input.
+1.  How many genes are used by the function `plotMDS` as inputs. What kind of genes are these?
+2.  Change the above function call so that all genes in the count matrix are used as input.
 
 ::: {.callout-tip collapse="true" appearance="simple"}
 #### Solutions
@@ -400,16 +336,11 @@ used as input.
 
 ## Correlation Plots
 
-We can also quantify the similarity between samples using correlations. This 
-involves simply computing pairwise correlations between samples using the gene 
-count vectors of each samples as inputs. The following methods this method as a 
-basis.
+We can also quantify the similarity between samples using correlations. This involves simply computing pairwise correlations between samples using the gene count vectors of each samples as inputs. The following methods this method as a basis.
 
 ### By-Sample Dendogram and Correlations
 
-We can use hierarchical clustering using the pearson correlations as inputs. 
-This will group samples together in a hierarchical fashion in a tree-like 
-structure.
+We can use hierarchical clustering using the pearson correlations as inputs. This will group samples together in a hierarchical fashion in a tree-like structure.
 
 ```{r dendogram}
 d <- as.dist(1-cor(vsdSE, use="complete.obs"))   # calculate the pairwise correlations
@@ -419,8 +350,7 @@ WGCNA::plotDendroAndColors(hc, sampleColours, autoColorHeight=TRUE, hang = -0.1)
 
 ### Correlation Heatmap
 
-Similarly, we can call `pheatmap` on the correlations to easily visualize the 
-similarity between samples within and across conditions.
+Similarly, we can call `pheatmap` on the correlations to easily visualize the similarity between samples within and across conditions.
 
 ```{r correlation heatmap, fig.width=12, fig.height=12}
 # Pearson correlation plot 
