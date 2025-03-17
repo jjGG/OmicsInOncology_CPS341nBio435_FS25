@@ -1,6 +1,6 @@
 ---
 title: "Get more experience with R"
-author: "Group XX"
+author: "Group 4"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 bibliography: COILbibliography.bib
@@ -113,6 +113,8 @@ print("look into reshaped data") # these statements can also be commented afterw
 
 ```{r someFirstVolcano, echo=FALSE, include=TRUE}
 # do a minimal volcano plot just to see if it works
+ggplot(data = vdat, aes(x = log2Ratio, y = -log10(Pvalue))) +
+         geom_point()
 
 ```
 
@@ -120,10 +122,20 @@ print("look into reshaped data") # these statements can also be commented afterw
 
 ```{r volcano With Significance colored, echo=FALSE, include=TRUE}
 # usually proteins with a p-value < 0.05 and a log2FC > 1 (or -1) are considered significant
+library(RColorBrewer)
+library(ggrepel) 
 
 # define threshold for significance and use different color
-abs_log2_threshold <- 1
-pvalue_threshold <- 0.05
+
+
+
+vdat$diffexpressed <- "NO"
+vdat$diffexpressed[vdat$log2Ratio > 1 & vdat$Pvalue < 0.05] <- "UP"
+vdat$diffexpressed[vdat$log2Ratio < -1 & vdat$Pvalue < 0.05] <- "DOWN"
+
+
+ggplot(data = vdat, aes(x = log2Ratio, y = -log10(Pvalue), colour=diffexpressed)) + geom_point(size=2) + scale_colour_manual(values = c("#00AFBB", "grey", "#FFDB6D"), labels = c('Downregulated', 'Not significant', 'Upregulated' ))
+
 
 ```
 
@@ -135,12 +147,32 @@ pvalue_threshold <- 0.05
 # read in another txt with the proteins of interest
 membrane_proteins <- read.table("MarkerProteinsPOIs.txt", header = TRUE, sep = "\t")
 
+vdat$label <- ifelse(vdat$Gene %in% membrane_proteins$MarkerProteins, vdat$Gene, NA)
+
+ggplot(data = vdat, aes(x = log2Ratio, y = -log10(Pvalue), colour=diffexpressed)) + geom_point(size=2) + scale_colour_manual(values = c("#00AFBB", "grey", "#FFDB6D"), labels = c('Downregulated', 'Not significant', 'Upregulated' ))+
+geom_text_repel(aes(label = label), size = 3, max.overlaps = 20) + 
+  theme_minimal()
+
 
 ```
 
 
 ```{r maybe there is overplotting try with ai, echo=FALSE, include=TRUE}
 
+ggplot(data = vdat, aes(x = log2Ratio, y = -log10(Pvalue), colour=diffexpressed)) + geom_point(size=2) + scale_colour_manual(values = c("#00AFBB", "grey", "#FFDB6D"), labels = c('Downregulated', 'Not significant', 'Upregulated' )) +
+geom_label_repel(aes(label = label), 
+                   size = 3,   
+                   box.padding = 0.4,  
+                   point.padding = 0.3,  
+                   label.size = 0.25,  
+                   label.r = unit(0.15, "lines"),  
+                   fill = "white", 
+                   color = "black", 
+                   segment.color = "black",  
+                   segment.size = 0.5,  
+                   max.overlaps = 20) +  
+  
+  theme_minimal()  
 ```
 
 
@@ -168,12 +200,25 @@ First some reshaping is necessairy again.
 # use the pheatmap package. It works on wide format
 # Generate the heatmap with clustering (using pheatmap)
 
-```
+dat_matrix <- as.matrix(dat_wide[, -1])  
+rownames(dat_matrix) <- dat_wide$Protein  
+pheatmap(dat_matrix, 
+         scale = "row",
+         clustering_distance_rows = "euclidean",  
+         clustering_distance_cols = "euclidean", 
+         clustering_method = "ward.D2", 
+         color = colorRampPalette(c("blue", "white", "red"))(50),  
+         show_rownames = FALSE) 
 
 ### A Correlation-Heatmap
 
 ```{r correlation plot or pca, echo=FALSE, include=TRUE}
 # corr
+cor_matrix <- cor(dat_matrix, method = "pearson")
+print(cor_matrix)
+pheatmap(cor_matrix, 
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         main = "Pearson Correlation Heatmap")
 
 ```
 
@@ -219,7 +264,16 @@ vsdSE <- SummarizedExperiment::assay(vsd)
 
 ```{r PCA plot, echo=TRUE, include=TRUE, warning=FALSE}
 # Do PCA
+pca_result <- prcomp(t(dat_matrix), scale. = TRUE)
+pca_data <- as.data.frame(pca_result$x)  
+pca_data$Sample <- rownames(pca_data) 
+pca_data$Group <- gsub("\\.\\d+$", "", pca_data$Sample)
 
+ggplot(pca_data, aes(x = PC1, y = PC2, label = Sample, colour = Group)) +
+  geom_point(size = 2, color = "black") +
+  geom_text_repel() + 
+  theme_minimal() +
+  labs(title = "PCA Plot", x = "PC1", y = "PC2") + theme(legend.position = "none")
 
 ```
 
@@ -227,6 +281,7 @@ vsdSE <- SummarizedExperiment::assay(vsd)
 
 ```{r corrPlot like in week 3, echo=TRUE, include=TRUE, warning=FALSE}
 # Pearson correlation plot 
+
 
 ```
 
