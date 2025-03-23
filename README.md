@@ -25,6 +25,4 @@ How this could look is visualized here
 
 
 ## About Markdown and html
-A very useful cheatsheet for markdown can be found [https://github.com/adam-p/markdown-here/wiki/markdown-cheatshee](
-
-https://github.com/adam-p/markdown-here/wiki/markdown-cheatsheet
+A very useful cheatsheet for markdown can be found https://github.com/adam-p/markdown-here/wiki/markdown-cheatsheet
