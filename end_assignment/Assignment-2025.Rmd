@@ -190,10 +190,19 @@ the histogram from the Response variable. Discuss what you observe in
 this plot.
 
 ```{r create histogram of expression values}
-
-
+PSME1_data <- PDdata %>% filter(Gene_name == "PSME1")
+ggplot(PSME1_data, aes(x = Expression, fill = Response)) +
+    geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
+    labs(title = "Histogram of PSME1 Protein Expression",
+         x = "Expression Level",
+         y = "Count",
+         fill = "Response") +
+   scale_fill_manual(values = c("NR" = 'yellow', "R" = "darkblue"),
+                      labels = c("NR" = "Not Responsive", "R" = "(Partially) Responsive")) +
+    theme_minimal()
 
 ```
+The histogram shows the distribution of PSME1 expression across the two different samples: non-responsive and responsive/partially responsive. PSME1 expression is higher in Responders to immunotherapy, which would indicate an association with treatment response. However, the distributions overlap quite a bit, meaning that PSME1 might not be a good predictor for immunotherapy response. We'll need a statistical test to quantify its predictive value. 
 
 # Statistical analysis
 
@@ -243,6 +252,7 @@ use the 'head' function to show the **10** proteins with the lowest
 p-values. As you can see PSME1 is indeed upregulated (fold_change\>0).
 
 ```{r show t_tests}
+head(t_tests, 10)
 
 ```
 
@@ -253,8 +263,34 @@ with different fold_changes, so you can show if the values from the
 table make sense.
 
 ```{r investigate with histograms}
+# We want to compare histograms for proteins with different fold_changes, and want to pick one protein that is upregulated (high positive fold change), one that is downregulated (high negative fold change), and no significant change (fold change around zero). 
+top_upregulated <- t_tests %>% filter(fold_change == max(fold_change)) %>% pull(Gene_name)
+top_downregulated <- t_tests %>% filter(fold_change == min(fold_change)) %>% pull(Gene_name)
+neutral_protein <- t_tests %>% filter(abs(fold_change) == min(abs(fold_change))) %>% pull(Gene_name)
+
+
+# For these histograms S100B (upregulated), POTEE (downregulated), and ILKAP (neutral) were selected. We will create a function to code for all three histograms. 
+
+plot_histogram <- function(protein) {
+  protein_data <- PDdata %>% filter(Gene_name == protein)
+  
+  ggplot(protein_data, aes(x = Expression, fill = Response)) +
+    geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
+    labs(title = paste("Histogram of", protein, "Expression"),
+         x = "Expression Level",
+         y = "Count",
+         fill = "Response") +
+    scale_fill_manual(values = c("NR" = "yellow", "R" = "darkblue"),
+                      labels = c("NR" = "Non-responsive", "R" = "(Partially) Responsive")) +
+    theme_minimal()
+}
+
+plot_histogram(top_upregulated)
+plot_histogram(top_downregulated)
+plot_histogram(neutral_protein)
 
 ```
+The histograms show that in upregulated proteins like S100B the protein expression level is very low in non-responsive samples, and high in responsive samples; in downregulated proteins like POTEE expression levels are higher in non-responsive samples compared to responsive ones; and for neutral proteins like ILKAP the two samples overlap in protein expression.
 
 ## Creating a volcano plot
 
@@ -289,7 +325,8 @@ means!
 ```{r}
 
 ## This line finds the top 50 significant names of the proteins (change this number to see more or less labels)
-sig_il_genes <- diseased_vs_healthy %>% filter(significance != "ns") %>% slice(1:10)
+sig_il_genes <- diseased_vs_healthy %>% filter(significance != "ns") %>% slice(1:10) %>%
+  pull(Gene_name)
 
 # Let's prepare some colors and sizes that we will use in the plot
 
@@ -328,6 +365,36 @@ sample.
 
 ```{r}
 ## create the heatmap
+
+# We will use the top 10 most significant proteins, already defined in sig_il_genes in the last chunk, we just added '%>% pull(Gene_name)' after it.
+# So, now we can create a heatmap data set. 
+
+heatmap_data <- PDdata %>%
+  filter(Gene_name %in% sig_il_genes)
+
+# But we have to reshape the data, because now the samples are row, and we want the genes to be rows and the samples to be columns. 
+heatmap_matrix <- heatmap_data %>%
+  select(Sample, Gene_name, Expression) %>%
+  pivot_wider(names_from = Sample, values_from = Expression)
+# The only problem now is that gene names are now in the first column, instead of being row names.
+heatmap_matrix <- as.data.frame(heatmap_matrix)
+rownames(heatmap_matrix) <- heatmap_matrix$Gene_name # Change row numbers to gene names. 
+heatmap_matrix <- heatmap_matrix[, -1] # And then remove the first column that contained the gene names. 
+
+# Okay, now the data is prepped and we can continue with plotting the heatmap :)
+
+# We get an error... It has something to do with the missing values in the data. We asked ChatGPT for help, and replace all 'NA' values with the row median. 
+heatmap_matrix <- t(apply(heatmap_matrix, 1, function(row) {
+  row[is.na(row)] <- median(row, na.rm = TRUE)  # Replace NA with row median
+  return(row)
+}))
+
+library(pheatmap)
+pheatmap(heatmap_matrix, 
+         scale = "row", # Standardize expression levels across genes
+         clustering_method = "complete",
+         color = colorRampPalette(c("lightblue", "lightgrey", "pink"))(50), # Define color gradient
+         main = "Heatmap of Top 10 Significant Proteins")
 
 
 ```
