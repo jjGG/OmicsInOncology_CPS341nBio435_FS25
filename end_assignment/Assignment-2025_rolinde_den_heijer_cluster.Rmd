@@ -569,6 +569,60 @@ a subset.
     
 ```{r}
 
+# Create a random graph (or load your graph)
+g <- erdos.renyi.game(100, p = 0.05)
+
+# Perform community detection using Louvain method
+clusterList <- cluster_louvain(g)
+
+# Display the membership of each node (which community it belongs to)
+membership(clusterList)
+
+# Get the communities (clusters)
+community_ids <- unique(membership(clusterList))
+
+# Initialize an empty list to store sub-clusters
+subclusters_list <- list()
+
+# Iterate through each community and perform sub-clustering
+for (community in community_ids) {
+  # Get the nodes in the current community
+  community_nodes <- which(membership(clusterList) == community)
+  
+  # Create a subgraph for this community
+  subgraph <- induced_subgraph(g, community_nodes)
+  
+  # Perform community detection on the subgraph (sub-clustering)
+  subcluster <- cluster_louvain(subgraph)
+  
+  # Store the sub-clusters in the list
+  subclusters_list[[paste0("community_", community)]] <- subcluster
+}
+
+# Check the results
+subclusters_list
+# Install and load clusterProfiler for enrichment analysis (if not installed)
+#install.packages("BiocManager")
+BiocManager::install("clusterProfiler")
+library(clusterProfiler)
+BiocManager::install("org.Hs.eg.db")
+library(org.Hs.eg.db)
+
+# Example: Gene list for nodes in subcluster (subcluster_1)
+gene_list <- c("GeneA", "GeneB", "GeneC")  # Replace with your actual gene list
+
+# Perform GO enrichment analysis for the gene list in the subcluster
+enrich_result <- enrichGO(gene = gene_list,
+                          OrgDb = org.Hs.eg.db, # Use appropriate database for your organism
+                          keyType = "SYMBOL",    # Gene identifiers used (could be ENTREZID, SYMBOL, etc.)
+                          ont = "BP",            # You can specify GO categories (BP: Biological Process, MF: Molecular Function, CC: Cellular Component)
+                          pAdjustMethod = "BH",  # Adjust p-values for multiple testing
+                          qvalueCutoff = 0.05)   # Adjusted p-value cutoff for significance
+
+# View the results
+summary(enrich_result)
+
+
 ```
     
     
