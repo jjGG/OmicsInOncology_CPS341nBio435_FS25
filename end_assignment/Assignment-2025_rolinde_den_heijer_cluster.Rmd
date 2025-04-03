@@ -1,0 +1,651 @@
+---
+title: An R Markdown document converted from "Assignment-2024.ipynb"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Omics in Oncology: Assignment + presentation
+
+## Introduction
+
+The study "Proteomics of Melanoma Response to Immunotherapy Reveals
+Mitochondrial Dependence" by Harel et al. (2019) uses mass
+spectrometry-based proteomics to analyze 116 melanoma tumors from
+patients undergoing either *tumor-infiltrating lymphocyte (TIL)*-based
+therapy (42 patients) or *anti-PD1 therapy* (74 patients). In this
+study, patients were classified as responders to immunotherapy (partial
+or complete response) or non-responders (progressive disease.\
+Mass spectrometry analysis quantified over 10,300 proteins in patient
+biopsies, with statistical analyses performed on \~4,500 proteins per
+dataset. Differential protein expression was assessed using t-tests,
+volcano plots, heatmap clustering methods, and enrichment analyses to
+identify functional differences.\
+Weighted gene correlation network analysis (WGCNA) was also applied to
+associate protein clusters with clinical outcomes to TIL or anti-PD1
+therapy. From this analysis the authors made some conclusion about what
+mechanisms are driving immunotherapy resistance in patients. For
+example, patients who responded to treatment had higher oxidative
+phosphorylation and lipid metabolism signatures in their proteome data.
+These signatures were associated with increased antigen presentation and
+IFN signaling.\
+From their analysis, the authors concluded that mitochondrial metabolism
+plays a crucial role in shaping tumor immunogenicity and response to
+immunotherapy.
+
+What else can we learn from this interesting proteomics dataset? For
+your final assessment, it is time for you to apply your data analysis
+skills to dig deeper into the data and see what biological inferences
+can be made to understand how patients respond to immunotherapy at a
+molecular level. Check out the Harel et al. 2019 publication for
+inspiration in your data analysis.
+
+Using the provided proteomics data from the TIL patient cohort this
+manuscript, apply the programming skills you learned to complete the
+following assignment tasks:
+
+## Overview
+
+For this assignment we want you to:
+
+1.  Load in the data from the cell paper CELL-179 supplementery data 1.
+    We focus on the anti-PD1 data of this experiment.
+    -   The ExpSetup data is in the *S1A* sheet
+    -   The PD data is in the S1D sheet
+2.  Perform a **T-test** on the PD data to get the most significantly
+    changed proteins between Responders and Non responders.
+3.  Create a **volcano plot** and label the top 10 proteins and color
+    the significant up/down regulated proteins.
+4.  Create a **heat map** of the top 10 most significantly changing
+    proteins to see if there are any patterns
+5.  With the t-test and volcano plot you can start the network and
+    enrichment analysis
+    -   Get the 1000 most significant proteins from our test
+    -   Find which proteins are interaction according to the **String
+        database** and export this network/graph
+    -   Extract communities from the network using the igraph package.
+        The result will contain 3 big clusters that we're interested in
+        and some clusters with just a few proteins.
+6.  Based on your group number you have to investigate cluster 1, 2 or 3
+    further. We will perform an enrichment analysis on your (sub)
+    cluster
+
+## R libraries
+
+Below are the libraries you need for this assignment. You can run the
+chunk to have the correct packages installed.
+
+```{r libraries, include=FALSE}
+
+
+if (! "BiocManager" %in% installed.packages()[,1]) {
+  install.packages("BiocManager")
+}
+
+library(BiocManager)
+
+needed_packages <- c("tidyr", "dplyr","stringr", "purrr", "readr", "magrittr", "readxl", "writexl", "tidyHeatmap", "RBGL", "igraph", "ggplot2", "ggrepel")
+
+for (package in needed_packages) {
+  if(! package %in% installed.packages()[,1]) {
+    install(package, update = FALSE, ask=FALSE)
+  }
+  library(package, character.only = TRUE)
+}
+
+```
+
+# Reading in the files
+
+This part of the code you get for free, to make sure, everyone has the
+correct data. The Excel file downloaded from the Cell journal website
+has different sheets for the supplementary tables. Here we will read the
+correct sheets. Also they have added a line above each sheet with some
+minor info, that we will need to skip.
+
+```{r file reading}
+## The experimental setup (which tells which patient is a responder and who is not) in Sheet S1A
+## First, we'll read it into the ExpSetup variable
+ExpSetup <- read_xlsx("CELL-179-suppl1.xlsx", sheet="S1A", na="NaN", skip = 1)
+
+# Rename a few columns
+ExpSetup %<>% rename(Sample="Sample ID", Age = "Age at treatment")
+
+# remove some non essential columns
+ExpSetup %<>% select(-c("Nb of CD8 cells in infusion bag (x10^10)", "Sample taken after treatment"))
+
+# The authors were sloppy and sometimes forgot an underscore in the Sample names. Not handy as this causes issues in combining the data later on.
+ExpSetup %<>% mutate(Sample = str_replace(Sample, " ", "_"))
+
+## Sheet S1D contains the actual quantitative data
+## We'll read it into the PDdata variable 
+PDdata_raw <- read_xlsx("CELL-179-suppl1.xlsx", sheet="S1D", na="NaN", skip = 1)
+```
+
+## Inspecting the imported data
+
+Make sure the data is correct by having a look at the table
+
+```{r inspect ExpSetup}
+## You: Output ExpSetup, to check if all the steps above have worked
+
+head(ExpSetup)
+head(PDdata_raw)
+```
+
+You need to still check if the name of your PD dataset (below it is
+called PDdata) is the same as yours. If not you need to change either
+your variable name, or the code below so that these match.
+
+Also this step you get for free: We combine the ExpSetup with the
+quantitative data.
+
+```{r Combine expsetup with quant data }
+
+
+# The names are a bit confusing, let's first fix that
+    PDdata_raw %<>%
+    rename(Gene_name = "T: T: Gene name",
+           Ensembl_accession = "T: ENSP",
+           Protein_name = "T: Protein name",
+           Uniprot_accession = "T: Uniprot")
+
+
+# Because sometimes we have multiple names for the gene names and accessions,
+# we are only going to look at the first ones.
+# We use the 'purrr' library to be able to use map_chr.
+# This is a bit more advanced code as well, so don't worry about it.
+# the result is that the columns with multiple values only show the first value from now on.
+
+PDdata_raw %<>%
+    mutate(Gene_name = map_chr(Gene_name, ~{ str_split_i(.x, ";", 1)} ), 
+           Ensembl_accession = map_chr(Ensembl_accession, ~{ str_split_i(.x, ";", 1)} ), 
+           Uniprot_accession = map_chr(Uniprot_accession, ~{ str_split_i(.x, ";", 1)} ), 
+           Protein_name = map_chr(Protein_name, ~{ str_split_i(.x, ";", 1)} ))
+
+# Here we take all the column titles that start with "PD", and use them as a
+# variable (column) called "Sample"
+# The numbers in these columns is stored in a column called "Expression"
+# All remaining columns still exist and the values are duplicated as needed so they
+# still correspond to the correct expression values
+
+PDdata <- PDdata_raw %>%
+    pivot_longer(starts_with("PD"), names_to = "Sample", values_to = "Expression") %>%
+    relocate(c(Sample, Expression))
+
+## the data from the ExpSetup table is combined with the PDdata table, based on 
+## where the Sample column values are the same between them
+PDdata %<>% left_join(ExpSetup, by="Sample")
+
+## The 'response' variable now has three levels: PR, CR are responders, PD are non-responders
+## we're going to convert the Response into, with values NR (no respones) or R (response) based on this information
+
+PDdata %<>% mutate(Response = ifelse(Response=='PD', "NR", "R"))
+```
+
+## Plot a histogram of one protein
+
+Take the data, and use 'filter' to extract a single protein **PSME1**.
+Use ggplot to create a histogram. Of the histogram bars, make 'fill' of
+the histogram from the Response variable. Discuss what you observe in
+this plot.
+
+```{r create histogram of expression values}
+
+filtered_data <- PDdata %>% filter(Gene_name == "PSME1")
+ggplot(filtered_data, aes(x = Expression, fill = Response)) +
+  geom_histogram(binwidth = 0.5, alpha = 0.8, color = "black") +
+  labs(
+    title = "PSME1: Distribution of Expression by Response",
+    x = "Expression Level",
+    y = "Frequency"
+  ) +
+  scale_fill_viridis_d()  # Color palette for categorical 'Response'
+
+
+
+
+```
+
+# Statistical analysis
+
+## Perform t-tests
+
+We have now given you an idea of how a single protein expression behaves
+between two situations, but now let's get a bit more systematic. We'll
+do a statistical test to see if protein expression is different between
+non-responders and the responders.
+
+The following code does the following things:
+
+-   group all genes, and for each gene calculate a t-test of expression
+    vs response and store the p-value
+-   calculate the fold change, which is the difference between the
+    median expression of response / no response
+-   remove the original data
+-   sort the table according to the p-value (low -\> high)
+-   perform an operation so that the fold_change is centered around 0,
+    by subtracting the median of all fold_changes
+
+The results are stored in a table t_tests
+
+```{r perform t-tests}
+
+# for readability, this is a function to calculate the fold_change column for each protein
+fold_change <- function(gene_table) {
+  medians <- tapply(gene_table$Expression, gene_table$Response, median, na.rm=TRUE)
+  # The data is already in log2 scale, so the values are simply subtracted
+  return( medians["R"] - medians["NR"] )
+}
+
+t_tests <- PDdata %>% 
+  group_by(Gene_name) %>%
+  nest() %>%
+  mutate(p_value = map_dbl(data, function(x) { return (t.test(x$Expression ~ x$Response)$p.value)})) %>%
+  mutate(fold_change = map_dbl(data, fold_change)) %>%
+  select(-data) %>%
+  arrange(p_value) %>%
+  ungroup() %>%
+  mutate(fold_change = fold_change - median(fold_change))
+```
+
+### Inspect the contents of the t_tests table
+
+use the 'head' function to show the **10** proteins with the lowest
+p-values. As you can see PSME1 is indeed upregulated (fold_change\>0).
+
+```{r show t_tests}
+head(t_tests)
+```
+
+### Check histograms to see if the fold_change makes sense
+
+Make some histograms like the one above, but now for different proteins
+with different fold_changes, so you can show if the values from the
+table make sense.
+
+```{r investigate with histograms}
+
+
+
+```
+
+## Creating a volcano plot
+
+We want to create a volcano plot, so we will need a fold change. In this
+case we'll calculate that based on the median Expression value for every
+gene.
+
+This part of the code, you again get for free... Make sure you have all
+the variables needed to run this code:
+
+-   We define significance 'up' vs 'down' or non-significant 'ns'
+
+-   The limits for these are, p-value \<= 0.05, and the fold change
+
+```{r}
+# Create new column with 'up', 'down'
+diseased_vs_healthy <- t_tests %>%
+  mutate(significance = case_when((fold_change >= 0.3 & p_value <= 0.05) ~ "up",
+                               (fold_change <= -0.3 & p_value <= 0.05) ~ "down",
+                               TRUE ~ "ns"))
+
+head(diseased_vs_healthy)
+
+# Obtain significance counts
+diseased_vs_healthy %>%
+  count(significance)
+```
+
+The following code is given, make sure you understand what everything
+means!
+
+```{r}
+
+## This line finds the top 50 significant names of the proteins (change this number to see more or less labels)
+sig_il_genes <- diseased_vs_healthy %>% filter(significance != "ns") %>% slice(1:10)
+
+# Let's prepare some colors and sizes that we will use in the plot
+
+cols <- c("up" = "pink", "down" = "lightblue", "ns" = "lightgrey") 
+sizes <- c("up" = 2, "down" = 2, "ns" = 1) 
+
+diseased_vs_healthy %>%
+  ggplot(aes(x = fold_change,
+             y = -log10(p_value),
+             fill = significance,
+             size = significance)) +
+  geom_point(shape = 21) +
+  geom_hline(yintercept = -log10(0.05),
+             linetype = "dashed") +
+  geom_vline(xintercept = c(-0.3, 0.3),
+             linetype = "dashed") +
+  scale_fill_manual(values = cols) + # Modify point colour
+  scale_size_manual(values = sizes) + # Modify point size
+  geom_label_repel(data = sig_il_genes, # Add labels last to appear as the top layer  
+                   aes(label = Gene_name),
+                   force = 2,
+                   nudge_y = 1) +
+  scale_x_continuous(limits=c(-3,3)) +
+  theme_minimal()
+```
+
+## Create a heatmap
+
+From the analysis created above, extract the values from the 10 most
+significant proteins and plot the expression values as a `heatmap`. The
+horizontal axis can be Gene_name, the vertical axis contains all
+samples.
+
+Create an `annotation_tile` based on the Response for each each patient
+sample.
+
+```{r heatmap}
+library(tibble)
+
+## create the heatmap
+## Extract the top 10 significant proteins
+significant_proteins <- t_tests %>% 
+  arrange(p_value) %>% 
+  slice(1:10) %>% 
+  pull(Gene_name)
+
+## Filter the original dataset for these proteins
+heatmap_data <- PDdata %>% 
+  filter(Gene_name %in% significant_proteins) %>% 
+  select(Sample, Gene_name, Expression, Response) %>% 
+  pivot_wider(names_from = Gene_name, values_from = Expression) %>% 
+  column_to_rownames(var = "Sample")
+
+## Extract response data for annotation
+annotation_data <- ExpSetup %>% 
+  select(Sample, Response) %>% 
+  column_to_rownames(var = "Sample")
+
+# Load required libraries
+library(tibble)
+library(dplyr)
+library(tidyr)
+library(pheatmap)
+
+# Extract the top 10 significant proteins
+significant_proteins <- t_tests %>% 
+  arrange(p_value) %>% 
+  slice(1:10) %>% 
+  pull(Gene_name)
+
+# Filter and reshape data for heatmap
+heatmap_data <- PDdata %>% 
+  filter(Gene_name %in% significant_proteins) %>% 
+  select(Sample, Gene_name, Expression) %>% 
+  pivot_wider(names_from = Gene_name, values_from = Expression)
+
+# Convert Expression values to numeric and remove non-numeric columns
+heatmap_matrix <- heatmap_data %>% 
+  select(-Sample) %>%  # Remove Sample column
+  mutate(across(everything(), as.numeric)) %>%  # Ensure all values are numeric
+  as.matrix()
+
+# Set row names
+rownames(heatmap_matrix) <- heatmap_data$Sample  
+
+# Check for NA values and replace them (pheatmap cannot handle NA)
+heatmap_matrix[is.na(heatmap_matrix)] <- 0
+
+# Extract response data for annotation
+annotation_data <- ExpSetup %>% 
+  select(Sample, Response) %>% 
+  column_to_rownames(var = "Sample")
+
+# Generate the heatmap
+pheatmap(
+  mat = heatmap_matrix, 
+  annotation_row = annotation_data, 
+  scale = "row",  # Standardize values
+  clustering_method = "complete", 
+  color = colorRampPalette(c("blue", "white", "red"))(50),
+  main = "Heatmap of Top 10 Significant Proteins"
+)
+# fixing the data 
+str(heatmap_data)
+heatmap_data <- data.frame(lapply(heatmap_data, as.numeric))
+rownames(heatmap_data) <- rownames(significant_proteins)  # Preserve row names if needed
+sum(is.na(heatmap_data))  # Count missing values
+sum(is.nan(as.matrix(heatmap_data)))  # Count NaN values
+sum(is.infinite(as.matrix(heatmap_data)))  # Count Inf values
+heatmap_data <- na.omit(heatmap_data)
+heatmap_data[is.na(heatmap_data)] <- 0  # Replace NA with 0
+heatmap_data <- apply(heatmap_data, 2, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
+heatmap_matrix <- as.matrix(heatmap_data)
+mode(heatmap_matrix) <- "numeric"
+heatmap_matrix <- heatmap_matrix[apply(heatmap_matrix, 1, var, na.rm = TRUE) > 0, ]
+
+
+
+## Generate the heatmap
+pheatmap::pheatmap(
+  mat = as.matrix(heatmap_data), 
+  annotation_row = annotation_data, 
+  scale = "row", # Standardize values
+  clustering_method = "complete", 
+  color = colorRampPalette(c("blue", "white", "red"))(50),
+  main = "Heatmap of Top 10 Significant Proteins"
+)
+
+```
+
+# Network analysis
+
+We're going to try to find some biological meaning in our data. For that
+we'll use the String database, that has been presented before.
+
+We'll do a network query with significant proteins from the t_tests
+table that you created also for the volcano plot. We'll take the top
+1000 most significantly changed proteins and upload those to the String
+database. We'll then get a network with the existing interactions, that
+we can analyze to extract protein networks from the huge fuzz ball.
+
+### Create the list with proteins
+
+First you will need to get the top-1000 protein names from the list of
+significant proteins. Use the R `write` function to create a text file
+with just the names of the proteins. The dplyr `pull` and `slice`
+functions can be helpful here.
+
+```{r}
+# Load necessary library
+library(dplyr)
+
+# Select the top 1000 most significant proteins based on p-value
+top_1000_proteins <- t_tests %>%
+  arrange(p_value) %>%  # Sort by p-value (smallest first)
+  slice(1:1000) %>%     # Take the top 1000 rows
+  pull(Gene_name)       # Extract only the Gene_name column
+
+# Save the list as a text file
+writeLines(top_1000_proteins, "top_1000_proteins.txt")
+
+# Confirm the output
+print("File 'top_1000_proteins.txt' has been created successfully!")
+
+```
+
+Go to the string-db.org site, and upload the top1000.txt file to the
+multiple proteins input. Make sure the organism is set to **Homo
+sapiens**, and show the found network.
+
+### Export the network from string-db.org
+
+Below the network (hairball), select the Exports tab. Export as a short
+tabular text output, but also as a graphical file for the presentation.
+Place this file in your project folder, and read it in. Find the correct
+columns to use in the graph that we're going to use.
+
+Create the protein graph from the imported table, using the function
+`graph_from_data_frame` from the igraph package (already loaded). When
+you have created the graph, it's necessary to also use the `simplify`
+function on it to make the data less complex.
+
+To get an idea about the connectivity of the graph, create a histogram
+of the degrees in the graph.
+
+```{r read in the exported graph data}
+string_network <- read_delim("string_interactions_short.tsv", delim="\t")
+# Load necessary libraries
+library(readr)   # For reading data
+library(igraph)  # For network analysis
+
+# Step 1: Read in the STRING interactions file
+string_network <- read_delim("string_interactions_short.tsv", delim = "\t", show_col_types = FALSE)
+
+# Step 2: Check the column names (to identify the correct interaction columns)
+colnames(string_network)
+
+# Step 3: Create the graph using the correct interaction columns
+proteingraph <- graph_from_data_frame(d = string_network[, c("#node1", "node2")], directed = FALSE)
+
+# Step 4: Simplify the graph (remove self-loops and duplicate edges)
+proteingraph <- simplify(proteingraph)
+
+# Step 5: Visualize the degree distribution with a histogram
+hist(degree(proteingraph), 
+     breaks = 30, 
+     main = "Histogram of Node Degrees",
+     xlab = "Degree (Number of Connections)",
+     col = "skyblue", 
+     border = "black")
+
+
+#proteingraph <- 
+
+```
+
+The following code will extract the networks from your protein graph
+(given). You can also see a graphical representation of the clusters.
+
+```{r detect clusters and plot}
+
+clusterList <- cluster_fast_greedy(proteingraph)
+
+plot(clusterList, proteingraph)
+
+```
+
+### Extract the lists from the clusters
+
+In order to get the clusters, you will need to extract them from the
+clusterList, you can use the `communities` function.
+
+```{r extract community clusters}
+
+clusters <- communities(clusterList)
+
+# Get the nodes in cluster 3
+nodes_in_cluster_3 <- which(membership(clusterList) == 3)
+
+# Print the nodes in cluster 3
+print(nodes_in_cluster_3)
+
+```
+
+We're going to focus on the 3 largest clusters. Each group is working on
+a subset.
+
+-   Group 1: Will work with cluster 1 (clusters[[1]])
+-   Group 2: Will work with cluster 2 (clusters[[2]])
+-   Group 3: Will work with cluster 3 (clusters[[3]])
+-   Group 4: Will work with cluster 1 (clusters[[1]])
+-   Group 5: Will work with cluster 2 (clusters[[2]])
+-   Group 6: Will work with cluster 3 (clusters[[3]])
+-   ...
+-   Use your clusters for further sub-clustering and subsequent
+    enrichment analysis of the subclusters.
+-   Try to identify which functions, kinds of proteins, cellular
+    localization, enzymatic activities are enriched.
+-   Put these enrichment in context of cancer. Did you find hallmarks?
+    Important protein complexes/functions that play a role in cancer?
+    And discuss this in your presentation.
+    
+```{r}
+
+# Create a random graph (or load your graph)
+g <- erdos.renyi.game(100, p = 0.05)
+
+# Perform community detection using Louvain method
+clusterList <- cluster_louvain(g)
+
+# Display the membership of each node (which community it belongs to)
+membership(clusterList)
+
+# Get the communities (clusters)
+community_ids <- unique(membership(clusterList))
+
+# Initialize an empty list to store sub-clusters
+subclusters_list <- list()
+
+# Iterate through each community and perform sub-clustering
+for (community in community_ids) {
+  # Get the nodes in the current community
+  community_nodes <- which(membership(clusterList) == community)
+  
+  # Create a subgraph for this community
+  subgraph <- induced_subgraph(g, community_nodes)
+  
+  # Perform community detection on the subgraph (sub-clustering)
+  subcluster <- cluster_louvain(subgraph)
+  
+  # Store the sub-clusters in the list
+  subclusters_list[[paste0("community_", community)]] <- subcluster
+}
+
+# Check the results
+subclusters_list
+# Install and load clusterProfiler for enrichment analysis (if not installed)
+#install.packages("BiocManager")
+BiocManager::install("clusterProfiler")
+library(clusterProfiler)
+BiocManager::install("org.Hs.eg.db")
+library(org.Hs.eg.db)
+
+# Example: Gene list for nodes in subcluster (subcluster_1)
+gene_list <- c("GeneA", "GeneB", "GeneC")  # Replace with your actual gene list
+
+# Perform GO enrichment analysis for the gene list in the subcluster
+enrich_result <- enrichGO(gene = gene_list,
+                          OrgDb = org.Hs.eg.db, # Use appropriate database for your organism
+                          keyType = "SYMBOL",    # Gene identifiers used (could be ENTREZID, SYMBOL, etc.)
+                          ont = "BP",            # You can specify GO categories (BP: Biological Process, MF: Molecular Function, CC: Cellular Component)
+                          pAdjustMethod = "BH",  # Adjust p-values for multiple testing
+                          qvalueCutoff = 0.05)   # Adjusted p-value cutoff for significance
+
+# View the results
+summary(enrich_result)
+
+
+```
+    
+    
+
+```
+
+
+```{r}
+
+
+
+```
+
+
+# Prepare a Presentation
+
+-   Make a powerpoint presentation of 10-15 minutes.
+-   Explain the steps you have performed, but don't use R code. Explain
+    it in simple steps.
+-   Show your heatmap(s) and volcano plots, and provide some insights.
+-   Show the results of your String clusters, subclusters and the main
+    outcome(s) of your enrichment analysis
+-   Explain the results of your enrichment in context of cancer. What do
+    you finding suggest, or point at? Can you explain the roles of the
+    proteins etc.
+
