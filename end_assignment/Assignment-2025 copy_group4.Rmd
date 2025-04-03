@@ -197,7 +197,7 @@ ggplot(PSME1_data, aes(x = Expression, fill = Response)) +
          x = "Expression Level",
          y = "Count",
          fill = "Response") +
-   scale_fill_manual(values = c("NR" = 'yellow', "R" = "darkblue"),
+   scale_fill_manual(values = c("NR" = 'skyblue', "R" = "slateblue"),
                       labels = c("NR" = "Not Responsive", "R" = "(Partially) Responsive")) +
     theme_minimal()
 
@@ -280,7 +280,7 @@ plot_histogram <- function(protein) {
          x = "Expression Level",
          y = "Count",
          fill = "Response") +
-    scale_fill_manual(values = c("NR" = "yellow", "R" = "darkblue"),
+    scale_fill_manual(values = c("NR" = "skyblue", "R" = "slateblue"),
                       labels = c("NR" = "Non-responsive", "R" = "(Partially) Responsive")) +
     theme_minimal()
 }
@@ -325,32 +325,33 @@ means!
 ```{r}
 
 ## This line finds the top 50 significant names of the proteins (change this number to see more or less labels)
-sig_il_genes <- diseased_vs_healthy %>% filter(significance != "ns") %>% slice(1:10) %>%
-  pull(Gene_name)
+sig_il_genes <- diseased_vs_healthy %>%
+  filter(significance != "ns") %>%
+  arrange(p_value) %>%
+  slice(1:10)
 
 # Let's prepare some colors and sizes that we will use in the plot
 
-cols <- c("up" = "pink", "down" = "lightblue", "ns" = "lightgrey") 
+cols <- c("up" = "hotpink1", "down" = "steelblue1", "ns" = 'lightgrey') 
 sizes <- c("up" = 2, "down" = 2, "ns" = 1) 
-
 diseased_vs_healthy %>%
   ggplot(aes(x = fold_change,
              y = -log10(p_value),
              fill = significance,
              size = significance)) +
   geom_point(shape = 21) +
-  geom_hline(yintercept = -log10(0.05),
-             linetype = "dashed") +
-  geom_vline(xintercept = c(-0.3, 0.3),
-             linetype = "dashed") +
-  scale_fill_manual(values = cols) + # Modify point colour
-  scale_size_manual(values = sizes) + # Modify point size
-  geom_label_repel(data = sig_il_genes, # Add labels last to appear as the top layer  
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
+  geom_vline(xintercept = c(-0.3, 0.3), linetype = "dashed") +
+  scale_fill_manual(values = cols) + # Kleuren instellen
+  scale_size_manual(values = sizes) + # Grootte instellen
+  geom_label_repel(data = sig_il_genes, 
                    aes(label = Gene_name),
                    force = 2,
                    nudge_y = 1) +
-  scale_x_continuous(limits=c(-3,3)) +
+  scale_x_continuous(limits = c(-3,3)) +
   theme_minimal()
+
+
 ```
 
 ## Create a heatmap
@@ -366,8 +367,10 @@ sample.
 ```{r}
 ## create the heatmap
 
+
 # We will use the top 10 most significant proteins, already defined in sig_il_genes in the last chunk, we just added '%>% pull(Gene_name)' after it.
 # So, now we can create a heatmap data set. 
+sig_il_genes <- diseased_vs_healthy %>% filter(significance != "ns") %>% slice(1:10) %>%  pull(Gene_name)
 
 heatmap_data <- PDdata %>%
   filter(Gene_name %in% sig_il_genes)
@@ -389,12 +392,24 @@ heatmap_matrix <- t(apply(heatmap_matrix, 1, function(row) {
   return(row)
 }))
 
+
+annotation_data <- unique(PDdata[, c('Sample', 'Response')])
+annotation_data <- as.data.frame(annotation_data)
+
+rownames(annotation_data) <- annotation_data$Sample  # Set 'Sample' as row names
+  # Remove the 'Sample' column as it's now row name
+annotation_colors <- list(Response = c("R" = "slateblue", "NR" = "skyblue"))
+
+
 library(pheatmap)
 pheatmap(heatmap_matrix, 
-         scale = "row", # Standardize expression levels across genes
+         scale = "row", 
          clustering_method = "complete",
-         color = colorRampPalette(c("lightblue", "lightgrey", "pink"))(50), # Define color gradient
-         main = "Heatmap of Top 10 Significant Proteins")
+         annotation_col = annotation_data, # Add sample annotations
+         annotation_colors = annotation_colors,
+         color = colorRampPalette(c("steelblue1", 'white', 'hotpink'))(50), 
+         main = "Heatmap of Top 10 Significant Proteins", 
+         show_colnames = FALSE)
 
 
 ```
@@ -418,7 +433,16 @@ with just the names of the proteins. The dplyr `pull` and `slice`
 functions can be helpful here.
 
 ```{r}
+# The problem is that the t-test are in the diseased_vs_healthy for each gene, but we want the significant proteins, and protein names are only mentioned in PDdata. So, we have to merge the data. And important, the 1000 protein names should be unique. 
+significant_proteins <- PDdata %>%
+  select(Gene_name, Protein_name) %>%   
+  inner_join(t_tests, by = "Gene_name") %>%  
+  arrange(p_value) %>% 
+  distinct(Protein_name, .keep_all = TRUE) %>%
+  slice_head(n = 1000) %>%              
+  select(Protein_name, fold_change)
 
+write_lines(significant_proteins$Protein_name, "top_1000_significant_proteins.txt")
 ```
 
 Go to the string-db.org site, and upload the top1000.txt file to the
@@ -441,9 +465,27 @@ To get an idea about the connectivity of the graph, create a histogram
 of the degrees in the graph.
 
 ```{r read in the exported graph data}
-string_network <- read_delim("string_interactions.tsv", delim="\t")
+string_network <- read_delim("string_interactions_group4.tsv", delim="\t", show_col_types = FALSE )
 
-#proteingraph <- 
+string_annotations <- read_delim("string_mapping_group4.tsv", delim="\t", show_col_types = FALSE )
+string_annotations <- string_annotations %>%
+  rename(Protein_name = queryItem)
+
+
+edges <- string_network %>% select(`#node1`, node2)
+connectivity_graph <- graph_from_data_frame(edges, directed = FALSE)
+connectivity_graph <- simplify(connectivity_graph) #Simplify removes multiple edges and loops. 
+
+# Now we will create a histogram of the degrees in the protein_graph: 
+
+degree_values <- degree(connectivity_graph)
+ggplot(data.frame(degree = degree_values), aes(x = degree)) +
+  geom_histogram(binwidth = 1) +
+  theme_minimal() +
+  labs(title = "Protein Interaction Degree Distribution",
+       x = "Degree (Number of Connections)",
+       y = "Frequency")
+
 
 ```
 
@@ -452,9 +494,19 @@ The following code will extract the networks from your protein graph
 
 ```{r detect clusters and plot}
 
-clusterList <- cluster_fast_greedy(proteingraph)
+# We got a problem when trying to knit, so trouble shooted it by loading in protein_graph from .RData specifically. 
 
-plot(clusterList, proteingraph)
+env <- new.env()  
+load(".RData", envir = env)  
+ls(env)
+protein_graph <- env$protein_graph
+
+clusterList <- cluster_fast_greedy(protein_graph)
+
+plot(clusterList, protein_graph, vertex.label = NA)
+
+
+
 
 ```
 
@@ -466,6 +518,27 @@ clusterList, you can use the `communities` function.
 ```{r extract community clusters}
 
 clusters <- communities(clusterList)
+# We are group 4, so will work on cluster 3. 
+proteins_cluster_3 <- clusters[[3]]
+write_lines(proteins_cluster_3, "cluster_3_proteins_group4.txt")
+
+# We want to create a file with the cluster 3 proteins and the fold change. This is a bit difficult because the cluster 3 protein file contains an abrreviation and not the full Protein_name. So, we have loaded in the mapping file from string DB. And renamed the full protein name column Protein_name. The abreviation column is called preferredName. 
+
+filtered_annotations <- string_annotations %>%
+  filter(preferredName %in% proteins_cluster_3) # Selecting only proteins in cluster 3. 
+
+proteins_with_full_name <- filtered_annotations %>%
+  inner_join(PDdata, by = "Protein_name")
+ORA_dataframe <- proteins_with_full_name %>%
+  inner_join(t_tests, by = "Gene_name") %>%
+  select(Protein_name, fold_change)
+# Finally lets remove the duplicates. 
+ORA_dataframe <- ORA_dataframe %>%
+  distinct(Protein_name, .keep_all = TRUE) 
+
+write.table(ORA_dataframe, file = "ORA_dataframe.txt", sep = "\t", row.names = FALSE, quote = FALSE)
+
+
 ```
 
 We're going to focus on the 3 largest clusters. Each group is working on
