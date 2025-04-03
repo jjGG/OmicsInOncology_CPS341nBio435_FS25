@@ -1,0 +1,271 @@
+Protein_name	fold_change
+Carbonyl reductase [NADPH] 3	1.08831675
+Deoxycytidine kinase	0.59381025
+Fumarylacetoacetate hydrolase domain-containing protein 2A	0.5438282
+2-oxoglutarate dehydrogenase, mitochondrial	0.52913075
+N-acetyl-D-glucosamine kinase	0.69329025
+Cytosolic non-specific dipeptidase	0.63673325
+V-type proton ATPase subunit B, brain isoform	0.34132825
+NADH dehydrogenase [ubiquinone] 1 alpha subcomplex subunit 5	0.39577595
+Long-chain-fatty-acid--CoA ligase 3	0.30221225
+Glycogenin-1	0.57535225
+Carbonyl reductase [NADPH] 1	0.70019025
+Alcohol dehydrogenase [NADP(+)]	0.39603825
+Superoxide dismutase	1.06477325
+Carnitine O-acetyltransferase	0.53257925
+T1-TrpRS	1.06503915
+[Pyruvate dehydrogenase [acetyl-transferring]]-phosphatase 1, mitochondrial	0.33116675
+Glutathione S-transferase omega-1	0.65309295
+Thioredoxin-related transmembrane protein 4	0.57893725
+Cytochrome c oxidase subunit 4 isoform 1, mitochondrial	0.3717395
+ERO1-like protein alpha	0.36244525
+V-type proton ATPase catalytic subunit A	0.21863075
+Hydroxymethylglutaryl-CoA lyase, mitochondrial	0.51543225
+Inorganic pyrophosphatase 2, mitochondrial	0.36826975
+Fructose-bisphosphate aldolase	0.50284575
+Very-long-chain enoyl-CoA reductase	0.24424275
+S-formylglutathione hydrolase	0.33386225
+Glutathione peroxidase	-0.13743275
+Mitochondrial fission 1 protein	0.48445425
+Probable cytosolic iron-sulfur protein assembly protein CIAO1	0.15600075
+V-type proton ATPase subunit E 1	0.41538625
+Glutathione S-transferase kappa 1	0.37972325
+Citrate synthase	0.12851525
+Alpha-enolase	0.35086525
+Dehydrogenase/reductase SDR family member 4	0.58853485
+Glucose-6-phosphate 1-dehydrogenase	0.15294375
+NADH-cytochrome b5 reductase 3	0.11908175
+Phosphoglycerate kinase 1	0.25797005
+Sulfide:quinone oxidoreductase, mitochondrial	0.79002605
+Pyridoxal kinase	0.34869025
+Glycerol-3-phosphate dehydrogenase [NAD(+)]	0.45294825
+Pyruvate dehydrogenase E1 component subunit beta, mitochondrial	0.35251825
+Maleylacetoacetate isomerase	0.70121325
+NADH-cytochrome b5 reductase 1	0.50882725
+Adenosine kinase	0.10401575
+Persulfide dioxygenase ETHE1, mitochondrial	0.40163216
+Succinyl-CoA:3-ketoacid coenzyme A transferase 1, mitochondrial	0.48782825
+UMP-CMP kinase	0.40032475
+Retinol dehydrogenase 11	0.46219525
+Peroxiredoxin-5, mitochondrial	0.29351225
+Elongation factor G, mitochondrial	0.23274275
+Protein Smaug homolog 2	-0.4364166
+Uridine phosphorylase 1	0.37560225
+Cytochrome c oxidase subunit 5A, mitochondrial	1.06245825
+DNA-directed RNA polymerase, mitochondrial	-0.86043175
+Cytochrome P450 20A1	0.56507825
+Endoplasmic reticulum resident protein 44	0.23052275
+Cytosolic acyl coenzyme A thioester hydrolase	0.37854175
+Thymidylate synthase	-0.76484175
+ATP synthase subunit d, mitochondrial	0.21960925
+Delta(24)-sterol reductase	0.24837125
+Acylglycerol kinase, mitochondrial	0.2137312
+Ragulator complex protein LAMTOR2	0.47726325
+Medium-chain specific acyl-CoA dehydrogenase, mitochondrial	0.13578675
+Succinyl-CoA ligase [GDP-forming] subunit beta, mitochondrial	0.38633325
+Protein MEMO1	0.17362625
+ATP-dependent 6-phosphofructokinase, platelet type	0.62128075
+Ethylmalonyl-CoA decarboxylase	0.50592155
+Phosphoglucomutase-1	0.42656385
+Carnitine O-palmitoyltransferase 2, mitochondrial	0.34876825
+3-ketoacyl-CoA thiolase, peroxisomal	0.58361925
+Caseinolytic peptidase B protein homolog	0.12308775
+Isobutyryl-CoA dehydrogenase, mitochondrial	0.46909475
+Ribose-5-phosphate isomerase	-0.23260025
+V-type proton ATPase subunit G 1	0.26063025
+Aconitate hydratase, mitochondrial	0.51815425
+V-type proton ATPase 116 kDa subunit a isoform 3	0.68652325
+Cytochrome c oxidase subunit 5B, mitochondrial	1.53490825
+Mevalonate kinase	0.37526925
+Peroxisomal acyl-coenzyme A oxidase 3	0.4366561
+4-trimethylaminobutyraldehyde dehydrogenase	0.32817425
+V-type proton ATPase subunit d 2	0.41830325
+Acyl-CoA-binding protein	1.01570825
+Alcohol dehydrogenase class-3	0.29416525
+Mannose-1-phosphate guanyltransferase beta	0.18075215
+CDGSH iron-sulfur domain-containing protein 1	0.6864166
+V-type proton ATPase subunit C 1	0.25309175
+Glutamate dehydrogenase 1, mitochondrial	0.28284375
+Inorganic pyrophosphatase	0.25577235
+Pyruvate kinase	0.45149465
+Protein farnesyltransferase subunit beta	0.46026025
+Enoyl-CoA hydratase, mitochondrial	0.12544475
+Microsomal glutathione S-transferase 3	0.30609025
+V-type proton ATPase 116 kDa subunit a isoform 1	0.13642475
+Aflatoxin B1 aldehyde reductase member 2	0.15466375
+UTP--glucose-1-phosphate uridylyltransferase	0.18707085
+Acetyl-CoA acetyltransferase, mitochondrial	0.30611435
+Isopentenyl-diphosphate Delta-isomerase 1	0.48236875
+UDP-glucose 4-epimerase	0.38976175
+Pterin-4-alpha-carbinolamine dehydratase	1.05073825
+V-type proton ATPase subunit D	0.37363325
+Glutathione peroxidase 7	-0.60975705
+BolA-like protein 2	0.38490575
+N-alpha-acetyltransferase 25, NatB auxiliary subunit	-0.24201025
+28S ribosomal protein S25, mitochondrial	0.43168605
+Isocitrate dehydrogenase [NAD] subunit gamma, mitochondrial	0.27161005
+6-phosphogluconolactonase	0.11975925
+N-acylglucosamine 2-epimerase	0.78010325
+Long-chain-fatty-acid--CoA ligase 1	0.68944525
+Cysteine and glycine-rich protein 1	0.15855925
+Glutamyl-tRNA(Gln) amidotransferase subunit B, mitochondrial	0.23485565
+ATP-dependent 6-phosphofructokinase, liver type	0.27247425
+3-hydroxybutyrate dehydrogenase type 2	0.34031325
+Cytochrome c oxidase subunit 7A2, mitochondrial	0.41873725
+Fatty aldehyde dehydrogenase	0.24083325
+ATPase inhibitor, mitochondrial	0.28620225
+Protein TMED8	0.59172525
+Thymidine kinase	0.28588825
+V-type proton ATPase subunit d 1	0.32446425
+GA-binding protein alpha chain	-0.4199228
+Succinyl-CoA ligase [ADP-forming] subunit beta, mitochondrial	0.10894175
+Acetyl-coenzyme A synthetase, cytoplasmic	0.59547355
+Acetyltransferase component of pyruvate dehydrogenase complex	0.2324239
+Hexokinase	0.60148325
+Phosphoenolpyruvate carboxykinase [GTP], mitochondrial	0.42805825
+ATP synthase subunit beta	0.16079425
+ATP-binding cassette sub-family D member 1	0.28263575
+60S ribosomal protein L7-like 1	-0.44699975
+Non-specific lipid-transfer protein	0.30731475
+Short/branched chain specific acyl-CoA dehydrogenase, mitochondrial	0.50456425
+Mitochondrial chaperone BCS1	-0.43813575
+Sorting and assembly machinery component 50 homolog	0.03427725
+Retinal dehydrogenase 1	0.98918325
+Farnesyl pyrophosphate synthase	0.20507275
+3-ketoacyl-CoA thiolase	0.16648925
+Long chain 3-hydroxyacyl-CoA dehydrogenase	-0.014946
+Transmembrane 9 superfamily member 2	0.47112685
+Nicotinamide phosphoribosyltransferase	0.09686175
+Adenylate kinase 4, mitochondrial	0.60304145
+Copper transport protein ATOX1	0.38299725
+Transaldolase	0.15070875
+Methylcrotonoyl-CoA carboxylase subunit alpha, mitochondrial	0.46233975
+Ubiquinone biosynthesis protein COQ9, mitochondrial	0.20402325
+Ras-related GTP-binding protein C	0.07631625
+BTB/POZ domain-containing protein KCTD14	0.46994125
+Chitobiosyldiphosphodolichol beta-mannosyltransferase	0.32097525
+1,4-alpha-glucan-branching enzyme	0.13191535
+Guanosine-3',5'-bis(diphosphate) 3'-pyrophosphohydrolase MESH1	0.24327425
+NADH dehydrogenase [ubiquinone] 1 beta subcomplex subunit 1	0.35411675
+Isochorismatase domain-containing protein 1	0.3336419
+Pyrroline-5-carboxylate reductase	-0.77153425
+Enoyl-CoA delta isomerase 1, mitochondrial	0.32971325
+Estradiol 17-beta-dehydrogenase 11	0.29592525
+Catechol O-methyltransferase	0.49070425
+Thioredoxin-dependent peroxide reductase, mitochondrial	0.61757625
+ATP synthase subunit delta, mitochondrial	0.50943325
+Trans-3-hydroxy-L-proline dehydratase	0.28204075
+Acylphosphatase	1.02402225
+[3-methyl-2-oxobutanoate dehydrogenase [lipoamide]] kinase, mitochondrial	0.42119125
+V-type proton ATPase subunit H	0.0396147500000001
+Peroxiredoxin-1	0.11432675
+14 kDa phosphohistidine phosphatase	0.2726198
+Dehydrogenase/reductase SDR family member 1	0.37274825
+Bcl10-interacting CARD protein	0.44230925
+Glycogen phosphorylase, muscle form	0.4870275
+Glycerol-3-phosphate dehydrogenase	0.06242575
+Methylcrotonoyl-CoA carboxylase beta chain, mitochondrial	0.40835105
+Transmembrane protein 14C	-0.81881655
+Thymidine kinase 2, mitochondrial	0.62576325
+NADH-ubiquinone oxidoreductase chain 4	0.07374525
+Adrenodoxin, mitochondrial	0.45577725
+Negative elongation factor C/D	-0.42865675
+ATP synthase subunit alpha, mitochondrial	0.27251225
+Beta-glucuronidase	0.47023325
+Succinate dehydrogenase [ubiquinone] flavoprotein subunit, mitochondrial	0.23257025
+Endoplasmic reticulum resident protein 29	0.19689024
+Ornithine aminotransferase, hepatic form	0.33585125
+Dihydropyrimidinase-related protein 1	-0.59784875
+ATP-binding cassette sub-family F member 1	-0.2091328
+Glutaredoxin-1	0.29525625
+Cytoplasmic aconitate hydratase	0.20815925
+V-type proton ATPase 16 kDa proteolipid subunit	0.35179225
+Phenylalanine--tRNA ligase beta subunit	0.06973215
+Transmembrane protein 199	0.17791025
+Dehydrogenase/reductase SDR family member 7	0.14798175
+DNA-3-methyladenine glycosylase	-0.2621586
+Pyruvate dehydrogenase protein X component, mitochondrial	0.23188715
+Protein-L-isoaspartate O-methyltransferase	0.22252565
+Heme oxygenase 2	0.148612
+DnaJ homolog subfamily A member 3, mitochondrial	0.0884086
+Aldehyde dehydrogenase, mitochondrial	0.82196875
+ER membrane protein complex subunit 8	0.06608525
+Pyruvate dehydrogenase E1 component subunit alpha, somatic form, mitochondrial	0.13523475
+ATP-dependent dihydroxyacetone kinase	0.24591725
+Polyribonucleotide nucleotidyltransferase 1, mitochondrial	0.05468125
+Mitochondrial peptide methionine sulfoxide reductase	0.12409625
+ATP synthase subunit O, mitochondrial	0.29914975
+NADH dehydrogenase [ubiquinone] 1 subunit C2	0.42946025
+NADH dehydrogenase [ubiquinone] 1 subunit C2, isoform 2	0.42946025
+Adenylate kinase 2, mitochondrial	0.30553325
+Geranylgeranyl pyrophosphate synthase	-0.84159875
+Triosephosphate isomerase	0.39176725
+Pyridoxine-5'-phosphate oxidase	0.25061225
+Cytochrome b-c1 complex subunit 1, mitochondrial	0.53121975
+MICOS complex subunit MIC10	0.5687717095
+Methylmalonate-semialdehyde dehydrogenase [acylating], mitochondrial	0.46563325
+Alkyldihydroxyacetonephosphate synthase, peroxisomal	0.18326575
+Synaptic vesicle membrane protein VAT-1 homolog	0.48911825
+Lanosterol synthase	0.28357485
+Mannose-6-phosphate isomerase	0.14205655
+Cytochrome b5 type B	0.20469075
+ADP/ATP translocase 2	0.20253175
+Thioredoxin-related transmembrane protein 1	0.29545025
+ATP synthase subunit gamma, mitochondrial	0.25723225
+Mitochondrial import inner membrane translocase subunit Tim10	0.83236575
+D-beta-hydroxybutyrate dehydrogenase, mitochondrial	0.38137725
+5'(3')-deoxyribonucleotidase, cytosolic type	0.26478825
+Succinate-semialdehyde dehydrogenase, mitochondrial	-0.81267675
+Glutathione S-transferase Mu 4	0.63516725
+Protoporphyrinogen oxidase	0.47724975
+ADP/ATP translocase 3	0.34935725
+Prostamide/prostaglandin F synthase	0.28603175
+L-lactate dehydrogenase A chain	0.23954275
+Protein deglycase DJ-1	0.0832764
+Transketolase	0.144799655
+DNA topoisomerase 2	-0.4045991
+Methylmalonyl-CoA mutase, mitochondrial	0.36864825
+Interferon regulatory factor 2-binding protein 1	-0.22812668
+Lysine--tRNA ligase	0.09474265
+Cytochrome c oxidase assembly protein COX15 homolog	-0.41971025
+DNA dC->dU-editing enzyme APOBEC-3C	0.30829075
+Mitochondrial carrier homolog 2	-0.03977775
+Sphingosine-1-phosphate lyase 1	0.81204995
+Nicotinamide N-methyltransferase	0.75271925
+Acyl-coenzyme A thioesterase 1	0.27394125
+Glutamine--tRNA ligase	0.00353275
+Peroxisomal acyl-coenzyme A oxidase 1	0.18647585
+Transmembrane protein 205	0.15481825
+MICOS complex subunit MIC27	0.37595325
+Mitochondrial import inner membrane translocase subunit TIM14	-0.70702375
+Metaxin-1	0.27355025
+Parkinson disease 7 domain-containing protein 1	0.17861525
+Single-stranded DNA-binding protein, mitochondrial	0.25367425
+Long-chain fatty acid transport protein 3	0.31787325
+ATP-binding cassette sub-family D member 3	0.2814174
+Pyruvate carboxylase, mitochondrial	0.3071788
+Adenylate kinase isoenzyme 1	0.0516073
+Complex I intermediate-associated protein 30, mitochondrial	0.15085325
+Acyl-CoA synthetase short-chain family member 3, mitochondrial	0.84295515
+Cytochrome c oxidase subunit NDUFA4	0.268672895
+Pantothenate kinase 2, mitochondrial	0.19870625
+7,8-dihydro-8-oxoguanine triphosphatase	-0.56359875
+Dynamin-like 120 kDa protein, form S1	0.00916644999999999
+Electron transfer flavoprotein subunit beta	-0.02745825
+Ribonucleoside-diphosphate reductase	-0.47234875
+60S ribosomal protein L8	-0.23196075
+ATP synthase subunit g, mitochondrial	0.2021921
+3-oxoacyl-[acyl-carrier-protein] synthase, mitochondrial	0.59082625
+Coronin-2B	-0.51724975
+Ribosomal protein 63, mitochondrial	-0.67961075
+Protein-glutamate O-methyltransferase	0.38108065
+NAD-dependent malic enzyme, mitochondrial	0.22439425
+Cytosolic Fe-S cluster assembly factor NUBP1	0.07240125
+FAST kinase domain-containing protein 2	-0.22849325
+Thioredoxin-related transmembrane protein 2	0.21893975
+Enolase	0.16239415
+Mitochondrial intermediate peptidase	0.17743875
+V-type proton ATPase subunit F	0.56503825
+ATP-dependent 6-phosphofructokinase, muscle type	0.14849575
+COX assembly mitochondrial protein homolog	0.379855925
+Protein O-mannose kinase	-0.4953563
